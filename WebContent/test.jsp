@@ -12,6 +12,7 @@
 	
   <p>뭔지 모르겠어요</p>
 	<p>test1입니다_손하늘</p>
+	<p>배규입니다 </p>
   
 	<form action="World" method="post">
 		<input type="text" name="greet" value="">
