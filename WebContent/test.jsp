@@ -12,6 +12,7 @@
   	<p>뭔지 모르겠어요</p>
 	<p>test1입니다_손하늘</p>
 	<p>배규입니다 </p>
+	<p>하리보가 제일 맛있습니다. 스타믹스 추천해요!</p>
   
 	<form action="World" method="post">
 		<input type="text" name="greet" value="">
