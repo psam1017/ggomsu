@@ -8,7 +8,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="Author" content="이름 입력">
+    <meta name="author" content="본인 이름">
+    <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>제목을 입력하세요</title>
 </head>
 <body>
