@@ -15,15 +15,15 @@
   	<servlet-name>UserFrontController</servlet-name>
   	<servlet-class>com.ggomsu.app.user.controller.UserFrontController</servlet-class>
   </servlet>
-  <servlet-mapping>
-  	<servlet-name>UserFrontController</servlet-name>
-  	<url-pattern>/user/*</url-pattern>
-  </servlet-mapping>
-  
   <servlet>
   	<servlet-name>BoardFrontController</servlet-name>
   	<servlet-class>com.ggomsu.app.board.controller.BoardFrontController</servlet-class>
   </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>UserFrontController</servlet-name>
+  	<url-pattern>/user/*</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>BoardFrontController</servlet-name>
   	<url-pattern>/board/*</url-pattern>
