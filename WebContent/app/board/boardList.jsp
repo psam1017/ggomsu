@@ -11,6 +11,9 @@
     <meta name="author" content="이성호">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>${article.getBoardValue()}</title>
+    <script src="${pageContext.request.contextPath}/assets/js/jquery.min.js "></script>
+    <script src="${pageContext.request.contextPath}/assets/js/jquery-migrate-1.4.1.min.js "></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
 </head>
 <body>
 	<h1>게시판</h1>
