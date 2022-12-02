@@ -34,7 +34,7 @@
             </div>
         </section>
         <section id="boardWrap">
-            <article id="recBoardWrap">
+            <div id="recBoardWrap">
                 <h2>내 추천 게시판</h2>
                 <div id="recBoard">
                     <a href="#" id="recboardRecBest">
@@ -54,8 +54,8 @@
                         <div class="recboardIc"></div>
                     </a>
                 </div>
-            </article>
-            <article id="mainBestWrap">
+            </div>
+            <div id="mainBestWrap">
                 <div id="mainRecBest">
                     <div id="recBestTitle"><h2>추천베스트</h2></div>
                     <ul id="recBestUi">
@@ -166,7 +166,7 @@
                         </li>
                     </ul>
                 </div>
-            </article>
+            </div>
         </section>
     </main>
     <jsp:include page="fix/footer.jsp" />
