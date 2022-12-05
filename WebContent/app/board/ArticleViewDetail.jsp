@@ -36,7 +36,7 @@
             </c:when>
             <c:otherwise>
                 c:forEach var="file" items="${file}"
-                    <a href="${pageContext.request.contextPath}/board/file-download-ok?fileName=${file.getFileName()}">
+                    <a href="${pageContext.request.contextPath}/board/attachment-download-ok?fileName=${file.getFileName()}">
                         <c:out value="${file.getFileName()}"/>
                     </a>
                 /c:forEach
@@ -64,12 +64,12 @@
 	                            작성일시 : ${comment.getWrittenAt()}
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount">${commentLike.getCount()}</span>
 	                            <input type="button" class="commentLikeBtn" name="commentLikeBtn" value="댓글추천">
-	                            <input type="button" class="reCommentWrite" name="reCommentWrite" value="답글쓰기">
+	                            <input type="button" class="refCommentWrite" name="refCommentWrite" value="답글쓰기">
                             	<!-- 답글쓰기 버튼을 누르면 js로 답글쓰기 양식이 나타나도록 한다. -->
 	                        </li>
 	                    </c:when>
 	                    <c:otherwise>
-	                        <li class="reComment">
+	                        <li class="refComment">
 	                            작성자 : ${comment.getUserNickname()}
 	                            <p>댓글 내용 : ${comment.content()}</p>
 	                            작성일시 : ${comment.getWrittenAt()}
@@ -81,7 +81,7 @@
                 </c:forEach>
             </ul>
             <!-- 대댓글 달기 및 대댓글 보기 -->
-            <div id="recomment">
+            <div id="refcomment">
                 <p> 대댓글 달기 및 보기는 댓글을 구현한 이후 다시 보도록 하겠습니다. </p>
             </div>
         </section>
