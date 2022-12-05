@@ -15,6 +15,7 @@
 <body>
 	<form action="#">
 		<input type="text" name="id" id="id">
+		<input type="button" name="checkID" id="checkId">
 	</form>
 </body>
 <script>
