@@ -30,7 +30,7 @@ screenMode.addEventListener('click', (e)=>{
         MyWrapBf.setAttribute('class', 'dark');
         mainRightAd.setAttribute('class', 'dark');
         /*header*/
-        header.setAttribute('class', 'dark');  
+        header.setAttribute('class', 'dark');
 
     }
 

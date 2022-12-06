@@ -17,10 +17,10 @@
         <div id="navWrap">
             <h2 class="hidden">네비게이션</h2>
             <ul id="navUl">
-                <li class="navLi"><a href="#">공지사항</a></li>
-                <li class="navLi"><a href="#">코딩게시판</a></li>
-                <li class="navLi"><a href="#">게임게시판</a></li>
-                <li class="navLi"><a href="#">자유게시판</a></li>
+                <li class="navLi"><a href="${pageContext.request.contextPath}/board/article-get-list-ok">공지사항</a></li>
+                <li class="navLi"><a href="${pageContext.request.contextPath}/board/article-get-list-ok">코딩게시판</a></li>
+                <li class="navLi"><a href="${pageContext.request.contextPath}/board/article-get-list-ok">게임게시판</a></li>
+                <li class="navLi"><a href="${pageContext.request.contextPath}/board/article-get-list-ok">자유게시판</a></li>
             </ul>
         </div>
         <a href="#"><div id="mainLeftAd">광고</div></a>
