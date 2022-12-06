@@ -1,0 +1,173 @@
+@charset "utf-8";
+
+/*초기화*/
+*{margin: 0; padding: 0; box-sizing: border-box;}
+li {list-style: none;}
+a {text-decoration: none; color: black;}
+.hidden {display: none;}
+button {border: none;}
+body {background: #fff;}
+input:focus, select:focus, option:focus, textarea:focus, button:focus {outline: none;}
+
+/*웹폰트*/
+@font-face {
+font-family: 'NanumSquareNeo-Variable';
+src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2');
+font-weight: normal;
+font-style: normal;}
+* {font-family: 'NanumSquareNeo-Variable', sans-serif;}
+
+/*다크모드 body영역*/
+body.dark {background: #323241;}
+
+/*header*/
+#header {width: 100%; height: 150px; background: #ffc400; color:#000; position: relative;}
+#mainLogo {width: 100px; height: 100px; margin: 0 auto; line-height: 150px;}
+#mainLoginWrap {position: absolute; right: 20px; top: 70px; width: 250px; display: flex; justify-content: space-evenly;}
+#mainLogin{padding: 13px 25px;
+                border-radius: 10px;
+                background-color: #fff;
+                cursor: pointer;
+                box-shadow: 1px 1px 5px 1px #c69900;}
+#mainLogin:hover {box-shadow: 2px 2px 5px 2px #d3d3d3 inset;}
+#mainJoin {padding: 13px 25px;
+                border-radius: 10px;
+                background: rgb(53, 53, 53);
+                color: #fff;
+                cursor: pointer;
+                box-shadow: 1px 1px 5px 1px #c69900;}
+#mainLoginWrap span{font-size: 17px;}
+#mainJoin:hover {box-shadow: 2px 2px 5px 2px #000000 inset;}
+/*다크모드 header*/
+#header.dark {background:#405692; color: #fff;}
+#mainLogin.dark {background-color: #fff; box-shadow: 1px 1px 5px 1px #405692;}/*수정*/
+#mainLogin:hover.dark {}
+#mainJoin.dark {background-color: rgb(53, 53, 53); box-shadow: 1px 1px 5px 1px #405692;}/*수정*/
+#mainJoin:hover.dark {}
+
+/*main*/
+/*서치*/
+#main {width: 1280px; margin: 0 auto; margin-bottom: 100px;}
+#searchWrap {position: relative; width: 550px; margin: 0 auto; margin-top: 50px;}
+#searchBar {margin: 10px; width: 550px; height: 50px; border-radius: 5px; border: 1px solid #c2c2c2; background: #fff;
+                box-shadow: 1px 1px 5px 1px #cecece; padding: 0 50px; font-size: 20px; color: #4a4a4a;}
+#searchBar:focus {border: 2px solid #ffc400; box-shadow: 1px 1px 5px 1px #cecece;}
+#searchIc {position: absolute; top: 10px; left:5px;
+                width: 50px; height: 50px; background: url(../../images/search.png) no-repeat center; background-size: 30px;}
+#recSearchText {display: flex; flex-flow: row nowrap; justify-content: center; margin: 10px;}
+.SearchTextBar {width: 1px; height: 15px; background: #bcbcbc; margin: 1px 10px;}
+#recSearchText a{color: #858585; font-size: 14px;}
+/*다크모드 서치*/
+#searchBar.dark {}
+#searchBar:focus.dark{}
+#recSearchText.dark{}
+.SearchTextBar.dark{background: #fff;}
+#recSearchText a.dark{color: #fff;}
+
+/*내 추천 게시판*/
+#recBoardWrap {width: 1000px; height: 350px; border-radius: 20px; background: #ffc400; text-align: center;
+                margin: 50px auto; padding-top: 30px; 
+                box-shadow: 1px 1px 5px 1px #cecece;}
+#recBoardWrap h2 {font-size: 40px; color: #fff; text-shadow: 2px 2px 3px #4e3c00; line-height: 50px;}
+#recBoard {display: flex; justify-content: space-evenly; position: relative; margin-top: 40px;}
+#recBoard > a {width: 450px; height: 200px; border-radius: 5px; background: #fff; box-shadow: 1px 1px 5px 1px #9e7900;}
+#recboardRecBest .recboardIc {position: absolute; left: 413px; top: -5px; width: 50px; height: 70px;
+                                background: url(../../images/bookmarker.png) no-repeat center; background-size: 70px;}
+#recboardViewBest .recboardIc {position: absolute; right: 50px; top: -5px; width: 50px; height: 70px;
+                                background: url(../../images/bookmarker.png) no-repeat center; background-size: 70px;}
+#recBoardWrap h3{padding: 10px 0; height: 50px; background: rgb(104, 104, 104); color: #fff; font-size: 25px;}
+#recBoardWrap > div p:nth-child(1) {font-size: 20px; font-weight: 600; margin: 30px 20px 10px; color: #474747;}
+#recBoardWrap > div p:nth-child(2) {font-size: 18px; margin: 30px 20px; color: #797979;
+                                white-space: noWrap; overflow: hidden; text-overflow: ellipsis;}
+/*다크모드 내 추천 게시판*/                  
+#recBoardWrap.dark {background: #405692; box-shadow: 1px 1px 5px 1px #3f465a;}
+#recBoardWrap h2.dark {text-shadow: 2px 2px 3px #405692;}
+#recBoard > a.dark  {}
+#recboardRecBest .recboardIc.dark{}
+#recboardViewBest .recboardIc.dark{}
+#recBoardWrap h3.dark{}
+#recBoardWrap > div p:nth-child(1).dark{}
+#recBoardWrap > div p:nth-child(2).dark{}
+
+
+/*베스트 게시글*/
+#mainBestWrap{display: flex; flex-flow: row nowrap; justify-content: center;}
+#mainBestWrap > div {width: 600px; height: 800px; margin: 20px; background: #fff;; border-radius: 5px;
+                        box-shadow: 1px 1px 5px 1px #cecece;}
+#mainBestWrap > div ul li {width: 550px; height: 125px; margin: 0 auto;}
+#mainBestWrap > div ul li:hover {background: #f0f0f0;}
+#mainBestWrap > div ul li:not(:nth-child(5)) {border-bottom: 1px solid #e5e7eb;}
+#mainBestWrap > div > div {width: 500px; height: 80px; border-radius: 10px; font-size: 20px;
+                        background: #ffc400; color: #423400;
+                        margin: 30px auto; text-align: center; line-height: 80px;}
+#mainBestWrap > div ul li p:nth-child(2) {width: 500px; margin: 10px auto; color: #272727; font-size: 18px; font-weight: 800;}
+#mainBestWrap > div ul li p:nth-child(3) {width: 500px; margin: 15px auto 10px; color: #7d82a8;
+                                        white-space: noWrap; overflow: hidden; text-overflow: ellipsis;}
+
+.recBestTopWrap {display: flex; justify-content: space-between; margin: 0px 10px; padding-top: 10px; height: 40px; line-height: 30px; font-size: 14px;}
+#mainRecBest ul li:nth-child(1) .recBestName {padding-left: 30px; background: url(../../images/medal1.png) no-repeat; background-size: 30px;}
+#mainRecBest ul li:nth-child(2) .recBestName {padding-left: 30px; background: url(../../images/medal2.png) no-repeat; background-size: 30px;}
+#mainRecBest ul li:nth-child(3) .recBestName {padding-left: 30px; background: url(../../images/medal3.png) no-repeat; background-size: 30px;}
+
+.recBextCount {width: 80px; padding-left: 30px; background: url(../../images/good.png) no-repeat; background-size: 30px; text-align: center;}
+
+.viewBestTopWrap {display: flex; justify-content: space-between; margin: 0px 10px; padding-top: 10px; height: 40px; line-height: 30px; font-size: 14px;}
+#mainViewBest ul li:nth-child(1) .viewBestName {padding-left: 30px; background: url(../../images/medal1.png) no-repeat; background-size: 30px;}
+#mainViewBest ul li:nth-child(2) .viewBestName {padding-left: 30px; background: url(../../images/medal2.png) no-repeat; background-size: 30px;}
+#mainViewBest ul li:nth-child(3) .viewBestName {padding-left: 30px; background: url(../../images/medal3.png) no-repeat; background-size: 30px;}
+
+.viewBextCount {width: 80px; padding-left: 30px; background: url(../../images/eye.png) no-repeat; background-size: 30px; text-align: center;}
+/*다크모드 베스트 게시글*/
+
+
+/*asideLeft*/
+#mainAsideLeft {position: absolute; top: 350px; left: 20px; display: flex; flex-flow: column nowrap; justify-content: space-between;}
+#navWrap {width: 200px; height: 500px; background: #ffc400; font-weight: 600; 
+        border-radius: 5px; margin: 20px; text-align: center; padding-top: 20px;}
+#navWrap ul li {line-height: 50px;}
+#navWrap ul li a{display: block; width: 100%; height: 100%; color: #000;}
+#navWrap ul li a:hover {background: #ffffff; color: #000000; font-size: 20px;}
+#mainLeftAd {width: 200px; height: 300px; background:rgb(255, 117, 37);
+        border-radius: 5px; margin: 20px;}
+/*다크모드 asideLeft*/
+#navWrap.dark {background: #405692;}
+#navWrap ul li a.dark{color: #fff;}
+#navWrap ul li a:hover.dark{background: #ffc400;}
+#mainLeftAd.dark {background: #405692; color: #fff;}
+
+
+/*asideRight_BF*/
+#mainAsideRight {position: absolute; top: 350px; right: 20px;}
+#MyWrapBfWrap {display: flex; flex-flow: column nowrap; justify-content: space-between; position: relative;}
+#MyWrapBf {display: block; width: 200px; height: 250px; border: 1px solid #cdcdcd;
+        border-radius: 5px; margin: 20px; text-align: center; padding-top: 20px;}
+#asideWriteBf {width: 150px; height: 40px; border-radius: 5px; margin: 0 auto;
+                background: #ffc400; border: none; cursor: pointer;
+                font-size: 20px; line-height: 40px; font-weight: 600; color: #363636;}
+#asideWriteBf:before {width: 100px; height: 100px; background: url(./../img/write.png) no-repeat center;}
+#asideLoginBf {display: block; width: 150px; height: 120px; border-radius: 5px; margin: 10px auto;
+                background: #cdcdcd url(../../images/login.png) no-repeat 50px 20px; background-size: 50px;
+                color: #474747; font-size: 13px; line-height: 16px; padding-top: 75px;}
+#mainRightAd {width: 200px; height: 300px; background:rgb(255, 117, 37);
+        border-radius: 5px; margin: 20px;}
+#screenMode {position: absolute; bottom: -100px; right: 80px; cursor: pointer;
+                width: 80px; height: 80px; border: none; border-radius: 50%;
+                background: #ffc400 url(../../images/sun.png) no-repeat center; background-size: 60px;}
+/*다크모드 asideRightBf*/
+#MyWrapBf.dark {background: #5c6683; border: none;}
+#asideLoginBf.dark {background-color: #7581a4; color: rgb(216, 225, 235);}/*이미지 컬러 바꾸기*/
+#asideWriteBf.dark {background: rgb(16, 25, 53); color:rgb(216, 225, 235);}
+#mainRightAd.dark {background: #405692; color: #fff;}
+#screenMode.dark {background: #405692 url(../../images/moon.png) no-repeat center; background-size: 60px;}
+
+
+/*footer*/
+#footer {height: 300px; background: gray; color: #fff;}
+#footerBottom {width: 1280px; margin: 0 auto; text-align:center;}
+/*다크모드 footer*/
+#footer.dark{background: rgb(73, 73, 73);}
+
+/*반응형*/
+/*1280이하*/
+
+/*768이하*/
