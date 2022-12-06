@@ -14,10 +14,10 @@
 </head>
 <body>
 	<header id="header">
-        <h1 id="mainLogo">로고</h1>
+        <h1 id="mainLogo"><a href="${pageContext.request.contextPath}/app/index.jsp">로고</a></h1>
         <div id="mainLoginWrap">
-            <button id="mainLogin" onclick="login()"><span>로그인</span></button>
-            <button id="mainJoin" onclick="signUp()"><span>회원가입</span> </button>
+            <a href="${pageContext.request.contextPath}/app/user/MemberSignIn.jsp" id="mainLogin"><span>로그인</span></a>
+            <a href="${pageContext.request.contextPath}/app/user/MemberSignUp.jsp" id="mainJoin"><span>회원가입</span></a>
         </div>
     </header>
 </body>

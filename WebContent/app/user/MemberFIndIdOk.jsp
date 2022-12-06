@@ -10,20 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>mainAsideLeft</title>
+    <title>아이디 확인 : 꼼수닷컴</title>
 </head>
 <body>
-	<aside id="mainAsideLeft">
-        <div id="navWrap">
-            <h2 class="hidden">네비게이션</h2>
-            <ul id="navUl">
-                <li class="navLi"><a href="#">공지사항</a></li>
-                <li class="navLi"><a href="#">코딩게시판</a></li>
-                <li class="navLi"><a href="#">게임게시판</a></li>
-                <li class="navLi"><a href="#">자유게시판</a></li>
-            </ul>
-        </div>
-        <a href="#"><div id="mainLeftAd">광고</div></a>
-    </aside>
+	<p>찾으시는 아이디는</p>
+    <p></p>
+    <p>입니다</p>
 </body>
 </html>

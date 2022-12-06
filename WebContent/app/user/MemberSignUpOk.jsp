@@ -10,18 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>mainAsideRight_bf</title>
+    <title>꼼수닷컴에 오신 것을 환영합니다</title>
 </head>
 <body>
-	<aside id="mainAsideRight">
-		<div id="MyWrapBfWrap">
-			<div id="MyWrapBf">
-	            <button id ="asideWriteBf">글쓰기</button>
-	            <a href="#" id ="asideLoginBf">꼼수닷컴을<br>더 즐겁게 이용하세요</a>
-	        </div>
-	        <div id="mainRightAd"><a href="#">광고</a></div>
-	        <button id="screenMode"></button>
-		</div>
-    </aside>
+	<p>회원가입이 완료되었습니다</p>
+	<a href="${pageContext.request.contextPath}/app/index.jsp">홈으로 이동하기</a>
 </body>
 </html>

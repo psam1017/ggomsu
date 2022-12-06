@@ -16,8 +16,8 @@
 	<footer id="footer">
         <div id="footerBottom">
             <div id="footerLine"></div>
-            <div id="footerLogo">로고</div>
-            <div id="Pipp"><a href="board/pipp.jsp">개인정보처리방침</a></div>
+            <a href="${pageContext.request.contextPath}/app/index.jsp"><div id="footerLogo">로고</div></a>
+            <a href="${pageContext.request.contextPath}/app/PrivacyPolicy.jsp"><div id="privacyPolicy">개인정보처리방침</div></a>
             <small>.Copyright 2022. GGOMSU All right reserved</small>
         </div>
     </footer>

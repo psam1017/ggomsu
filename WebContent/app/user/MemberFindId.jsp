@@ -10,10 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>꼼수닷컴에 오신 것을 환영합니다</title>
+    <title>아이디찾기 : 꼼수닷컴</title>
 </head>
 <body>
-	<p>회원가입이 완료되었습니다</p>
-	<button>홈으로 이동하기</button>
+	<h2>로고</h2>
+    <form action="" name="searchIdForm" method="post">
+        <ul>
+            <li><input type="text" name="email"></li>
+            <li><input type="text" name="contact"></li>
+            <li><input type="button" value="아이디찾기" id="findIdButton" onclick="findId()"></li>
+        </ul>
+    </form>
 </body>
 </html>

@@ -10,16 +10,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>로그인 : 꼼수닷컴</title>
+    <title>mainAsideRight</title>
 </head>
 <body>
-	<h2>로고</h2>
-    <form action="" name="loginForm" method="post">
-        <ul>
-            <li id="loginId"><input type="text"></li>
-            <li id="loginPasswd"><input type="password"></li>
-            <li id="loginButton"><input type="button" value="로그인" onclick="Login()"></li>
-        </ul>
-    </form>
+	<aside id="mainAsideRight">
+		<div id="MyWrapBfWrap">
+			<div id="MyWrapBf">
+	            <a href="${pageContext.request.contextPath}/app/user/MemberSignIn.jsp" id ="asideWriteBf">글쓰기</a>
+	            <a href="${pageContext.request.contextPath}/app/user/MemberSignIn.jsp" id ="asideLoginBf">꼼수닷컴을<br>더 즐겁게 이용하세요</a>
+	        </div>
+	        <a href="#"><div id="mainRightAd">광고</div></a>
+	        <button id="screenMode"></button>
+		</div>
+    </aside>
 </body>
 </html>

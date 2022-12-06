@@ -11,12 +11,12 @@
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>꼼수닷컴</title>
-    <link rel="stylesheet" href="../assets/css/mainIndex.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common.css">
 </head>
 <body>
     <jsp:include page="fix/header.jsp" />
 	<jsp:include page="fix/mainAsideLeft.jsp" />
-	<jsp:include page="fix/mainAsideRight_bf.jsp" />
+	<jsp:include page="fix/mainAsideRight.jsp" />
     <main id="main">
         <section id="searchWrap">
             <form action="" name="searchForm">
@@ -170,6 +170,6 @@
         </section>
     </main>
     <jsp:include page="fix/footer.jsp" />
-    <script src="../assets/js/mainIndex.js" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/common.js" defer></script>
 </body>
 </html>
