@@ -2,13 +2,13 @@ package com.ggomsu.app.board.vo;
 
 // 작성자 : 박성민
 
-public class FileVO {
+public class AttachmentVO {
 	
 	private String fileName;
 	private int articleIndex;
 	private String fileNameOrigin;
 	
-	public FileVO() { ; }
+	public AttachmentVO() { ; }
 	
 	public String getFileName() {
 		return fileName;
