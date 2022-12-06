@@ -19,29 +19,28 @@ VALUES	("notice", "공지사항"),
 CREATE TABLE articles
 (
     `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	board_value		VARCHAR(10) NOT NULL,
-    user_nickname	VARCHAR(10) NOT NULL,
+	boardValue		VARCHAR(10) NOT NULL,
+    memberNickname	VARCHAR(10) NOT NULL,
     title			VARCHAR(100) NOT NULL,
     content			VARCHAR(20000) NOT NULL,
-    view_count		INT UNSIGNED NOT NULL DEFAULT 0,
-    written_at		DATETIME NOT NULL DEFAULT NOW(),
-    deleted_at		DATETIME NULL,
-    CONSTRAINT FOREIGN KEY(board_value)
+    viewCount		INT UNSIGNED NOT NULL DEFAULT 0,
+    writtenAt		DATETIME NOT NULL DEFAULT NOW(),
+    deletedAt		DATETIME NULL,
+    CONSTRAINT FOREIGN KEY(boardValue)
 		REFERENCES boards(value)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(user_nickname)
-		REFERENCES user_profile(nickname)
+	CONSTRAINT FOREIGN KEY(memberNickname)
+		REFERENCES memberProfile(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
 CREATE TABLE attachment
 (
-	file_name VARCHAR(100) NOT NULL PRIMARY KEY,
-	article_index INT UNSIGNED NOT NULL,
-	file_name_original VARCHAR(100) NOT NULL,
-    CONSTRAINT FOREIGN KEY(article_index)
+	name			VARCHAR(100) NOT NULL PRIMARY KEY,
+	articleIndex	INT UNSIGNED NOT NULL,
+    CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(`index`)
 			ON DELETE CASCADE
             ON UPDATE CASCADE
@@ -50,52 +49,52 @@ CREATE TABLE attachment
 CREATE TABLE comments
 (
     `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    re_index		INT UNSIGNED NULL,
-    article_index	INT UNSIGNED NOT NULL,
-    user_nickname	VARCHAR(10) NOT NULL,
+    refIndex		INT UNSIGNED NULL,
+    articleIndex	INT UNSIGNED NOT NULL,
+    memberNickname	VARCHAR(10) NOT NULL,
     content			VARCHAR(1000) NOT NULL,
-    written_at		DATETIME DEFAULT NOW(),
-    deleted_at		DATETIME NULL,
-	CONSTRAINT FOREIGN KEY(article_index)
+    writtenAt		DATETIME DEFAULT NOW(),
+    deletedAt		DATETIME NULL,
+	CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(user_nickname)
-		REFERENCES user_profile(nickname)
+    CONSTRAINT FOREIGN KEY(memberNickname)
+		REFERENCES memberProfile(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(re_index)
+	CONSTRAINT FOREIGN KEY(refIndex)
 		REFERENCES comments(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE article_like
+CREATE TABLE articleLike
 (
-	article_index INT UNSIGNED NOT NULL,
-	user_nickname VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(article_index, user_nickname),
-    CONSTRAINT FOREIGN KEY(article_index)
+	articleIndex	INT UNSIGNED NOT NULL,
+	memberNickname	VARCHAR(10) NOT NULL,
+    CONSTRAINT PRIMARY KEY(articleIndex, memberNickname),
+    CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(user_nickname)
-		REFERENCES user_profile(nickname)
+    CONSTRAINT FOREIGN KEY(memberNickname)
+		REFERENCES memberProfile(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE comment_like
+CREATE TABLE commentLike
 (
-	comment_index INT UNSIGNED NOT NULL,
-	user_nickname VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(comment_index, user_nickname),
-    CONSTRAINT FOREIGN KEY(comment_index)
+	commentIndex INT UNSIGNED NOT NULL,
+	memberNickname VARCHAR(10) NOT NULL,
+    CONSTRAINT PRIMARY KEY(commentIndex, memberNickname),
+    CONSTRAINT FOREIGN KEY(commentIndex)
 		REFERENCES comments(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(user_nickname)
-		REFERENCES user_profile(nickname)
+    CONSTRAINT FOREIGN KEY(memberNickname)
+		REFERENCES memberProfile(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
