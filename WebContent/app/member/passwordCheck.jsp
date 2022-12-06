@@ -15,7 +15,7 @@
 <body>
   <div id="mainWrap">
     <main id="main">
-      <%@ include file = "../fix/aside.jsp/" %>
+      <%@ include file="${pageContext.request.contextPath}/app/fix/aside.jsp/" %>
 
       <section id="mainContent">
         <h2>비밀번호 확인</h2>
