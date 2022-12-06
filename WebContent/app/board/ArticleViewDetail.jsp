@@ -17,9 +17,9 @@
         <!-- 게시글 작성자와 조회수 등 -->
         <section id="articleHeader">
             <h2>제목 ${article.getTitle()}</h2>
-            <p>작성자 ${article.getUserNickname()}</p>
+            <p>작성자 ${article.getMemberNickname()}</p>
             <p>조회수 ${article.getViewCount()}</p>
-            <p>추천수 <span id="articleLikeCount" name="articleLikeCount">${articleLike.getCount()}</span></p>
+            <p>추천수 <span id="articleLikeCount" name="articleLikeCount">${article.getArticleLikeCount()}</span></p>
             <p>작성일 ${article.getWrittenAt()}</p>
         </section>
 
@@ -35,11 +35,11 @@
                 <p>첨부파일이 없습니다.</p>
             </c:when>
             <c:otherwise>
-                c:forEach var="file" items="${file}"
+                <c:forEach var="file" items="${file}">
                     <a href="${pageContext.request.contextPath}/board/attachment-download-ok?fileName=${file.getFileName()}">
                         <c:out value="${file.getFileName()}"/>
                     </a>
-                /c:forEach
+                </c:forEach>
             </c:otherwise>
         </c:choose>
         </section>
