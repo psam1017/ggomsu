@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
 </head>
 <body>
-	
+
 	<c:set var="totalCount" value="${totalCount}"/>
 	<c:set var="realEndPage" value="${realEndPage}"/>
 	<c:set var="startPage" value="${startPage}"/>
@@ -30,7 +30,7 @@
 	
 	<h1>게시판</h1>
         <h2>꼼수게시판 : ${articles.getBoardValue()}</h2>
-        <form action="#" method="get">
+        <form action="${pageContext.request.contextPath}/board/article-get-search-list-ok" method="get">
             <input type="text" name="search">
             <input type="submit" value="검색">
         </form>
@@ -42,10 +42,11 @@
                 <c:choose>
                     <c:when test="${articleList != null and fn:length(articleList) > 0}">
                         <c:forEach var="articles" items="${articleList}">
+                        	<c:set var="articleIndex" value="${articles.getIndex()}"/>
                             <li>
                                 <div>
-                                <a href="#">제목 : ${articles.getTitle()}</a>
-                                <div><a href="#">닉네임 : ${articles.getUserNickname()}</a></div>
+                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?index=${articleIndex}">제목 : ${articles.getTitle()}</a>
+                                <div><a href="#">닉네임 : ${articles.getMemberNickname()}</a></div>
                                 <div>작성일 : ${articles.getWrittenAt()}</div>
                                 <div>조회수 : ${articles.getViewCount()}</div>
                                 <c:if test="${articles.getArticleLikeCount()!=null}">

@@ -51,6 +51,18 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("베스트 게시판 리스트 가져오기 실패!!!" + e);
 			}
+		}else if(command.equals("/board/article-get-search-list-ok")) {
+			try {
+				forward = new ArticleGetSearchListOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-view-detail-ok")) {
+			try {
+				forward = new ArticleViewDetailOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
+			}
 		}
 		
 		if(forward != null) {

@@ -1,6 +1,8 @@
 package com.ggomsu.app.board.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -29,4 +31,15 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getBestArticleList", page);
 	}
 	
+	public int getSearchTotal(String search) {
+		return sqlSession.selectOne("Article.getSearchTotal", search);
+	}
+	
+	public List<ArticleVO> getSearchList(String search){
+		return sqlSession.selectList("Article.getSearchArticleList", search);
+	}
+	
+	public ArticleVO getArticle(int index) {
+		return sqlSession.selectOne("Article.getArticle", index);
+	}
 }
