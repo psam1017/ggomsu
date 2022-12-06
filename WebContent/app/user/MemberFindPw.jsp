@@ -18,7 +18,7 @@
         <ul>
             <li><input type="text" name="email"></li>
             <li><input type="text" name="contact"></li>
-            <li><input type="button" value="비밀번호찾기" id="findhPwButton" onclick="findPw()"></li>
+            <li><input type="button" value="비밀번호찾기" id="findhPwButton"></li>
         </ul>
     </form>
 </body>

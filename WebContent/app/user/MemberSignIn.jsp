@@ -18,7 +18,7 @@
         <ul>
             <li id="loginId"><input type="text"></li>
             <li id="loginPasswd"><input type="password"></li>
-            <li id="loginButton"><input type="button" value="로그인" onclick="singIn()"></li>
+            <li id="loginButton"><input type="button" value="로그인"></li>
         </ul>
     </form>
 </body>

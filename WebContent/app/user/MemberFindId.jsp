@@ -18,7 +18,7 @@
         <ul>
             <li><input type="text" name="email"></li>
             <li><input type="text" name="contact"></li>
-            <li><input type="button" value="아이디찾기" id="findIdButton" onclick="findId()"></li>
+            <li><input type="button" value="아이디찾기" id="findIdButton"></li>
         </ul>
     </form>
 </body>

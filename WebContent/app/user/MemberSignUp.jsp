@@ -40,7 +40,7 @@
                     	동의하지 않습니다<input type="radio" name="agreedTermAt" value="disagree" checked></li><!--질문-->
                 <li class="signUpLi">마케팅 동의: 동의합니다<input type="radio" name="agreedMarketingAt" value="agree">
                     	동의하지 않습니다<input type="radio" name="agreedMarketingAt" value="disagree" checked></li>
-                <li class="signUpLi"><input type="button" value="회원가입" onclick="signUp()"></li>
+                <li class="signUpLi"><input type="button" value="회원가입"></li>
             </ul>
         </form>
     </section>
