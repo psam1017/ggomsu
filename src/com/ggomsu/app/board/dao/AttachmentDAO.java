@@ -5,12 +5,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 
-public class FileDAO {
+public class AttachmentDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
 	SqlSession sqlSession;
 	
 	// openSession(true) : 오토 커밋을 true로 설정.
-	public FileDAO() {
+	public AttachmentDAO() {
 		sqlSession = sessionFactory.openSession(true);
 	}
 }

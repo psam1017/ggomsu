@@ -16,7 +16,7 @@ public class MemberDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-//	public boolean checkEmail(String email) {
-//		return (Integer)(sqlSession.selectOne("User.checkEmail", email)) == 1;
-//	}
+	public boolean checkEmail(String email) {
+		return (Integer)(sqlSession.selectOne("Member.checkEmail", email)) == 1;
+	}
 }
