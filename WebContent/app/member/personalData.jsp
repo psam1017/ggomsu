@@ -14,8 +14,8 @@
 </head>
 <body>
   <div id="mainWrap">
-    <main id="main"> 
-      <jsp:include page="${pageContext.request.contextPath}/app/fix/aside.jsp/" />
+    <main id="main">
+      <jsp:include page="../fix/myPageAside.jsp" />
       
       <section id="mainContent">
         <h2>개인정보 변경</h2>
@@ -76,7 +76,6 @@
 	          <div>
               	<p>구글</p>
 	            <input type="button">
-	          </div>
 	          </div>
             </div>
 
