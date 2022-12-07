@@ -43,6 +43,18 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("아이디 중복검사 오류" + e);
 			}
 		}
+		else if(command.equals("/member/member-sign-up-ok")) {
+			
+		}
+		else if(command.equals("/member/member-view-my-info-ok")){
+			
+		}
+		else if(command.equals("/member/member-updata-my-info-ok")) {
+			
+		}
+		else if(command.equals("/member/member-delete-ok")) {
+			
+		}
 		
 		if(forward != null) {
 			if(forward.isForward()) {
