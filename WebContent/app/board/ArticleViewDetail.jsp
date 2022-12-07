@@ -31,13 +31,13 @@
         <!-- 첨부파일 목록 보기 -->
         <section id="attachment">
             <c:choose>
-            <c:when test="${file eq null}">
+            <c:when test="${attachment eq null}">
                 <p>첨부파일이 없습니다.</p>
             </c:when>
             <c:otherwise>
-                <c:forEach var="file" items="${file}">
-                    <a href="${pageContext.request.contextPath}/board/attachment-download-ok?fileName=${file.getFileName()}">
-                        <c:out value="${file.getFileName()}"/>
+                <c:forEach var="attachment" items="${attachment}">
+                    <a href="${pageContext.request.contextPath}/board/attachment-download-ok?attachmentName=${attachment.getAttachmentName()}">
+                        <c:out value="${attachment.getAttachmentName()}"/>
                     </a>
                 </c:forEach>
             </c:otherwise>
@@ -57,7 +57,7 @@
             <ul>
                 <c:forEach var="comment" items="${comment}">
 	                <c:choose>
-	                    <c:when test="${comment.getIndex()} eq ${comment.getReIndex()}">
+	                    <c:when test="${comment.getIndex()} eq ${comment.getRefIndex()}">
 	                        <li class="originComment">
 	                            작성자 : ${comment.getUserNickname()}
 	                            <p>댓글 내용 : ${comment.content()}</p>

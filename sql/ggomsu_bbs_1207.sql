@@ -1,4 +1,3 @@
-
 # 작성자 : 박성민
 
 CREATE TABLE boards
@@ -20,7 +19,7 @@ CREATE TABLE articles
 (
     `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	boardValue		VARCHAR(10) NOT NULL,
-    memberNickname	VARCHAR(10) NOT NULL,
+    nickname	VARCHAR(10) NOT NULL,
     title			VARCHAR(100) NOT NULL,
     content			VARCHAR(20000) NOT NULL,
     viewCount		INT UNSIGNED NOT NULL DEFAULT 0,
@@ -30,15 +29,15 @@ CREATE TABLE articles
 		REFERENCES boards(value)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(memberNickname)
-		REFERENCES memberProfile(nickname)
+	CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
 CREATE TABLE attachment
 (
-	name			VARCHAR(100) NOT NULL PRIMARY KEY,
+	attachmentName	VARCHAR(128) NOT NULL PRIMARY KEY,
 	articleIndex	INT UNSIGNED NOT NULL,
     CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(`index`)
@@ -51,7 +50,7 @@ CREATE TABLE comments
     `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     refIndex		INT UNSIGNED NULL,
     articleIndex	INT UNSIGNED NOT NULL,
-    memberNickname	VARCHAR(10) NOT NULL,
+    nickname		VARCHAR(10) NOT NULL,
     content			VARCHAR(1000) NOT NULL,
     writtenAt		DATETIME DEFAULT NOW(),
     deletedAt		DATETIME NULL,
@@ -59,8 +58,8 @@ CREATE TABLE comments
 		REFERENCES articles(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(memberNickname)
-		REFERENCES memberProfile(nickname)
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(refIndex)
@@ -72,14 +71,14 @@ CREATE TABLE comments
 CREATE TABLE articleLike
 (
 	articleIndex	INT UNSIGNED NOT NULL,
-	memberNickname	VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(articleIndex, memberNickname),
+	nickname		VARCHAR(10) NOT NULL,
+    CONSTRAINT PRIMARY KEY(articleIndex, nickname),
     CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(memberNickname)
-		REFERENCES memberProfile(nickname)
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -87,14 +86,14 @@ CREATE TABLE articleLike
 CREATE TABLE commentLike
 (
 	commentIndex INT UNSIGNED NOT NULL,
-	memberNickname VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(commentIndex, memberNickname),
+	nickname VARCHAR(10) NOT NULL,
+    CONSTRAINT PRIMARY KEY(commentIndex, nickname),
     CONSTRAINT FOREIGN KEY(commentIndex)
 		REFERENCES comments(`index`)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(memberNickname)
-		REFERENCES memberProfile(nickname)
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );

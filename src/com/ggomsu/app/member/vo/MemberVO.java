@@ -4,15 +4,20 @@ package com.ggomsu.app.member.vo;
 
 public class MemberVO {
 	
+	// 로그인
 	private String email;
-	private String uniqueId;
 	private String password;
+	private String naverKey;
+	private String kakaoKey;
+	private String googleKey;
 	private String signAt;
 	private String passwordAlertAt;
 	
+	// 게시판 이용
 	private String nickname;
 	private String profileImageUrl;
 	
+	// 개인정보
 	private String name;
 	private String birthDate;
 	private String sex;
@@ -22,13 +27,16 @@ public class MemberVO {
 	private String address;
 	private String addressDetail;
 	
+	// 이용사항 및 약관
 	private String agreedTermAt;
 	private String agreedMarketingAt;
 	private String createdAt;
 	
+	// 회원상태
 	private String statusValue;
 	private int abuseCount;
 	
+	// 차단유저
 	private String blockedMember;
 	
 	public MemberVO() { ; }
@@ -41,20 +49,36 @@ public class MemberVO {
 		this.email = email;
 	}
 
-	public String getUniqueId() {
-		return uniqueId;
-	}
-
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
-
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getNaverKey() {
+		return naverKey;
+	}
+
+	public void setNaverKey(String naverKey) {
+		this.naverKey = naverKey;
+	}
+
+	public String getKakaoKey() {
+		return kakaoKey;
+	}
+
+	public void setKakaoKey(String kakaoKey) {
+		this.kakaoKey = kakaoKey;
+	}
+
+	public String getGoogleKey() {
+		return googleKey;
+	}
+
+	public void setGoogleKey(String googleKey) {
+		this.googleKey = googleKey;
 	}
 
 	public String getSignAt() {

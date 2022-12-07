@@ -11,8 +11,7 @@ public class CommentVO {
 	private String Content;
 	private String writtenAt;
 	private String deletedAt;
-	
-	private int commentLike;
+	private int commentLikeCount;
 	
 	public CommentVO() { ; }
 	
@@ -59,9 +58,9 @@ public class CommentVO {
 		this.deletedAt = deletedAt;
 	}
 	public int getCommentLike() {
-		return commentLike;
+		return commentLikeCount;
 	}
-	public void setCommentLike(int commentLike) {
-		this.commentLike = commentLike;
+	public void setCommentLike(int commentLikeCount) {
+		this.commentLikeCount = commentLikeCount;
 	}
 }

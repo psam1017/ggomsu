@@ -12,7 +12,7 @@ public class ArticleVO {
 	private int viewCount;
 	private String writtenAt;
 	private String deletedAt;
-	private int ArticleLikeCount;
+	private int articleLikeCount;
 
 	public ArticleVO() { ; }
 	
@@ -65,9 +65,9 @@ public class ArticleVO {
 		this.deletedAt = deletedAt;
 	}
 	public int getArticleLikeCount() {
-		return ArticleLikeCount;
+		return articleLikeCount;
 	}
 	public void setArticleLikeCount(int articleLikeCount) {
-		ArticleLikeCount = articleLikeCount;
+		this.articleLikeCount = articleLikeCount;
 	}
 }
