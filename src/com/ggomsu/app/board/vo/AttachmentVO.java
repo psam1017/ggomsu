@@ -4,28 +4,24 @@ package com.ggomsu.app.board.vo;
 
 public class AttachmentVO {
 	
-	private String fileName;
+	private String attachmentName;
 	private int articleIndex;
-	private String fileNameOrigin;
 	
 	public AttachmentVO() { ; }
 	
-	public String getFileName() {
-		return fileName;
+	public String getAttachmentName() {
+		return attachmentName;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	
+	public void setAttachmentName(String attachmentName) {
+		this.attachmentName = attachmentName;
 	}
+
 	public int getArticleIndex() {
 		return articleIndex;
 	}
+
 	public void setArticleIndex(int articleIndex) {
 		this.articleIndex = articleIndex;
-	}
-	public String getFileNameOrigin() {
-		return fileNameOrigin;
-	}
-	public void setFileNameOrigin(String fileNameOrigin) {
-		this.fileNameOrigin = fileNameOrigin;
 	}
 }

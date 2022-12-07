@@ -25,7 +25,6 @@ public class MemberFrontController extends HttpServlet {
 		doProcess(request, response);
 	}
 	
-	@SuppressWarnings("unused")
 	protected void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String requestURI = req.getRequestURI();

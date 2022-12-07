@@ -2,8 +2,10 @@
 -- DROP SCHEMA psam1017;
 
 # 작성자 : 박성민
-# 전화번호는 js로 유효성 검사 실시
-# 차단유저는 로그인할 때 정보를 한 번에 불러와서 세션에 저장하기
+# 22.12.07.
+# 변경사항 : member 테이블 통합 / 컬럼명 통일
+# 사유 : 정규화 / 컬럼명 구분에 따른 작업효율 저하
+# 비고 : 제1정규형을 만족시키기 위해 소셜 로그인 key를 모두 분리하였습니다.
 
 CREATE TABLE memberSex
 (
@@ -52,17 +54,15 @@ VALUES	("KT", "케이티"),
         ("CPS", "알뜰폰에스케이티"),
         ("CPL", "알뜰폰엘지");
 
-CREATE TABLE memberSign
+CREATE TABLE members
 (
 	email				VARCHAR(50) 	NOT NULL	PRIMARY KEY,
-    password			VARCHAR(128) 	NOT NULL,
-    signAt				DATETIME 		NOT NULL,
-    passwordAlertAt		DATETIME 		NOT NULL
-);
-
-CREATE TABLE memberInfo
-(
-	memberEmail			VARCHAR(50) 	NOT NULL	PRIMARY KEY,
+	password			VARCHAR(128) 	NOT NULL,
+    naverKey			VARCHAR(128)	NULL,
+    kakaoKey			VARCHAR(128)	NULL,
+    googleKey			VARCHAR(128)	NULL,
+	signAt				DATETIME 		NOT NULL,
+    passwordAlertAt		DATETIME 		NOT NULL,
     nickname			VARCHAR(10) 	NOT NULL 	UNIQUE,
 	profileImageUrl		VARCHAR(128) 	NULL		UNIQUE,
 	name				VARCHAR(5) 	NULL,
@@ -73,15 +73,11 @@ CREATE TABLE memberInfo
 	zipcode				VARCHAR(5)		NULL,
 	address				VARCHAR(100)	NULL,
 	addressDetail		VARCHAR(100)	NULL,
-    agreedTermAt		DATETIME 		NOT NULL,
+    agreedTermAt		DATETIME 		NOT NULL	DEFAULT NOW(),
     agreedMarketingAt	DATETIME 		NULL,
     createdAt			DATETIME 		NOT NULL 	DEFAULT NOW(),
     statusValue			VARCHAR(3) 	NOT NULL	DEFAULT "MEM",
     abuseCount			TINYINT		NOT NULL	DEFAULT 0,
-	CONSTRAINT FOREIGN KEY(memberEmail)
-		REFERENCES memberSign(email)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(sex)
 		REFERENCES memberSex(value)
         ON DELETE CASCADE
@@ -96,58 +92,17 @@ CREATE TABLE memberInfo
         ON UPDATE CASCADE
 );
 
-CREATE TABLE memberProfile
-(
-    nickname			VARCHAR(10) 	NOT NULL PRIMARY KEY,
-	profileImageUrl		VARCHAR(128) 	NULL,
-    CONSTRAINT FOREIGN KEY(nickname)
-		REFERENCES memberInfo(nickname)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(profileImageUrl)
-		REFERENCES memberInfo(profileImageUrl)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
-CREATE TABLE socialType
-(
-	value	VARCHAR(15)	NOT NULL	PRIMARY KEY,
-    text	VARCHAR(50)	NOT NULL
-);
-
-INSERT INTO socialType
-VALUES	("naver", "네이버"),
-		("kakao", "카카오"),
-        ("google", "구글");
-
-CREATE TABLE memberSocial
-(
-	memberEmail	VARCHAR(50) 	NOT NULL,
-    socialValue	VARCHAR(3)		NOT NULL,
-	uniqueId	VARCHAR(100)	NOT NULL,
-	CONSTRAINT PRIMARY KEY(memberEmail, socialValue),
-	CONSTRAINT FOREIGN KEY(memberEmail)
-		REFERENCES memberSign(email)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(socialValue)
-		REFERENCES socialType(value)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
 CREATE TABLE memberBlock
 (
-	memberNickname		VARCHAR(10) NOT NULL,
+	nickname			VARCHAR(10) NOT NULL,
 	blockedMember		VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(memberNickname, blockedMember),
-    CONSTRAINT FOREIGN KEY(memberNickname)
-		REFERENCES memberProfile(nickname)
+    CONSTRAINT PRIMARY KEY(nickname, blockedMember),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(blockedMember)
-		REFERENCES memberProfile(nickname)
+		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 );
