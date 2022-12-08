@@ -19,12 +19,15 @@ CREATE TABLE articles
 (
     `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	boardValue		VARCHAR(10) NOT NULL,
-    nickname	VARCHAR(10) NOT NULL,
+    nickname		VARCHAR(10) NOT NULL,
     title			VARCHAR(100) NOT NULL,
     content			VARCHAR(20000) NOT NULL,
     viewCount		INT UNSIGNED NOT NULL DEFAULT 0,
     writtenAt		DATETIME NOT NULL DEFAULT NOW(),
     deletedAt		DATETIME NULL,
+    tag1			VARCHAR(20) NULL,
+    tag2			VARCHAR(20) NULL,
+    tag3			VARCHAR(20) NULL,
     CONSTRAINT FOREIGN KEY(boardValue)
 		REFERENCES boards(value)
         ON DELETE CASCADE
@@ -33,6 +36,13 @@ CREATE TABLE articles
 		REFERENCES members(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
+);
+
+CREATE TABLE tags
+(
+	value		VARCHAR(20) NOT NULL PRIMARY KEY,
+    tagCount	INT UNSIGNED NOT NULL,
+    searchCount	INT UNSIGNED NOT NULL
 );
 
 CREATE TABLE attachment

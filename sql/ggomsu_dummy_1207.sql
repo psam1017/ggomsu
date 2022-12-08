@@ -17,6 +17,18 @@ UPDATE articles
 SET viewCount = 200
 WHERE `index` = 17;
 
+UPDATE articles
+SET tag1 = 'JAVA', tag2 = 'Spring'
+WHERE `index` = 17;
+
+UPDATE articles
+SET tag1 = 'Java', viewCount = 181
+WHERE `index` = 18;
+
+UPDATE articles
+SET tag1 = 'Python', tag2 = 'Java', tag3 = 'C++'
+WHERE `index` = 19;
+
 INSERT INTO comments(refIndex, articleIndex, nickname, content)
 VALUES
 (1, 2, 'psam-nick', '새로운 기념비적인 게시글입니다.'),
