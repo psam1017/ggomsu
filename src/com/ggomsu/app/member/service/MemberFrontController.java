@@ -31,8 +31,6 @@ public class MemberFrontController extends HttpServlet {
 		String contextPath = req.getContextPath();
 		String command = requestURI.substring(contextPath.length());
 		
-		System.out.println("실행!");
-
 		ActionForward forward = null;
 		
 		// 아래의 경로는 src 패키지 경로와는 무관하다. controller를 생략할 수 있다.
@@ -42,6 +40,13 @@ public class MemberFrontController extends HttpServlet {
 				forward = new MemberCheckEmailOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("아이디 중복검사 오류" + e);
+			}
+		}
+		else if(command.equals("/member/member-check-nickname-ok")) {
+			try {
+				forward = new MemberCheckNicknameOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("닉네임 중복검사 오류" + e);
 			}
 		}
 		else if(command.equals("/member/member-sign-up-ok")) {

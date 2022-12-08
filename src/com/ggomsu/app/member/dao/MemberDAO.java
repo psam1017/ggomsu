@@ -21,6 +21,10 @@ public class MemberDAO {
 		return (Integer)(sqlSession.selectOne("Member.checkEmail", email)) == 1;
 	}
 	
+	public boolean checkNickname(String nickname) {
+		return (Integer)(sqlSession.selectOne("Member.checkNickname", nickname)) == 1;
+	}
+	
 	public void signUp(MemberVO vo) {
 		sqlSession.insert("Member.signUp", vo);
 	}

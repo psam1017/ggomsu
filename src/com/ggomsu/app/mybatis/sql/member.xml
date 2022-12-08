@@ -4,16 +4,26 @@
 <mapper namespace="Member">
 	<select id="checkEmail" parameterType="string" resultType="_int">
 		SELECT COUNT(email)
-		FROM memberSign
+		FROM members
 		WHERE email = #{email}
 	</select>
+	<select id="checkNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM members
+		WHERE nickname = #{nickname}
+	</select>
+	<!--
+	@손하늘 / 회원가입 페이지에는 현재 소셜 로그인 연동 기능이 없어서
+	지금 naverKey, ...를 넣으면 오류가 발생할 것 같습니다.
+	일단은 빼놓고 나중에 구현을 한다면 그때 추가하는 게 어떨까요?
+	-->
 	<insert id="signUp" parameterType="member">
 		INSERT INTO members
 		(email, password, naverKey, kakaoKey, googleKey, signAt, passwordAlertAt, nickname, profileImageUrl, name,
 		birthDate, sex, 
 		telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 		VALUES
-		(#{email}, #{password}, #{naverKey}, #{kakaoKey}, googleKey{}, NOW(), NOW()
+		(#{email}, #{password}, #{naverKey}, #{kakaoKey}, #{googleKey}, NOW(), NOW()
 		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
 		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW());
 	</insert>

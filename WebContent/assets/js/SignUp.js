@@ -20,7 +20,7 @@ let isPasswordCheckValid = false;
 let isNicknameValid = false;
 let isTermOk = false;
 let emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-let passwordRegExp = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*-?]).{8,}$/;;
+let passwordRegExp = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*?]).{8,}$/;;
 // 비밀번호는 소문자, 숫자, 특수문자를 포함한 8자 이상
 
 email.addEventListener("blur", function(){
@@ -35,9 +35,9 @@ passwordCheck.addEventListener("keyup", function(){
 	checkPasswordCheck(password.value, passwordCheck.value);
 });
 
-nickname.addEventListener("blur"), function(){
+nickname.addEventListener("blur", function(){
 	checkNickname(nickname.value);
-}
+});
 
 signUpSubmit.addEventListener("click", function(){
 	formSubmit();
@@ -124,6 +124,7 @@ function checkPassword(passwordValue){
 		return;
 	}
 	
+	passwordResult.innerText = "";
 	isPasswordValid = true;
 }
 
@@ -135,13 +136,13 @@ function checkPasswordCheck(passwordValue, passwordCheckValue){
 	isPasswordCheckValid = false;
 
 	if(!isPasswordValid){
-		passwordCheckResult.innerText = "비밀번호가 올바르지 않습니다.";
+		alert("비밀번호가 올바르지 않습니다.");
 		password.focus();
 		return;
 	}
 	else{
 		if(passwordValue === passwordCheckValue){
-			passwordCheckResult.innerText = "비밀번호가 일치합니다.";
+			passwordCheckResult.innerText = "";
 			isPasswordCheckValid = true;
 		}
 		else{
@@ -165,7 +166,7 @@ function checkNickname(nicknameValue){
 		return;
 	}
 	
-	if(nicknameValue.length <= 2 || nicknameValue.length >= 10){
+	if(nicknameValue.length < 2 || nicknameValue.length > 10){
 		nicknameResult.innerText = "닉네임은 2자 이상 10자 이하로 입력해주세요.";
 		return;
 	}
