@@ -24,10 +24,10 @@ public class MemberCheckEmailOk implements Action {
 		PrintWriter out = resp.getWriter();
 		
 		if(dao.checkEmail(email)) {
-			json.put("status", "not-ok");
+			json.put("emailStatus", "not-ok");
 		}
 		else {
-			json.put("status", "ok");
+			json.put("emailStatus", "ok");
 		}
 		
 		out.print(json.toJSONString());
