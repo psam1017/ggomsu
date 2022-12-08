@@ -26,16 +26,24 @@
 	<c:set var="prevPage" value="${prevPage}"/>
 	<c:set var="nextPage" value="${nextPage}"/>
 	<c:set var="articleLikeCount" value="${articleLikeCount}"/>
-	<c:set var="category" value="${category}"/>
+	<c:set var="sortBy" value="${sortBy}"/> 
+	<!-- sortBy : 조회순, 최신순, 추천순 처럼 정렬기준을 전달하는 변수  -->
+	<c:set var="boardValue" value="${boardValue}"/>
+	<!-- boardVlaue : 공지사항, 코딩게시판, 게임게시판, 자유게시판을 구별해주는 변수 --> 
+	<c:set var="boardText" value="${boardText}"/>
+	<!-- boardText : 공지사항, 코딩게시판, 게임게시판, 자유게시판을 출력하는 변수 --> 
+	<c:set var="search" value="${search}"/>
 	
 	<h1>게시판</h1>
-        <h2>꼼수게시판 : ${articles.getBoardValue()}</h2>
+        <h2>${boardText}</h2>
         <form action="${pageContext.request.contextPath}/board/article-get-search-list-ok" method="get">
+        	<input type="hidden" name="boardValue" value="${boardValue}" >
             <input type="text" name="search">
             <input type="submit" value="검색">
         </form>
-        <a href="${pageContext.request.contextPath}/board/article-get-best-list-ok">추천순</a>
-        <a href="${pageContext.request.contextPath}/board/article-get-list-ok">최신순</a>
+        <a href="${pageContext.request.contextPath}/board/article-get-best-list-ok?boardValue=${boardValue}">추천순</a>
+        <a href="${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=${boardValue}">최신순</a>
+        <a href="${pageContext.request.contextPath}/board/article-get-viewed-order-list-ok?boardValue=${boardValue}">조회순</a>
         <!-- 검색 버튼 입력시 검색단어로 출력 -->
         <div class="ulWrap">
             <ul class="articleLine">
@@ -71,7 +79,7 @@
         	<tr>
         		<td>
         			<c:if test="${nowPage > 1}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${category}-list-ok?page=${prevPage}">&lt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${prevPage}&search=${search}">&lt;</a>
         			</c:if>
         			
         			<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -80,13 +88,13 @@
         						<c:out value="[${i}]"/>&nbsp;
         					</c:when>
         					<c:otherwise>
-        						<a href="${pageContext.request.contextPath}/board/article-get${category}-list-ok?page=${i}"><c:out value="${i}"/></a>
+        						<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${i}&search=${search}"><c:out value="${i}"/></a>
         					</c:otherwise>
         				</c:choose>
         			</c:forEach>
         			
         			<c:if test="${nowPage != realEndPage}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${category}-list-ok?page=${nextPage}">&gt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${nextPage}&search=${search}">&gt;</a>
         			</c:if>
         		</td>
         	</tr>
