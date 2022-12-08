@@ -30,6 +30,8 @@ public class MemberFrontController extends HttpServlet {
 		String requestURI = req.getRequestURI();
 		String contextPath = req.getContextPath();
 		String command = requestURI.substring(contextPath.length());
+		
+		System.out.println("실행!");
 
 		ActionForward forward = null;
 		
@@ -43,7 +45,11 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		else if(command.equals("/member/member-sign-up-ok")) {
-			
+			try {
+				forward = new MemberSignUpOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원가입 실패!" + e);
+			}
 		}
 		else if(command.equals("/member/member-view-my-info-ok")){
 			

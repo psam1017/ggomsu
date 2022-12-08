@@ -7,4 +7,15 @@
 		FROM memberSign
 		WHERE email = #{email}
 	</select>
+	<insert id="signUp" parameterType="member">
+		INSERT INTO members
+		(email, password, naverKey, kakaoKey, googleKey, signAt, passwordAlertAt, nickname, profileImageUrl, name,
+		birthDate, sex, 
+		telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
+		VALUES
+		(#{email}, #{password}, #{naverKey}, #{kakaoKey}, googleKey{}, NOW(), NOW()
+		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
+		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW());
+	</insert>
+	
 </mapper>
