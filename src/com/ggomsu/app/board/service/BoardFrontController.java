@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
-
+	// 작성자 : 이성호
 @SuppressWarnings("serial")
 public class BoardFrontController extends HttpServlet {
 
@@ -60,6 +60,12 @@ public class BoardFrontController extends HttpServlet {
 		}else if(command.equals("/board/article-view-detail-ok")) {
 			try {
 				forward = new ArticleViewDetailOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-get-viewed-order-list-ok")) {
+			try {
+				forward = new ArticleGetOrderListOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
 			}

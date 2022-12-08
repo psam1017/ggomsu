@@ -8,7 +8,7 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
 	// 작성자 : 이성호
-public class ArticleGetBestListOk implements Action{
+public class ArticleGetOrderListOk implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -43,12 +43,12 @@ public class ArticleGetBestListOk implements Action{
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
 		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", dao.getBestList((page-1)*10,boardValue));
+		req.setAttribute("articleList", dao.getViewedOrderList((page-1)*10,boardValue));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
-		req.setAttribute("boardValue", boardValue);
+		req.setAttribute("boardValue", boardValue); 
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
-		req.setAttribute("sortBy","-best"); 
+		req.setAttribute("sortBy","-viewed-order");
 		
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
