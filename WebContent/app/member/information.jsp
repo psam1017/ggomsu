@@ -15,7 +15,7 @@
 <body>
   <div id="mainWrap">
     <main id="main">
-      <jsp:include page="${pageContext.request.contextPath}/app/fix/aside.jsp/" />
+    <jsp:include page="../fix/myPageAside.jsp" />
       
       <section id="mainContent">
         <form action="" method="">
