@@ -12,20 +12,22 @@
 		FROM members
 		WHERE nickname = #{nickname}
 	</select>
-	<!--
-	@손하늘 / 회원가입 페이지에는 현재 소셜 로그인 연동 기능이 없어서
-	지금 naverKey, ...를 넣으면 오류가 발생할 것 같습니다.
-	일단은 빼놓고 나중에 구현을 한다면 그때 추가하는 게 어떨까요?
-	-->
+
 	<insert id="signUp" parameterType="member">
 		INSERT INTO members
-		(email, password, naverKey, kakaoKey, googleKey, signAt, passwordAlertAt, nickname, profileImageUrl, name,
-		birthDate, sex, 
-		telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
+		(email, password, signAt, passwordAlertAt, nickname, profileImageUrl, name,
+		birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 		VALUES
-		(#{email}, #{password}, #{naverKey}, #{kakaoKey}, #{googleKey}, NOW(), NOW()
+		(#{email}, #{password}, NOW(), NOW(),
 		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
-		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW());
+		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW())
 	</insert>
 	
+	<!-- 회원탈퇴 : 탈퇴 후 바로 사용자DB 정보를 삭제하는 것 이 아니라 일정기간 이후 삭제 하기 때문 사용자상태 정보만 변경 하여 회원 탈퇴 구분 -->
+	<update id="withdrawal" parameterType="member">
+		UPDATE members 
+		SET statusValue = "DEL"
+		WHERE 
+		email = #{email}
+	</update>
 </mapper>
