@@ -32,7 +32,6 @@ public class MemberFrontController extends HttpServlet {
 		String command = requestURI.substring(contextPath.length());
 		
 		ActionForward forward = null;
-		System.out.println("실행1");
 		
 		// 아래의 경로는 src 패키지 경로와는 무관하다. controller를 생략할 수 있다.
 		// Ok는 "연산 또는 완료"의 의미를 가진다. 단순 이동이라면 Ok를 붙이지 않는다.
@@ -56,7 +55,11 @@ public class MemberFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("회원가입 실패!" + e);
 			}
-			System.out.println("실행3");
+		}
+		else if(command.equals("/member/welcom")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/member/MemberSignUpOk.jsp");
 		}
 		else if(command.equals("/member/member-view-my-info-ok")){
 			
@@ -71,7 +74,6 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("회원탈퇴 실패!" + e);
 			}
 		}
-		System.out.println("실행4");
 		if(forward != null) {
 			if(forward.isForward()) {
 				RequestDispatcher dispatcher = req.getRequestDispatcher(forward.getPath());
