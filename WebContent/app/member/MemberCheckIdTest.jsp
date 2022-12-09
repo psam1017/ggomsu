@@ -18,7 +18,7 @@ pageEncoding="UTF-8"%>
         <form action="${pageContext.request.contextPath}/member/member-sign-up-ok" id="signUpForm" name="signUpForm" method="post">
             <ul id="signUpUl">
                 <li class="signUpLi">
-                    이메일 <input type="email" name="email" id="email"/>
+                    이메일 <input type="email" name="email" id="email" value="psam1017@naver.com"/>
                     <span id="emailResult" name="emailResult">이메일은 필수항목입니다.</span>
                 </li>
                 <li class="signUpLi">

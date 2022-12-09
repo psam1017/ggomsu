@@ -203,7 +203,7 @@ function checkNickname(nicknameValue){
 }
 
 function formSubmit(){
-	
+
 	if(!isEmailValid){
 		alert("이메일을 확인해주세요.");
 		email.focus();
@@ -215,19 +215,19 @@ function formSubmit(){
 		password.focus();
 		return;
 	}
-	
+
 	if(!isPasswordCheckValid){
 		alert("비밀번호가 일치하지 않습니다.");
 		passwordCheck.focus();
 		return;
 	}
-	
+
 	if(!isNicknameValid){
 		alert("닉네임을 확인해주세요.");
 		nickname.focus();
 		return;
 	}
-	
+
 	isTermOk = true;
 	terms.forEach(element => {
 		if(element.checked == false){
@@ -243,6 +243,7 @@ function formSubmit(){
 
 	// 비밀번호 암호화
 	// 자문결과 front에서의 암호화는 SSL로 대체한다.
+	// 필요한 경우 Base64를 사용할 수 있다.
 
 	signUpForm.submit();
 }
