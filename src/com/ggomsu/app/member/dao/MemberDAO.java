@@ -28,4 +28,8 @@ public class MemberDAO {
 	public void signUp(MemberVO vo) {
 		sqlSession.insert("Member.signUp", vo);
 	}
+	
+	public boolean withdrawal(MemberVO statusValue) {
+		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
+	}
 }
