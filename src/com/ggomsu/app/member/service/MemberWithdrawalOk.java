@@ -8,6 +8,7 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
+	//작성자 : 손하늘
 public class MemberWithdrawalOk implements Action{
 	
 	@Override
@@ -25,13 +26,9 @@ public class MemberWithdrawalOk implements Action{
 		
 		dao.withdrawal(vo);
 		
-		System.out.println("실행2!");
-		
 		forward.setForward(false);
 		System.out.println(req.getContextPath());
 		forward.setPath(req.getContextPath() + "/app/index.jsp");
-		
-		System.out.println("실행3!");
 		
 		return forward;
 		

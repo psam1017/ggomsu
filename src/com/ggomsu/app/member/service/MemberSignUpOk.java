@@ -8,6 +8,7 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
+	//작성자 : 손하늘
 public class MemberSignUpOk implements Action{
 	
 	@Override
@@ -25,7 +26,11 @@ public class MemberSignUpOk implements Action{
 		vo.setEmail(req.getParameter("email"));
 		String inserted = req.getParameter("password");
 		
-		info = encrypt.encrypt(inserted);
+		try {
+			info = encrypt.encrypt(inserted);
+		} catch (Exception e) {
+			System.out.println("암호화 예외 발생! " + e);
+		}
 
 		vo.setPassword(info.getPassword());
 		//vo.setSalt(info.getSalt());
