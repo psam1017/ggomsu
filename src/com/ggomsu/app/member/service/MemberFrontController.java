@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
 
-// 작성자 : 박성민
+// 작성자 : 박성민, 손하늘
 
 @WebServlet("/MemberFrontController")
 public class MemberFrontController extends HttpServlet {
