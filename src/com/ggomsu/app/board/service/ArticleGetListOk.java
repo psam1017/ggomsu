@@ -25,7 +25,7 @@ public class ArticleGetListOk implements Action{
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
-		int totalCount = dao.getTotal();
+		int totalCount = dao.getTotal(boardValue);
 		
 		int endRow = page * pageSize;
 		int startRow = endRow - (pageSize - 1);
@@ -44,7 +44,7 @@ public class ArticleGetListOk implements Action{
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
 		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", dao.getList((page-1)*10,boardValue));
+		req.setAttribute("articleList", dao.getList((page-1)*10,"%"+boardValue));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardValue", boardValue); 

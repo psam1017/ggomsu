@@ -33,7 +33,7 @@
 	<c:set var="boardText" value="${boardText}"/>
 	<!-- boardText : 공지사항, 코딩게시판, 게임게시판, 자유게시판을 출력하는 변수 --> 
 	<c:set var="search" value="${search}"/>
-	
+
 	<h1>게시판</h1>
         <h2>${boardText}</h2>
         <form action="${pageContext.request.contextPath}/board/article-get-search-list-ok" method="get">
@@ -53,7 +53,7 @@
                         	<c:set var="articleIndex" value="${articles.getIndex()}"/>
                             <li>
                                 <div>
-                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?index=${articleIndex}">제목 : ${articles.getTitle()}</a>
+                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?index=${articles.getIndex()}">제목 : ${articles.getTitle()}</a>
                                 <div><a href="#">닉네임 : ${articles.getMemberNickname()}</a></div>
                                 <div>작성일 : ${articles.getWrittenAt()}</div>
                                 <div>조회수 : ${articles.getViewCount()}</div>
@@ -79,7 +79,7 @@
         	<tr>
         		<td>
         			<c:if test="${nowPage > 1}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${prevPage}&search=${search}">&lt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${prevPage}&boardValue=${boardValue}&search=${search}">&lt;</a>
         			</c:if>
         			
         			<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -88,13 +88,13 @@
         						<c:out value="[${i}]"/>&nbsp;
         					</c:when>
         					<c:otherwise>
-        						<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${i}&search=${search}"><c:out value="${i}"/></a>
+        						<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${i}&boardValue=${boardValue}&search=${search}"><c:out value="${i}"/></a>
         					</c:otherwise>
         				</c:choose>
         			</c:forEach>
         			
         			<c:if test="${nowPage != realEndPage}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${nextPage}&search=${search}">&gt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${nextPage}&boardValue=${boardValue}&search=${search}">&gt;</a>
         			</c:if>
         		</td>
         	</tr>

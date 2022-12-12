@@ -5,12 +5,14 @@
 <mapper namespace="Article">
 	<select id="getTotal" resultType="_int">
 		SELECT COUNT(`index`) FROM psam1017.articles
+		WHERE boardValue LIKE #{boardValue}
 	</select>
 	
 	<select id="getArticleList" parameterType="hashmap" resultType="article">
 		SELECT @rownum := @rownum + 1 AS R, A.`index`, A.title, A.memberNickname, A.viewCount, A.writtenAt
 		FROM psam1017.articles A, (SELECT @rownum := 0) rownum
-		WHERE boardValue = #{boardValue}
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY writtenAt DESC
 		LIMIT 10 OFFSET #{page}
 	</select>
 	
@@ -19,7 +21,7 @@
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`index` = B.articleIndex
-		WHERE boardValue = #{boardValue}
+		WHERE boardValue LIKE #{boardValue}
 		ORDER BY articleLikeCount DESC
 		LIMIT 10 OFFSET #{page};
 	</select>
@@ -60,10 +62,23 @@
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`index` = B.articleIndex
-		WHERE boardValue = #{boardValue}
+		WHERE boardValue LIKE #{boardValue}
 		ORDER BY viewCount DESC
 		LIMIT 10 OFFSET #{page};
 	</select>
 	
+	<delete id="deleteArticle" parameterType="_int">
+		DELETE FROM articles WHERE `index` = #{index}
+	</delete>
 	
+	<insert id="insertArticle" parameterType="article">
+		INSERT INTO psam1017.Articles(boardValue, memberNickname, title, content)
+		VALUES (#{boardValue},"박성민",#{title},#{content})
+	</insert>
+	
+	<select id="getMaxIndex" resultType="_int">
+		SELECT `index` FROM psam1017.articles 
+		ORDER BY `index` DESC
+		LIMIT 1
+	</select>
 </mapper>
