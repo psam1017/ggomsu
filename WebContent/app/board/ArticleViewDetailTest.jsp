@@ -20,7 +20,7 @@
         <!-- 게시글 작성자와 조회수 등 -->
         <section id="articleHeader">
             <h2>제목 ${article.getTitle()}</h2>
-            <p>작성자 ${article.getMemberNickname()}</p>
+            <p>작성자 ${article.getNickname()}</p>
             <p>조회수 ${article.getViewCount()}</p>
             <p>추천수 <span id="articleLikeCount" name="articleLikeCount">${article.getArticleLikeCount()}</span></p>
             <p>작성일 ${article.getWrittenAt()}</p>
