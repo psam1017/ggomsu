@@ -61,6 +61,13 @@ public class MemberFrontController extends HttpServlet {
 			forward.setForward(true);
 			forward.setPath("/app/member/MemberSignUpOk.jsp");
 		}
+		else if(command.equals("/member/member-get-block-ok")) {
+			try {
+				forward = new MemberGetBlockOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원차단 실패!" + e);
+			}
+		}
 		else if(command.equals("/member/member-view-my-info-ok")){
 			
 		}

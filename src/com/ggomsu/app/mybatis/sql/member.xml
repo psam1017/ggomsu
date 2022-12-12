@@ -30,4 +30,19 @@
 		WHERE 
 		email = #{email}
 	</update>
+	
+	<!-- 차단유저 -->
+	<select id="blockView" parameterType="string" resultType="_int">
+		SELECT nickname
+		FROM memberBlock
+		WHERE nickname = #{nickname}
+	</select>	
+	<insert id="blockOk" parameterType="member">
+		INSERT INTO memberBlock
+		(nickname, blockedMember)
+		VALUES
+		(#{nickname}, #{blockedMember})
+	</insert>
+
+	
 </mapper>
