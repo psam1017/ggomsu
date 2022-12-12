@@ -36,7 +36,7 @@
           </li>
           <li>
             <input type="text" placeholder="제목을 입력하세요." name="title" maxlength="100" style="width: 100%" />
-            <input type="hidden" name="memberNickname" value="${sessionMember}"/>
+            <input type="hidden" name="nickname" value="${sessionMember}"/>
           </li>
         </ul>
       </div>
