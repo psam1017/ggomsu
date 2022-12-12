@@ -12,37 +12,51 @@
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>회원가입 : 꼼수닷컴</title>
 </head>
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
+<script src="${pageContext.request.contextPath}/assets/js/SignUp.js" defer></script>
+<script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
 <body>
-	<section id="signUp">
+	<main id="signUp">
         <h1 id="signUpH">회원가입</h1>
         <form action="${pageContext.request.contextPath}" id="signUpForm" name="signUpForm" method="post">
+        	<fieldset>
+        	<legend>필수항목</legend>
             <ul id="signUpUl">
-                <li class="signUpLi">이메일 <input type="text" name="email"></li>
-                <li class="signUpLi">비밀번호 <input type="password" name="password"></li>
-                <li class="signUpLi">비밀번호 확인 <input type="password"></li>
-                <li class="signUpLi">닉네임 <input type="text" name="nickname"></li>
-                <li class="signUpLi">이름 <input type="text" name="name"></li>
-                <li class="signUpLi">성별: 남성<input type="radio" name="sex" value="남성" checked>
+                <li>이메일 <input type="email" name="email" id= "email"></li><span id=emailResult></span>
+                <li>비밀번호 <input type="password" name="password" id="password"></li><span id=passwordResult></span>
+                <li>비밀번호 확인 <input type="password" id="passwordCheck"></li>
+                <li>닉네임 <input type="text" name="nickname" id="nickname"></li><span id=nicknameResult></span>
+            </fieldset>
+            <fieldset>
+            <legend>선택항목</legend>
+                <li>이름 <input type="text" name="name" id="name"></li>
+                <li>성별: 남성<input type="radio" name="sex" value="남성">
                         	여성<input type="radio" name="sex" value="여성"></li>
-                <li class="signUpLi">생년월일 <input type="date" name="birthDate"></li>
-                <li class="signUpLi">통신사 <select name="telecomValue">
+                <li>생년월일 <input type="date" name="birthDate" id="birthDate"></li>
+                <li>통신사 <select name="telecomValue" id="telecomValue">
                     <option value="KT">KT</option>
                     <option value="SKT">SKT</option>
-                    <option value="LGU+">LGU+</option>
-                    <option value="MVNO">알뜰폰</option>
+                    <option value="LG">LGU+</option>
+                    <option value="CPK">알뜰폰KT</option>
+                    <option value="CPS">알뜰폰SKT</option>
+                    <option value="CPL">알뜰폰LGU+</option>
                 </select></li>
-                <li class="signUpLi">전화번호 <input type="text" name="contact" maxlangth ="11" size="11"></li>
-                <li class="signUpLi">우편번호 <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="7" size="7">
-                                                <button id="postcodify_search_button" onclick="postcodifyPopUp()">검색</button><br/>
-                                    도로명주소 <input type="text" name="address" class="postcodify_address" maxlength="30" size="30"/><br/>
-                                    상세주소 <input type="text" name="addressDetail" class="postcodify_details" maxlength="30" size="30"/></li>
-                <li class="signUpLi">약관 동의: 동의합니다<input type="radio" name="agreedTermAt" value="agree">
-                    	동의하지 않습니다<input type="radio" name="agreedTermAt" value="disagree" checked></li><!--질문-->
-                <li class="signUpLi">마케팅 동의: 동의합니다<input type="radio" name="agreedMarketingAt" value="agree">
-                    	동의하지 않습니다<input type="radio" name="agreedMarketingAt" value="disagree" checked></li>
-                <li class="signUpLi"><input type="button" value="회원가입"></li>
+                <li>전화번호 <input type="text" name="contact" maxlength ="3" size="3" id="contact1">
+                 - <input type="text" name="contact" maxlength ="4" size="4" id="contact2">
+                 	- <input type="text" name="contact" maxlength ="4" size="4" id="contact3"></li>
+                <li>우편번호 <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="5" size="5" id="zipcode">
+                                                <button id="postcodify_search_button">검색</button><br/>
+                                    도로명주소 <input type="text" name="address" id="address" class="postcodify_address" maxlength="100" size="100"/><br/>
+                                    상세주소 <input type="text" name="addressDetail" id="addressDetail" class="postcodify_details" maxlength="100" size="100"/></li>
+                <li>약관 동의: 동의합니다<input type="radio" name="agreedTermAt" value="agree"></li>
+                <li>마케팅 동의: 동의합니다<input type="radio" name="agreedMarketingAt" value="agree"></li>
+                <li>개인정보 처리방침동의: 동의합니다<input type="radio" name="agreed" value="agree"><li>
+            </fieldset>
+                <li><input type="button" value="회원가입" id="signUpSubmit"></li>
             </ul>
         </form>
-    </section>
+    </main>
 </body>
 </html>
