@@ -9,7 +9,7 @@
 	</select>
 	
 	<select id="getArticleList" parameterType="hashmap" resultType="article">
-		SELECT @rownum := @rownum + 1 AS R, A.`index`, A.title, A.memberNickname, A.viewCount, A.writtenAt
+		SELECT @rownum := @rownum + 1 AS R, A.`index`, A.title, A.nickname, A.viewCount, A.writtenAt
 		FROM psam1017.articles A, (SELECT @rownum := 0) rownum
 		WHERE boardValue LIKE #{boardValue}
 		ORDER BY writtenAt DESC
@@ -17,7 +17,7 @@
 	</select>
 	
 	<select id="getBestArticleList" parameterType="hashmap" resultType="article">
-		SELECT A.`index`, A.title, A.memberNickname , A.writtenAt, A.viewCount, B.articleLikeCount 
+		SELECT A.`index`, A.title, A.nickname , A.writtenAt, A.viewCount, B.articleLikeCount 
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`index` = B.articleIndex
@@ -31,20 +31,20 @@
 	FROM (
 	SELECT A.`index`
 	FROM psam1017.articles A
-	WHERE CONCAT(A.title, A.memberNickname, A.content) LIKE #{search}) AS SL ;
+	WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search}) AS SL ;
 	</select>
 	
 	<select id="getSearchArticleList" parameterType="hashmap" resultType="article">
-		SELECT A.`index`, A.title, A.memberNickname, A.viewCount, A.writtenAt, B.articleLikeCount
+		SELECT A.`index`, A.title, A.nickname, A.viewCount, A.writtenAt, B.articleLikeCount
 		FROM psam1017.articles A
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`index` = B.articleIndex
-		WHERE CONCAT(A.title, A.memberNickname, A.content) LIKE #{search}
+		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search}
 		LIMIT 10 OFFSET #{page};
 	</select>
 	
 	<select id="getArticle" parameterType="_int" resultType="article">
-		SELECT A.`index`, A.boardValue, A.title, A.memberNickname , A.writtenAt, A.viewCount, A.content, AL.articleLikeCount 
+		SELECT A.`index`, A.boardValue, A.title, A.nickname , A.writtenAt, A.viewCount, A.content, AL.articleLikeCount 
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS AL
 		ON A.`index` = AL.articleIndex
@@ -58,7 +58,7 @@
 	</select>
 	
 	<select id="getViewedOrderArticleList" parameterType="hashmap" resultType="article">
-		SELECT A.`index`, A.title, A.memberNickname , A.writtenAt, A.viewCount, B.articleLikeCount 
+		SELECT A.`index`, A.title, A.nickname , A.writtenAt, A.viewCount, B.articleLikeCount 
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`index` = B.articleIndex
@@ -72,7 +72,7 @@
 	</delete>
 	
 	<insert id="insertArticle" parameterType="article">
-		INSERT INTO psam1017.Articles(boardValue, memberNickname, title, content)
+		INSERT INTO psam1017.Articles(boardValue, nickname, title, content)
 		VALUES (#{boardValue},"박성민",#{title},#{content})
 	</insert>
 	

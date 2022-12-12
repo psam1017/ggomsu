@@ -6,7 +6,7 @@ public class ArticleVO {
 	
 	private int index;
 	private String boardValue;
-	private String memberNickname;
+	private String nickname;
 	private String title;
 	private String content;
 	private int viewCount;
@@ -35,12 +35,12 @@ public class ArticleVO {
 		this.boardValue = boardValue;
 	}
 
-	public String getMemberNickname() {
-		return memberNickname;
+	public String getNickname() {
+		return nickname;
 	}
 
-	public void setMemberNickname(String memberNickname) {
-		this.memberNickname = memberNickname;
+	public void setNickname(String memberNickname) {
+		this.nickname = memberNickname;
 	}
 
 	public String getTitle() {
