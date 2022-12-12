@@ -11,10 +11,17 @@
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>게시글 작성</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/writing.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleWrite.css" />
+    <!-- 경로를 못찾음
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/lib/dist/tagify.css" />
-    <script src="${pageContext.request.contextPath}/assets/js/writing.js" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/ArticleWriting" defer></script>
     <script src="${pageContext.request.contextPath}/assets/lib/dist/tagify.js"></script>
+     -->
+    <!--  
+     <link rel="stylesheet" href="../../assets/lib/dist/tagify.css" />
+     <script src="../../assets/js/ArticleWriting" defer></script>
+     <script src="../../assets/lib/dist/tagify.js"></script>
+    -->
 </head>
   <body>
     <div class="modal_background"></div>
@@ -49,7 +56,7 @@
           <input type="submit" name="writing" value="글쓰기" />
         </li>
         <li id="modal_btn">
-          <input type="button" name="preview" value="미리보기" onclick="inputValue()" />
+          <input type="button" name="preview" value="미리보기" />
         </li>
         <li>
           <!--쿠키-->

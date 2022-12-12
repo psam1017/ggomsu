@@ -4,7 +4,30 @@
 <mapper namespace="Member">
 	<select id="checkEmail" parameterType="string" resultType="_int">
 		SELECT COUNT(email)
-		FROM memberSign
+		FROM members
 		WHERE email = #{email}
 	</select>
+	<select id="checkNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM members
+		WHERE nickname = #{nickname}
+	</select>
+
+	<insert id="signUp" parameterType="member">
+		INSERT INTO members
+		(email, password, signAt, passwordAlertAt, nickname, profileImageUrl, name,
+		birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
+		VALUES
+		(#{email}, #{password}, NOW(), NOW(),
+		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
+		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW())
+	</insert>
+	
+	<!-- 회원탈퇴 : 탈퇴 후 바로 사용자DB 정보를 삭제하는 것 이 아니라 일정기간 이후 삭제 하기 때문 사용자상태 정보만 변경 하여 회원 탈퇴 구분 -->
+	<update id="withdrawal" parameterType="member">
+		UPDATE members 
+		SET statusValue = "DEL"
+		WHERE 
+		email = #{email}
+	</update>
 </mapper>

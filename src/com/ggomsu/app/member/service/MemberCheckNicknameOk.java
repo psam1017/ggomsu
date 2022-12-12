@@ -11,23 +11,24 @@ import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 
-public class MemberCheckEmailOk implements Action {
+public class MemberCheckNicknameOk implements Action {
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		String email = req.getParameter("email");
+		String nickname = req.getParameter("nickname");
 		MemberDAO dao = new MemberDAO();
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		if(dao.checkEmail(email)) {
-			json.put("emailStatus", "not-ok");
+		if(dao.checkNickname(nickname)) {
+			json.put("nicknameStatus", "not-ok");
 		}
 		else {
-			json.put("emailStatus", "ok");
+			json.put("nicknameStatus", "ok");
 		}
 		
 		out.print(json.toJSONString());
