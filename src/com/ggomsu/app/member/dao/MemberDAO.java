@@ -1,5 +1,7 @@
 package com.ggomsu.app.member.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -32,4 +34,9 @@ public class MemberDAO {
 	public boolean withdrawal(MemberVO statusValue) {
 		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
 	}
+
+	public List<String> getList(String nickname) {
+		return sqlSession.selectList("Member.blockedMember", nickname);
+	}
+	
 }

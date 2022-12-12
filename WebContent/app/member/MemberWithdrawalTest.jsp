@@ -13,9 +13,10 @@
     <title>회원가입 : 꼼수닷컴</title>
 </head>
 <body>
-     <form action="${pageContext.request.contextPath}/member/member-delete-ok" id="signUpForm" name="signUpForm" method="post">
-     		이메일<input type="text"  name="email"> <br>
-          <input type="submit" value="회원탈퇴" name="withdrawal">
-     </form>
+   <form action="${pageContext.request.contextPath}/member/member-view-my-info-ok" id="signUpForm" name="signUpForm" method="post">
+     	 이메일<input type="text" name="email">
+     	<br>
+        <input type="submit" value="회원탈퇴" name="withdrawal">
+    </form>
 </body>
 </html>
