@@ -31,7 +31,7 @@
                     <option value="LGU+">LGU+</option>
                     <option value="MVNO">알뜰폰</option>
                 </select></li>
-                <li class="signUpLi">전화번호 <input type="text" name="contact" maxlangth ="11" size="11"></li>
+                <li class="signUpLi">전화번호 <input type="text" name="contact" maxlength ="11" size="11"></li>
                 <li class="signUpLi">우편번호 <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="7" size="7">
                                                 <button id="postcodify_search_button" onclick="postcodifyPopUp()">검색</button><br/>
                                     도로명주소 <input type="text" name="address" class="postcodify_address" maxlength="30" size="30"/><br/>
