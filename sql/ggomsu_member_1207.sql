@@ -58,6 +58,7 @@ CREATE TABLE members
 (
 	email				VARCHAR(50) 	NOT NULL	PRIMARY KEY,
 	password			VARCHAR(128) 	NOT NULL,
+	salt				VARCHAR(128)	NOT NULL,
     naverKey			VARCHAR(128)	NULL,
     kakaoKey			VARCHAR(128)	NULL,
     googleKey			VARCHAR(128)	NULL,
@@ -65,10 +66,10 @@ CREATE TABLE members
     passwordAlertAt		DATETIME 		NOT NULL,
     nickname			VARCHAR(10) 	NOT NULL 	UNIQUE,
 	profileImageUrl		VARCHAR(128) 	NULL		UNIQUE,
-	name				VARCHAR(5) 	NULL,
+	name				VARCHAR(5) 		NULL,
     birthDate			DATE 			NULL,
-    sex					VARCHAR(1) 	NULL,
-    telecomValue		VARCHAR(3) 	NULL,
+    sex					VARCHAR(1) 		NULL,
+    telecomValue		VARCHAR(3) 		NULL,
     contact				VARCHAR(12) 	NULL 		UNIQUE,
 	zipcode				VARCHAR(5)		NULL,
 	address				VARCHAR(100)	NULL,
@@ -76,8 +77,8 @@ CREATE TABLE members
     agreedTermAt		DATETIME 		NOT NULL	DEFAULT NOW(),
     agreedMarketingAt	DATETIME 		NULL,
     createdAt			DATETIME 		NOT NULL 	DEFAULT NOW(),
-    statusValue			VARCHAR(3) 	NOT NULL	DEFAULT "MEM",
-    abuseCount			TINYINT		NOT NULL	DEFAULT 0,
+    statusValue			VARCHAR(3) 		NOT NULL	DEFAULT "MEM",
+    abuseCount			TINYINT			NOT NULL	DEFAULT 0,
 	CONSTRAINT FOREIGN KEY(sex)
 		REFERENCES memberSex(value)
         ON DELETE CASCADE
