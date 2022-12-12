@@ -11,17 +11,10 @@
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>게시글 작성</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleWrite.css" />
-    <!-- 경로를 못찾음
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/writing.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/lib/dist/tagify.css" />
-    <script src="${pageContext.request.contextPath}/assets/js/ArticleWriting" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/writing.js" defer></script>
     <script src="${pageContext.request.contextPath}/assets/lib/dist/tagify.js"></script>
-     -->
-    <!--  
-     <link rel="stylesheet" href="../../assets/lib/dist/tagify.css" />
-     <script src="../../assets/js/ArticleWriting" defer></script>
-     <script src="../../assets/lib/dist/tagify.js"></script>
-    -->
 </head>
   <body>
     <div class="modal_background"></div>
@@ -30,19 +23,20 @@
       <div class="text">미리보기 모달</div>
     </div>
     <h3>게시판 글쓰기</h3>
-    <form action="" method="get" name="writing">
+    <form name="writeArticle" action="${pageContext.request.contextPath}/board/article-write-ok" method="post" enctype="multipart/form-data">
       <div class="title">
         <ul>
           <li>
-            <select name="category">
-              <option value="자유" selected>자유</option>
-              <option value="코딩">코딩</option>
-              <option value="게임">게임</option>
-              <option value="공지">공지</option>
+          	<select name="boardValue">
+              <option value="free" selected>자유</option>
+              <option value="coding">코딩</option>
+              <option value="game">게임</option>
+              <option value="notice">공지</option>
             </select>
           </li>
           <li>
             <input type="text" placeholder="제목을 입력하세요." name="title" maxlength="100" style="width: 100%" />
+            <input type="hidden" name="memberNickname" value="${sessionMember}"/>
           </li>
         </ul>
       </div>
@@ -50,13 +44,13 @@
       <input name="basic" placeholder="관련해시태그를 입력하세요" style="width: 80%" />
       <ul style="border-top: 1px solid #0000">
         <li>
-          <textarea placeholder="내용을 입력하세요." name="mainText" style="width: 80%; height: 50vh"></textarea>
+          <textarea placeholder="내용을 입력하세요." name="content" style="width: 80%; height: 50vh"></textarea>
         </li>
         <li>
           <input type="submit" name="writing" value="글쓰기" />
         </li>
         <li id="modal_btn">
-          <input type="button" name="preview" value="미리보기" />
+          <input type="button" name="preview" value="미리보기" onclick="inputValue()" />
         </li>
         <li>
           <!--쿠키-->
@@ -65,13 +59,10 @@
         <li>
           <input type="button" name="home" value="목록으로" />
         </li>
+        <li>
+          <input type="file" accept=".jpg , .png , .gif " id="ff" name="fileValue" onchange="alert(this.value)" />
+        </li>
       </ul>
-    </form>
-    <!-- 첨부파일 : 일시적으로 이미지만 업로드 가능하도록 -->
-    <form name="file" action="" method="post" enctype="multipart/form-data">
-      <!-- onchange 확인 후 삭제 -->
-      <input type="file" accept=".jpg , .png , .gif " name="fileValue" multiple onchange="alert(this.value)" />
-    </form>
+     </form>
   </body>
-  <script> let contextPath = "${pageContext.request.contextPath}"; console.log(contextPath);</script>
 </html>

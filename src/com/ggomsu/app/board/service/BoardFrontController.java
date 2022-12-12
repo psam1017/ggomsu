@@ -1,10 +1,12 @@
 package com.ggomsu.app.board.service;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,15 +63,34 @@ public class BoardFrontController extends HttpServlet {
 			try {
 				forward = new ArticleViewDetailOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
+				System.out.println("게시글 상세보기 게시글 가져오기 실패!!!" + e);
 			}
 		}else if(command.equals("/board/article-get-viewed-order-list-ok")) {
 			try {
 				forward = new ArticleGetOrderListOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
+				System.out.println("조회순 게시판 리스트 가져오기 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-delete-ok")) {
+			try {
+				forward = new ArticleDeleteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 삭제 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-write-ok")) {
+			try {
+				forward = new ArticleWriteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 작성 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-write")) {
+			try {
+				forward = new ArticleWrite().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 작성 후 값 전달 실패!!!" + e);
 			}
 		}
+		
 		
 		if(forward != null) {
 			if(forward.isForward()) {

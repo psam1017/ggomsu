@@ -11,6 +11,7 @@ import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 
+	//작성자 : 박성민
 public class MemberCheckNicknameOk implements Action {
 
 	@SuppressWarnings("unchecked")

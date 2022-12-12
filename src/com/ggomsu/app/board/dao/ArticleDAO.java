@@ -19,8 +19,8 @@ public class ArticleDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public int getTotal() {
-		return sqlSession.selectOne("Article.getTotal");
+	public int getTotal(String boardValue) {
+		return sqlSession.selectOne("Article.getTotal",boardValue);
 	}
 	
 	public List<ArticleVO> getList(int page, String boardValue){
@@ -63,5 +63,16 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getViewedOrderArticleList", hash);
 	}
 	
+	public void deleteArticle(int index) {
+		sqlSession.update("Article.deleteArticle", index);
+	}
+	
+	public void insertArticle(ArticleVO articleVo) {
+		sqlSession.update("Article.insertArticle", articleVo);
+	}
+	
+	public int getMaxIndex() {
+		return sqlSession.selectOne("Article.getMaxIndex");
+	}
 	
 }

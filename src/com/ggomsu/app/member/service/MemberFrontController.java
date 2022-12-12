@@ -56,6 +56,11 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("회원가입 실패!" + e);
 			}
 		}
+		else if(command.equals("/member/welcom")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/member/MemberSignUpOk.jsp");
+		}
 		else if(command.equals("/member/member-view-my-info-ok")){
 			
 		}
@@ -63,9 +68,12 @@ public class MemberFrontController extends HttpServlet {
 			
 		}
 		else if(command.equals("/member/member-delete-ok")) {
-			
+			try {
+				forward = new MemberWithdrawalOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원탈퇴 실패!" + e);
+			}
 		}
-		
 		if(forward != null) {
 			if(forward.isForward()) {
 				RequestDispatcher dispatcher = req.getRequestDispatcher(forward.getPath());

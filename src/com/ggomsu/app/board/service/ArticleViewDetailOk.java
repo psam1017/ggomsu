@@ -20,9 +20,12 @@ public class ArticleViewDetailOk implements Action {
 		
 		int index = Integer.parseInt(req.getParameter("index"));
 		dao.updateArticleViewCount(index);
+		
 		req.setAttribute("article", dao.getArticle(index));
+		req.setAttribute("index", index);
+		
 		forward.setForward(true);
-		forward.setPath("/app/board/ArticleViewDetail.jsp");
+		forward.setPath("/app/board/ArticleViewDetailTest.jsp");
 
 		return forward;
 	}

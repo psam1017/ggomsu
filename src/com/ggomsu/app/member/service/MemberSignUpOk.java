@@ -8,6 +8,7 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
+	//작성자 : 손하늘
 public class MemberSignUpOk implements Action{
 	
 	@Override
@@ -18,13 +19,25 @@ public class MemberSignUpOk implements Action{
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
+		MemberEncryptOk encrypt = new MemberEncryptOk();
+		MemberEncryptInfo info = new MemberEncryptInfo();
 		
 		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
 		vo.setEmail(req.getParameter("email"));
-		vo.setPassword(req.getParameter("password"));
-		vo.setNaverKey(req.getParameter("naverKey"));
-		vo.setKakaoKey(req.getParameter("kakaoKey"));
-		vo.setGoogleKey(req.getParameter("googleKey"));
+		String inserted = req.getParameter("password");
+		
+		try {
+			info = encrypt.encrypt(inserted);
+		} catch (Exception e) {
+			System.out.println("암호화 예외 발생! " + e);
+		}
+
+		vo.setPassword(info.getPassword());
+		//vo.setSalt(info.getSalt());
+		
+		//vo.setNaverKey(req.getParameter("naverKey"));
+		//vo.setKakaoKey(req.getParameter("kakaoKey"));
+		//vo.setGoogleKey(req.getParameter("googleKey"));
 		vo.setNickname(req.getParameter("nickname"));
 		vo.setName(req.getParameter("name"));
 		vo.setBirthDate(req.getParameter("birthDate"));
@@ -40,13 +53,8 @@ public class MemberSignUpOk implements Action{
 		
 		dao.signUp(vo);
 		
-		System.out.println("실행2!");
-		
 		forward.setForward(false);
-		System.out.println(req.getContextPath());
-		forward.setPath(req.getContextPath() + "/app/Member/MemberSignUpOk.jsp");
-		
-		System.out.println("실행3!");
+		forward.setPath(req.getContextPath() + "/member/welcome");
 		
 		return forward;
 		
