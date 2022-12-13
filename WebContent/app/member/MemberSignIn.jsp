@@ -8,18 +8,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="김지혜">
+    <meta name="author" content="김지혜, 박성민">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>로그인 : 꼼수닷컴</title>
+    <title>로그인</title>
 </head>
 <body>
 	<h2>로고</h2>
-    <form action="" name="loginForm" method="post">
+    <form action="${pageContext.request.contextPath}/member/member-sign-in-ok" name="loginForm" method="post">
         <ul>
-            <li id="loginId"><input type="text"></li>
-            <li id="loginPasswd"><input type="password"></li>
-            <li id="loginButton"><input type="button" value="로그인"></li>
+            <li id="signInEmail"><input type="email" name="email"></li>
+            <li id="signInPassword"><input type="password" name="password"></li>
         </ul>
+        <input type="button" id="signInButton" value="로그인">
     </form>
 </body>
 </html>

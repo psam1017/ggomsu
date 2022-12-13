@@ -16,7 +16,7 @@ pageEncoding="UTF-8"%>
         <jsp:include page="../fix/myPageAside.jsp" />
 
         <main id="infomationMain">
-          <form name="memberInformation" action="${pageContext.request.contextPath}/member/member-update-info-ok" method="post">
+          <form name="memberInformation" id="updateMembersForm" action="${pageContext.request.contextPath}/member/member-update-info-ok" method="post">
             <fieldset id="viewProfile">
               <legend>프로필</legend>
               <ul>
