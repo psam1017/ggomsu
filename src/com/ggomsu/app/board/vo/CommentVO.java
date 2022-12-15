@@ -4,7 +4,7 @@ package com.ggomsu.app.board.vo;
 
 public class CommentVO {
 	
-	private int index;
+	private int commentIndex;
 	private int reIndex;
 	private int articleIndex;
 	private String userNickname;
@@ -14,12 +14,12 @@ public class CommentVO {
 	private int commentLikeCount;
 	
 	public CommentVO() { ; }
-	
-	public int getIndex() {
-		return index;
+
+	public int getCommentIndex() {
+		return commentIndex;
 	}
-	public void setIndex(int index) {
-		this.index = index;
+	public void setCommentIndex(int commentIndex) {
+		this.commentIndex = commentIndex;
 	}
 	public int getReIndex() {
 		return reIndex;
@@ -61,6 +61,12 @@ public class CommentVO {
 		return commentLikeCount;
 	}
 	public void setCommentLike(int commentLikeCount) {
+		this.commentLikeCount = commentLikeCount;
+	}
+	public int getCommentLikeCount() {
+		return commentLikeCount;
+	}
+	public void setCommentLikeCount(int commentLikeCount) {
 		this.commentLikeCount = commentLikeCount;
 	}
 }
