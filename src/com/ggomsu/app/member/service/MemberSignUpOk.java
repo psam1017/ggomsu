@@ -29,11 +29,11 @@ public class MemberSignUpOk implements Action{
 		try {
 			info = encrypt.encrypt(inserted);
 		} catch (Exception e) {
-			System.out.println("암호화 예외 발생! " + e);
+			System.out.println("암호 생성 예외 발생! " + e);
 		}
 
 		vo.setPassword(info.getPassword());
-		//vo.setSalt(info.getSalt());
+		vo.setSalt(info.getSalt());
 		
 		//vo.setNaverKey(req.getParameter("naverKey"));
 		//vo.setKakaoKey(req.getParameter("kakaoKey"));
@@ -59,5 +59,4 @@ public class MemberSignUpOk implements Action{
 		return forward;
 		
 	}
-
 }

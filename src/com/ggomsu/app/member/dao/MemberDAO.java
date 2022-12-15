@@ -31,6 +31,10 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
+	public MemberVO getMemberInfo(String email) {
+		return sqlSession.selectOne("Member.getMemberInfo", email);
+	}
+	
 	public boolean withdrawal(MemberVO statusValue) {
 		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
 	}
@@ -38,5 +42,4 @@ public class MemberDAO {
 	public List<String> getList(String nickname) {
 		return sqlSession.selectList("Member.blockedMember", nickname);
 	}
-	
 }
