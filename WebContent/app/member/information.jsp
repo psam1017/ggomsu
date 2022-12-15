@@ -21,17 +21,17 @@ pageEncoding="UTF-8"%>
               <legend>프로필</legend>
               <ul>
                 <li>
-                  프로필 이미지 <img id="memberInfoProfileImageUrl" src="${members.getProfileImageUrl}" alt="프로필 이미지">
+                  프로필 이미지 <img id="memberInfoProfileImageUrl" src="${member.getProfileImageUrl}" alt="프로필 이미지">
                   <br>
                   변경할 프로필 이미지를 골라주세요. <input type="file" name="profileImageUrl" value="">
                 </li>
-                <li>닉네임 <c:out value="${members.getNickname()}"/></li>
+                <li>닉네임 <c:out value="${member.getNickname()}"/></li>
               </ul>
             </fieldset>
             <fieldset id="viewPersonal">
               <legend>회원정보</legend>
               <ul>
-                <li>이메일 <span><c:out value="${members.getEmail()}" /></span></li>
+                <li>이메일 <span><c:out value="${member.getEmail()}" /></span></li>
                 <li>비밀번호 변경
                   <span><input type="password" name="password" id="memberInfoPassword"></span>
                   <span name="passwordResult" id="passwordResult">비밀번호는 필수항목입니다.</span>
@@ -40,10 +40,10 @@ pageEncoding="UTF-8"%>
                   <span><input type="password" name="passwordCheck" id="memberInfoPasswordCheck"></span>
                   <span name="passwordCheckResult" id="passwordCheckResult"></span>
                 </li>
-                <li>이름<span><c:out value="${members.getName()}"/></span></li>
-                <li>성별<span><c:out value="${members.getSex()}"/></span></li>
-                <li>생일<span><c:out value="${members.getBrithDate()}"/></span></li>
-                <li>가입일<span><c:out value="${members.getCreatedAt()}"/></span></li>
+                <li>이름<span><c:out value="${member.getName()}"/></span></li>
+                <li>성별<span><c:out value="${member.getSex()}"/></span></li>
+                <li>생일<span><c:out value="${member.getBrithDate()}"/></span></li>
+                <li>가입일<span><c:out value="${member.getCreatedAt()}"/></span></li>
               </ul>
             </fieldset>
             <fieldset id="viewPersonalOption">
@@ -64,12 +64,12 @@ pageEncoding="UTF-8"%>
                   <input type="text" name="contact3" id="memberInfoContact3">
                 </li>
                 <li>우편번호 
-                  <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="5" size="5" id="zipcode">
+                  <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="5" size="5" id="zipcode" value="${member.getZipcode()}">
                   <button id="postcodify_search_button">검색</button>
                   <br>
-                  도로명주소 <input type="text" name="address" id="memberInfoAddress" class="postcodify_address" maxlength="100" size="100">
+                  도로명주소 <input type="text" name="address" id="memberInfoAddress" class="postcodify_address" maxlength="100" size="100" value="${member.getAddress()}">
                   <br>
-                  상세주소 <input type="text" name="addressDetail" id="memberInfoAddressDetail" class="postcodify_details" maxlength="100" size="100">
+                  상세주소 <input type="text" name="addressDetail" id="memberInfoAddressDetail" class="postcodify_details" maxlength="100" size="100" value="${member.getAddressDetail()}">
                 </li>
               </ul>
             </fieldset>

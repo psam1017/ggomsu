@@ -2,7 +2,7 @@
 
 CREATE TABLE boards
 (
-	value VARCHAR(10) NOT NULL PRIMARY KEY,
+	boardValue VARCHAR(10) NOT NULL PRIMARY KEY,
     text VARCHAR(50) NOT NULL
 );
 
@@ -17,7 +17,7 @@ VALUES	("notice", "공지사항"),
 
 CREATE TABLE articles
 (
-    `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    articleIndex	INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	boardValue		VARCHAR(10) NOT NULL,
     nickname		VARCHAR(10) NOT NULL,
     title			VARCHAR(100) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE articles
     tag2			VARCHAR(20) NULL,
     tag3			VARCHAR(20) NULL,
     CONSTRAINT FOREIGN KEY(boardValue)
-		REFERENCES boards(value)
+		REFERENCES boards(boardValue)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(nickname)
@@ -40,9 +40,9 @@ CREATE TABLE articles
 
 CREATE TABLE tags
 (
-	value		VARCHAR(20) NOT NULL PRIMARY KEY,
-    tagCount	INT UNSIGNED NOT NULL,
-    searchCount	INT UNSIGNED NOT NULL
+	tagValue	VARCHAR(255)	NOT NULL PRIMARY KEY,
+    tagCount	INT UNSIGNED	NOT NULL,
+    searchCount	INT UNSIGNED	NOT NULL
 );
 
 CREATE TABLE attachment
@@ -50,14 +50,14 @@ CREATE TABLE attachment
 	attachmentName	VARCHAR(128) NOT NULL PRIMARY KEY,
 	articleIndex	INT UNSIGNED NOT NULL,
     CONSTRAINT FOREIGN KEY(articleIndex)
-		REFERENCES articles(`index`)
+		REFERENCES articles(articleIndex)
 			ON DELETE CASCADE
             ON UPDATE CASCADE
 );
 
 CREATE TABLE comments
 (
-    `index`			INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    commentIndex	INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     refIndex		INT UNSIGNED NULL,
     articleIndex	INT UNSIGNED NOT NULL,
     nickname		VARCHAR(10) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE comments
     writtenAt		DATETIME DEFAULT NOW(),
     deletedAt		DATETIME NULL,
 	CONSTRAINT FOREIGN KEY(articleIndex)
-		REFERENCES articles(`index`)
+		REFERENCES articles(articleIndex)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT FOREIGN KEY(nickname)
@@ -73,7 +73,7 @@ CREATE TABLE comments
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(refIndex)
-		REFERENCES comments(`index`)
+		REFERENCES comments(commentIndex)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -84,7 +84,7 @@ CREATE TABLE articleLike
 	nickname		VARCHAR(10) NOT NULL,
     CONSTRAINT PRIMARY KEY(articleIndex, nickname),
     CONSTRAINT FOREIGN KEY(articleIndex)
-		REFERENCES articles(`index`)
+		REFERENCES articles(articleIndex)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT FOREIGN KEY(nickname)
@@ -99,7 +99,7 @@ CREATE TABLE commentLike
 	nickname VARCHAR(10) NOT NULL,
     CONSTRAINT PRIMARY KEY(commentIndex, nickname),
     CONSTRAINT FOREIGN KEY(commentIndex)
-		REFERENCES comments(`index`)
+		REFERENCES comments(commentIndex)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT FOREIGN KEY(nickname)

@@ -13,13 +13,16 @@
     <title>로그인</title>
 </head>
 <body>
+	<c:if test="${param.code eq 'fail'}">
+		<script>alert("로그인 정보가 일치하지 않습니다.");</script>
+	</c:if>
 	<h2>로고</h2>
-    <form action="${pageContext.request.contextPath}/member/member-sign-in-ok" name="loginForm" method="post">
+    <form action="${pageContext.request.contextPath}/member/member-sign-in-ok" name="signInForm" method="post">
         <ul>
             <li id="signInEmail"><input type="email" name="email"></li>
             <li id="signInPassword"><input type="password" name="password"></li>
         </ul>
-        <input type="button" id="signInButton" value="로그인">
+        <input type="submit" id="signInButton" value="로그인">
     </form>
 </body>
 </html>

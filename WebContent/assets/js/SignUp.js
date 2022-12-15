@@ -232,7 +232,7 @@ function formSubmit(){
 	terms.forEach(element => {
 		if(element.checked == false){
 			isTermOk = false;
-			return;
+			break;
 		}
 	});
 
