@@ -60,9 +60,6 @@ CREATE TABLE members
 	email				VARCHAR(50) 	NOT NULL	PRIMARY KEY,
 	password			VARCHAR(128) 	NOT NULL,
 	salt				VARCHAR(128)	NOT NULL,
-    naverKey			VARCHAR(128)	NULL,
-    kakaoKey			VARCHAR(128)	NULL,
-    googleKey			VARCHAR(128)	NULL,
 	signAt				DATETIME 		NOT NULL,
     passwordAlertAt		DATETIME 		NOT NULL,
     nickname			VARCHAR(10) 	NOT NULL 	UNIQUE,
@@ -90,6 +87,17 @@ CREATE TABLE members
         ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(statusValue)
 		REFERENCES memberStatus(value)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE memberSNS
+(
+	email	VARCHAR(50) NOT NULL,
+    snsKey	VARCHAR(128) NOT NULL,
+    CONSTRAINT PRIMARY KEY(email, snsKey),
+    CONSTRAINT FOREIGN KEY(email)
+		REFERENCES members(email)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );

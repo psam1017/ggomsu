@@ -25,9 +25,6 @@ CREATE TABLE articles
     viewCount		INT UNSIGNED NOT NULL DEFAULT 0,
     writtenAt		DATETIME NOT NULL DEFAULT NOW(),
     deletedAt		DATETIME NULL,
-    tag1			VARCHAR(20) NULL,
-    tag2			VARCHAR(20) NULL,
-    tag3			VARCHAR(20) NULL,
     CONSTRAINT FOREIGN KEY(boardValue)
 		REFERENCES boards(boardValue)
         ON DELETE CASCADE
@@ -40,9 +37,13 @@ CREATE TABLE articles
 
 CREATE TABLE tags
 (
-	tagValue	VARCHAR(255)	NOT NULL PRIMARY KEY,
-    tagCount	INT UNSIGNED	NOT NULL,
-    searchCount	INT UNSIGNED	NOT NULL
+	articleIndex	INT UNSIGNED NOT NULL,
+	tagValue		VARCHAR(255) NOT NULL,
+    CONSTRAINT PRIMARY KEY(articleIndex, tagValue),
+	CONSTRAINT FOREIGN KEY(articleIndex)
+	REFERENCES articles(articleIndex)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
 );
 
 CREATE TABLE attachment

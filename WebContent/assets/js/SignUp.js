@@ -228,18 +228,12 @@ function formSubmit(){
 		return;
 	}
 
-	isTermOk = true;
 	terms.forEach(element => {
 		if(element.checked == false){
-			isTermOk = false;
-			break;
+			alert("필수 이용약관에 동의해주십시오.");
+			return;
 		}
 	});
-
-	if(!isTermOk){
-		alert("필수 이용약관에 동의해주십시오.");
-		return;
-	}
 
 	// 비밀번호 암호화
 	// 자문결과 front에서의 암호화는 SSL로 대체한다.
