@@ -32,7 +32,7 @@
 	</update>
 	
 	<!-- 차단유저 -->
-	<select id="blockView" parameterType="string" resultType="_int">
+	<select id="blockView" parameterType="member">
 		SELECT nickname
 		FROM memberBlock
 		WHERE nickname = #{nickname}

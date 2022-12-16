@@ -31,12 +31,23 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
+	public int singIn(MemberVO email, MemberVO password) {
+		if(email.equals(email)) {
+			if(password.equals(password)) {
+				return 1;
+			}
+			else
+				return 0;
+		}
+		return -1;
+	}
+	
 	public boolean withdrawal(MemberVO statusValue) {
 		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
 	}
 
 	public List<String> getList(String nickname) {
-		return sqlSession.selectList("Member.blockedMember", nickname);
+		return sqlSession.selectList("Member.blockView", nickname);
 	}
 	
 }
