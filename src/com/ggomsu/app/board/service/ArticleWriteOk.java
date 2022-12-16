@@ -1,9 +1,7 @@
 package com.ggomsu.app.board.service;
 
-import java.net.URLEncoder;
 import java.util.Enumeration;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,21 +48,24 @@ public class ArticleWriteOk implements Action {
 		
 		String boardValue = multi.getParameter("boardValue");
 		String title = multi.getParameter("title");
-		String basic = multi.getParameter("basic"); // 해쉬태그 값
+		// String basic = multi.getParameter("basic"); // 해쉬태그 값
 		String content = multi.getParameter("content");
-		String value = multi.getParameter("value");
+		// String value = multi.getParameter("value");
 		
 		aVo.setBoardValue(boardValue);
 		aVo.setTitle(title);
 		aVo.setContent(content);
 		
+		aDao.insertArticle(aVo);
+		
+		int articleIndex = aDao.getMaxIndex();
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = aDao.getTotal(boardValue);
 		
-		int endRow = page * pageSize;
-		int startRow = endRow - (pageSize - 1);
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -74,9 +75,6 @@ public class ArticleWriteOk implements Action {
 		
 		int prevPage = (int)((page - 10) / 10) * 10 + 1;
 		int nextPage = (int)((page + 9) / 10) * 10 + 1;
-		// 세션 객체 생성
-		HttpSession session = req.getSession();
-		session.setAttribute("boardValue", boardValue);
 		
 		// 쿠키 생성
 //		Cookie cBoardValue = new Cookie("boardValue",  URLEncoder.encode(boardValue, "UTF-8"));
@@ -98,7 +96,6 @@ public class ArticleWriteOk implements Action {
 		req.setAttribute("boardValue", boardValue);
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
 		
-		aDao.insertArticle(aVo);
 		
 		Enumeration<String> files = multi.getFileNames();
 		while(files.hasMoreElements()) {
@@ -115,6 +112,11 @@ public class ArticleWriteOk implements Action {
 		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/board/article-write");
+		
+		// Session
+		HttpSession session = req.getSession();
+		session.setAttribute("boardValue", boardValue);
+		session.setAttribute("articleIndex", articleIndex);
 		
 		return forward;
 	}

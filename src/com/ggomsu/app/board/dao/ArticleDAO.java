@@ -48,12 +48,12 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getSearchArticleList", hash);
 	}
 	
-	public ArticleVO getArticle(int index) {
-		return sqlSession.selectOne("Article.getArticle", index);
+	public ArticleVO getArticle(int articleIndex) {
+		return sqlSession.selectOne("Article.getArticle", articleIndex);
 	}
 	
-	public void updateArticleViewCount(int index) {
-		sqlSession.update("Article.updateArticleViewCount",index);
+	public void updateArticleViewCount(int articleIndex) {
+		sqlSession.update("Article.updateArticleViewCount",articleIndex);
 	}
 	
 	public List<ArticleVO> getViewedOrderList(int page, String boardValue){
@@ -63,8 +63,8 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getViewedOrderArticleList", hash);
 	}
 	
-	public void deleteArticle(int index) {
-		sqlSession.update("Article.deleteArticle", index);
+	public void deleteArticle(int articleIndex) {
+		sqlSession.update("Article.deleteArticle", articleIndex);
 	}
 	
 	public void insertArticle(ArticleVO articleVo) {
