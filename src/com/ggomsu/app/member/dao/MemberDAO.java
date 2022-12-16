@@ -40,6 +40,6 @@ public class MemberDAO {
 	}
 
 	public List<String> getList(String nickname) {
-		return sqlSession.selectList("Member.blockedMember", nickname);
+		return sqlSession.selectList("Member.blockView", nickname);
 	}
 }

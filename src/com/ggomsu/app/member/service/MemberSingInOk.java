@@ -9,24 +9,28 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
 //작성자 : 손하늘
+public class MemberSingInOk implements Action{
 
-public class MemberGetBlockOk implements Action{
-	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		String nickname = req.getParameter("nickname"); 
-		
+		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
 		
-		req.setAttribute("blockList", dao.getList(nickname));
+		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
+		vo.setEmail(req.getParameter("email"));
+		vo.setPassword(req.getParameter("password"));
 		
-		forward.setForward(true);
-		forward.setPath("/app/member/MemberBlock.jsp");
+		//dao.singIn();
+		
+		forward.setForward(false);
+		System.out.println(req.getContextPath());
+		forward.setPath(req.getContextPath() + "/app/index.jsp");
 		
 		return forward;
+		
 	}
 }
