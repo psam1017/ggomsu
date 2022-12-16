@@ -227,20 +227,21 @@ function formSubmit(){
 		nickname.focus();
 		return;
 	}
-
-	isTermOk = true;
+	
+	let isTermOk = true;
+	
 	terms.forEach(element => {
 		if(element.checked == false){
 			isTermOk = false;
 			return;
 		}
 	});
-
+	
 	if(!isTermOk){
 		alert("필수 이용약관에 동의해주십시오.");
 		return;
 	}
-
+	
 	// 비밀번호 암호화
 	// 자문결과 front에서의 암호화는 SSL로 대체한다.
 	// 필요한 경우 Base64를 사용할 수 있다.

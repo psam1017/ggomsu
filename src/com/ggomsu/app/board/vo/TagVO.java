@@ -4,18 +4,18 @@ package com.ggomsu.app.board.vo;
 
 public class TagVO {
 	
-	private String value;
+	private String tagValue;
 	private int tagCount;
 	private int searchCount;
 	
 	public TagVO() { ; }
 
-	public String getValue() {
-		return value;
+	public String getTagValue() {
+		return tagValue;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setTagValue(String tagValue) {
+		this.tagValue = tagValue;
 	}
 
 	public int getTagCount() {

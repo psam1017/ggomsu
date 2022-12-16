@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common.css">
 </head>
 <body>
-    <jsp:include page="fix/header.jsp" />
-	<jsp:include page="fix/mainAsideLeft.jsp" />
-	<jsp:include page="fix/mainAsideRight.jsp" />
+    <jsp:include page="/app/fix/header.jsp" />
+	<jsp:include page="/app/fix/mainAsideLeft.jsp" />
+	<jsp:include page="/app/fix/mainAsideRight.jsp" />
     <main id="main">
         <section id="searchWrap">
             <form action="" name="searchForm">
@@ -169,7 +169,7 @@
             </div>
         </section>
     </main>
-    <jsp:include page="fix/footer.jsp" />
+    <jsp:include page="/app/fix/footer.jsp" />
     <script src="${pageContext.request.contextPath}/assets/js/common.js" defer></script>
 </body>
 </html>

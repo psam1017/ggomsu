@@ -31,15 +31,8 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
-	public int singIn(MemberVO email, MemberVO password) {
-		if(email.equals(email)) {
-			if(password.equals(password)) {
-				return 1;
-			}
-			else
-				return 0;
-		}
-		return -1;
+	public MemberVO getMemberInfo(String email) {
+		return sqlSession.selectOne("Member.getMemberInfo", email);
 	}
 	
 	public boolean withdrawal(MemberVO statusValue) {
@@ -49,5 +42,4 @@ public class MemberDAO {
 	public List<String> getList(String nickname) {
 		return sqlSession.selectList("Member.blockView", nickname);
 	}
-	
 }

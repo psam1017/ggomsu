@@ -39,24 +39,36 @@ public class MemberFrontController extends HttpServlet {
 			try {
 				forward = new MemberCheckEmailOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("아이디 중복검사 오류" + e);
+				System.out.println("아이디 중복검사 오류!" + e);
 			}
 		}
 		else if(command.equals("/member/member-check-nickname-ok")) {
 			try {
 				forward = new MemberCheckNicknameOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("닉네임 중복검사 오류" + e);
+				System.out.println("닉네임 중복검사 오류!" + e);
 			}
 		}
 		else if(command.equals("/member/member-sign-up-ok")) {
 			try {
 				forward = new MemberSignUpOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("회원가입 실패!" + e);
+				System.out.println("회원가입 오류!" + e);
 			}
 		}
-		else if(command.equals("/member/welcom")) {
+		else if(command.equals("/member/member-sign-in")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/member/MemberSignIn.jsp");
+		}
+		else if(command.equals("/member/member-sign-in-ok")) {
+			try {
+				forward = new MemberSignInOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("로그인 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/welcome")) {
 			forward = new ActionForward();
 			forward.setForward(true);
 			forward.setPath("/app/member/MemberSignUpOk.jsp");
@@ -74,7 +86,7 @@ public class MemberFrontController extends HttpServlet {
 			try {
 				forward = new MemberGetBlockOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("회원차단 실패!" + e);
+				System.out.println("회원차단 오류!" + e);
 			}
 		}
 		else if(command.equals("/member/member-view-my-info-ok")){
@@ -87,7 +99,7 @@ public class MemberFrontController extends HttpServlet {
 			try {
 				forward = new MemberWithdrawalOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("회원탈퇴 실패!" + e);
+				System.out.println("회원탈퇴 오류!" + e);
 			}
 		}
 		if(forward != null) {
