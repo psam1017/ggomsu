@@ -27,7 +27,7 @@
       <div class="title">
         <ul>
           <li>
-          	<select id="boardValue" name="boardValue">
+            <select id="boardValue" name="boardValue">
               <option value="free">자유</option>
               <option value="coding">코딩</option>
               <option value="game">게임</option>

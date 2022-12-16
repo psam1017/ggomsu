@@ -5,9 +5,9 @@ package com.ggomsu.app.board.vo;
 public class CommentVO {
 	
 	private int commentIndex;
-	private int reIndex;
+	private int refIndex;
 	private int articleIndex;
-	private String userNickname;
+	private String nickname;
 	private String Content;
 	private String writtenAt;
 	private String deletedAt;
@@ -21,11 +21,11 @@ public class CommentVO {
 	public void setCommentIndex(int commentIndex) {
 		this.commentIndex = commentIndex;
 	}
-	public int getReIndex() {
-		return reIndex;
+	public int getRefIndex() {
+		return refIndex;
 	}
-	public void setReIndex(int reIndex) {
-		this.reIndex = reIndex;
+	public void setRefIndex(int refIndex) {
+		this.refIndex = refIndex;
 	}
 	public int getArticleIndex() {
 		return articleIndex;
@@ -33,11 +33,11 @@ public class CommentVO {
 	public void setArticleIndex(int articleIndex) {
 		this.articleIndex = articleIndex;
 	}
-	public String getUserNickname() {
-		return userNickname;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setUserNickname(String userNickname) {
-		this.userNickname = userNickname;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public String getContent() {
 		return Content;

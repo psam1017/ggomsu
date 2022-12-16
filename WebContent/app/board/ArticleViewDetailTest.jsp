@@ -11,11 +11,7 @@
     <meta name="author" content="박성민">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>${article.getTitle()}</title>
-    <style>
-    .off{
-    	display:none;
-    }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleViewDetail.css" />
     <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
 </head>
 <body>
@@ -70,9 +66,8 @@
         <section id="commentList" name="commentList">
             <ul>
                 <c:forEach var="comment" items="${commentList}">
-                	<c:set var="com" value="${comment.getRefIndex() eq comment.getCommentIndex()}"/>
 	                <c:choose>
-	                    <c:when test="${com}">
+	                    <c:when test="${comment.getRefIndex() eq comment.getCommentIndex()}">
 	                        <li class="originComment">
 	                            <c:out value="작성자 : ${comment.getNickname()}test"/>
 	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
@@ -92,7 +87,7 @@
 	                    </c:when>
 	                    <c:otherwise>
 	                        <li class="refComment">
-	                            <c:out value="작성자 : ${comment.getNickname()}test22"/>
+	                            <c:out value="작성자 : ${comment.getNickname()}"/>
 	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
 	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"></span>
@@ -111,6 +106,6 @@
     
     <script>
      	const boardValue = '${sessionScope.boardValue}';
-     </script>
+    </script>
 </body>
 </html>
