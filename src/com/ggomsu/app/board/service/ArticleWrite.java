@@ -1,8 +1,5 @@
 package com.ggomsu.app.board.service;
 
-import java.net.URLDecoder;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,14 +20,12 @@ public class ArticleWrite implements Action {
 		ArticleDAO dao = new ArticleDAO();
 		BoardDAO bDao = new BoardDAO();
 		ActionForward forward = new ActionForward();
-		HttpSession session = req.getSession();
 		
-		Cookie cookie = null;
-		Cookie cookies [] = req.getCookies();
+		// Cookie cookie = null;
+		// Cookie cookies [] = req.getCookies();
 		
 		String boardValue = null;
 		
-		boardValue = (String)session.getAttribute("boardValue");
 //		if(cookies != null) {
 //			cookie = cookies[0];
 //			boardValue = URLDecoder.decode(cookie.getValue(), "utf-8");
@@ -41,8 +36,8 @@ public class ArticleWrite implements Action {
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = dao.getTotal("%" + boardValue);
-		int endRow = page * pageSize;
-		int startRow = endRow - (pageSize - 1);
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount/pageSize);
@@ -50,7 +45,9 @@ public class ArticleWrite implements Action {
 		int prevPage = (int)((page - 10) / 10) * 10 + 1;
 		int nextPage = (int)((page + 9) / 10) * 10 + 1;
 		
-		
+		//Session
+		HttpSession session = req.getSession();
+		boardValue = (String)session.getAttribute("boardValue");
 		
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("realEndPage", realEndPage);

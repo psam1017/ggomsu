@@ -13,4 +13,5 @@ public class CommentDAO {
 	public CommentDAO() {
 		sqlSession = sessionFactory.openSession(true);
 	}
+
 }

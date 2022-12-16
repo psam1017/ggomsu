@@ -5,6 +5,6 @@
 	<select id="getBoardText" parameterType="string" resultType="string">
 		SELECT `text` 
 		FROM psam1017.boards 
-		WHERE `value` = #{boardValue}
+		WHERE `boardValue` = #{boardValue}
 	</select>
 </mapper>

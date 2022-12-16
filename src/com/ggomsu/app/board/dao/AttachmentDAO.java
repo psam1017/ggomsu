@@ -1,14 +1,11 @@
 package com.ggomsu.app.board.dao;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.board.vo.AttachmentVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
-import com.oreilly.servlet.MultipartRequest;
 
 public class AttachmentDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();

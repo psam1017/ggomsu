@@ -21,17 +21,17 @@ public class ArticleDeleteOk implements Action{
 		ActionForward forward = new ActionForward();
 
 		String temp = req.getParameter("page");
-		int index = Integer.parseInt(req.getParameter("index"));
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		
-		dao.deleteArticle(index);
+		dao.deleteArticle(articleIndex);
 		
 		String boardValue = req.getParameter("boardValue");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = dao.getTotal(boardValue);
 		
-		int endRow = page * pageSize;
-		int startRow = endRow - (pageSize - 1);
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -52,9 +52,7 @@ public class ArticleDeleteOk implements Action{
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardValue", boardValue);
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
-		
-		
-		
+			
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
 		
