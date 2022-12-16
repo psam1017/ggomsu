@@ -15,9 +15,9 @@
 </head>
 <body>
 	<main>
-        <h1 id="signUpH">회원가입</h1>
+        <h2>회원가입</h2>
         <section>
-            <form action="${pageContext.request.contextPath}" id="signUpForm" name="signUpForm" method="post">
+            <form action="${pageContext.request.contextPath}/member/member-sign-up-ok" id="signUpForm" name="signUpForm" method="post">
                 <fieldset>
                 <legend>필수항목</legend>
                 <ul>
@@ -25,8 +25,8 @@
                     <li>비밀번호 <input type="password" name="password" id="password"><span id="passwordResult"></span></li>
                     <li>비밀번호 확인 <input type="password" id="passwordCheck"><span id="passwordCheckResult"></span></li>
                     <li>닉네임 <input type="text" name="nickname" id="nickname"><span id="nicknameResult"></span></li>
-                    <li>개인정보 수입 및 이용약관에 동의합니다. <input type="checkbox" name="agreedTermAt" class="agreedTermAt"></li>
-                    <li>서비스 이용약관에 동의합니다. <input type="checkbox" name="agreedTermAt" class="agreedTermAt"></li>
+                    <li>개인정보 수입 및 이용약관에 동의합니다. <input type="checkbox" class="agreedTermAt"></li>
+                    <li>서비스 이용약관에 동의합니다. <input type="checkbox" class="agreedTermAt"></li>
                 </ul>
                 </fieldset>
                 <fieldset>
