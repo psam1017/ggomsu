@@ -16,9 +16,8 @@
 </head>
 <body>
 	<c:set var="article" value="${article}"/>
-	<c:set var="index" value="${index}"/>
+	<c:set var="articleIndex" value="${articleIndex}"/>
 	<c:set var="commentList" value="${commentList}"/>
-	<c:set var="articleIndex" value="${sessionScope.articleIndex}"/>
 	<c:set var="boardValue" value="${sessionScope.boardValue}"/>
 	
     <main id="main">
