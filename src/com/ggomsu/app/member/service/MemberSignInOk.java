@@ -36,15 +36,18 @@ public class MemberSignInOk implements Action {
 			System.out.println("암호화 로그인 예외 발생! " + e);
 		}
 		
+		// 차단된 유저인가?(신고 횟수)
+		// 휴면계정은 아닌가?(1년 동안 접속 X)
+
 		if(isSignInOk) {
 			// 로그인 성공 -> 현재 일자로 다시 signAt을 업데이트
+			session.setAttribute("email", vo.getEmail());
 			session.setAttribute("nickname", vo.getNickname());
 			
-			// 차단된 유저인가?(신고 횟수)
-			// 휴면계정은 아닌가?(1년 동안 접속 X)
 			// 비밀번호를 변경할 때인가?(3개월) -> 변경 시 비밀번호 변경 일자를 다시 3개월 후로 갱신
 			// 약관에 다시 동의기간이 지났는가?(1년)
-			// 생일에 축하 메시지를 띄울 것인가?
+			// 차단 유저 목록을 불러와서 세션에 저장해둘 것인가?(YES)
+			// 생일에 축하 메시지를 띄울 것인가?(NO?)
 			
 			// 세션으로 이전 페이지 값을 기억하여 값이 있으면 그 페이지로, 아니면 index로 redirect
 			if(session.getAttribute("articleIndex") != null) {

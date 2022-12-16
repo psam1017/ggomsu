@@ -14,36 +14,36 @@ pageEncoding="UTF-8"%>
 </head>
 <body>
     <section id="signUp">
-        <h1 id="signUpH">회원가입</h1>
+        <h2>회원가입</h2>
         <form action="${pageContext.request.contextPath}/member/member-sign-up-ok" id="signUpForm" name="signUpForm" method="post">
-            <ul id="signUpUl">
-                <li class="signUpLi">
+            <ul>
+                <li>
                     이메일 <input type="email" name="email" id="email" value="psam1017@naver.com">
                     <span id="emailResult" name="emailResult">이메일은 필수항목입니다.</span>
                 </li>
-                <li class="signUpLi">
+                <li>
                     비밀번호 <input type="password" name="password" id="password">
                     <span id="passwordResult" name="passwordResult">비밀번호는 필수항목입니다.</span>
                 </li>
-                <li class="signUpLi">
+                <li>
                     비밀번호 확인 <input type="password" id="passwordCheck">
                     <span id="passwordCheckResult" name="passwordCheckResult"></span>
                 </li>
-                <li class="signUpLi">
+                <li>
                     닉네임 <input type="text" name="nickname" id="nickname">
                     <span id="nicknameResult" name="nicknameResult">닉네임은 필수항목입니다.</span>
                 </li>
-                <li class="signUpLi">
+                <li>
                     이름 <input type="text" name="name">
                 </li>
-                <li class="signUpLi">
+                <li>
                     성별: 남성<input type="radio" name="sex" value="M">
                     여성<input type="radio" name="sex" value="F">
                 </li>
-                <li class="signUpLi">
+                <li>
                     생년월일 <input type="date" name="birthDate">
                 </li>
-                <li class="signUpLi">
+                <li>
                     통신사
                     <select name="telecomValue">
                         <option value="KT">KT</option>
@@ -54,11 +54,11 @@ pageEncoding="UTF-8"%>
                         <option value="CPL">알뜰폰 LG</option>
                     </select>
                 </li>
-                <li class="signUpLi">
+                <li>
                     전화번호
                     <input type="text" name="contact" maxlength="11" size="11">
                 </li>
-                <li class="signUpLi">
+                <li>
                     우편번호
                     <input type="text" name="zipcode" class="postcodify_postcode5" maxlength="5" size="5">
                     <button id="postcodify_search_button">검색</button><br>
@@ -66,14 +66,14 @@ pageEncoding="UTF-8"%>
                     <input type="text" name="address" class="postcodify_address" maxlength="100" size="100"><br>
                     상세주소 <input type="text" name="addressDetail" class="postcodify_details" maxlength="100" size="100">
                 </li>
-                <li class="signUpLi">
+                <li>
                     이용약관 동의: 동의합니다<input type="checkbox" name="agreedTermAt" class="agreedTermAt">
                     개인정보처리방침: 동의합니다<input type="checkbox" name="agreedTermAt" class="agreedTermAt">
                 </li>
-                <li class="signUpLi">
+                <li>
                     마케팅 동의: 동의합니다<input type="checkbox" name="agreedMarketingAt">
                 </li>
-                <li class="signUpLi">
+                <li>
                     <input type="button" name="signUpSubmit" id="signUpSubmit" value="회원가입">
                 </li>
             </ul>
