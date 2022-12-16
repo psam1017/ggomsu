@@ -50,7 +50,7 @@
         <button onclick="location.href='${pageContext.request.contextPath}/board/article-delete-ok?index=${index}&boardValue=${article.getBoardValue()}'">삭제</button>
         <!-- 댓글 작성 -->
         <section id="commentWrite" name="commentWrite">
-            <form method="post" action="#">
+            <form method="post" action="${pageContext.request.contextPath}/board/comment-write-ok">
                 <textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                 <input type="button" id="register" value="등록">
             </form>
