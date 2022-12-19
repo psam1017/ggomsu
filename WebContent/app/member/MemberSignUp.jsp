@@ -34,13 +34,14 @@
                 <ul>
                     <li>이름 <input type="text" name="name" id="name"></li>
                     <li>
-                        성별: <span>남성<input type="radio" name="sex" value="남성"></span>
-                              <span>여성<input type="radio" name="sex" value="여성"></span>
+                        성별: <span>남성<input type="radio" name="sex" value="M"></span>
+                              <span>여성<input type="radio" name="sex" value="F"></span>
                     </li>
                     <li>생년월일 <input type="date" name="birthDate" id="birthDate"></li>
                     <li>
                         통신사 
                         <select name="telecomValue" id="telecomValue">
+                        	<option value="NO" selected>통신사 선택</option>
                             <option value="KT">KT</option>
                             <option value="SKT">SKT</option>
                             <option value="LG">LGU+</option>
@@ -50,9 +51,9 @@
                         </select>
                     </li>
                     <li>
-                        전화번호 <input type="text" maxlength ="3" size="3" class="eachContact">
-                        - <input type="text" maxlength ="4" size="4" class="eachContact">
-                        - <input type="text" maxlength ="4" size="4" class="eachContact">
+                        전화번호 <input type="text" maxlength ="3" class="eachContact">
+                        - <input type="text" maxlength ="4" class="eachContact">
+                        - <input type="text" maxlength ="4" class="eachContact">
                         <input type="hidden" name="contact" id="contact" value="">
                     </li>
                     <li>
