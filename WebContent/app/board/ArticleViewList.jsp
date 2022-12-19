@@ -50,18 +50,18 @@
                 <c:choose>
                     <c:when test="${articleList != null and fn:length(articleList) > 0}">
                         <c:forEach var="articles" items="${articleList}">
-                        	<c:set var="articleIndex" value="${articles.getIndex()}"/>
+                        	<c:set var="articleIndex" value="${articles.getArticleIndex()}"/>
                             <li>
-                                <div>
-                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?index=${articles.getIndex()}">제목 : ${articles.getTitle()}</a>
-                                <div><a href="#">닉네임 : ${articles.getMemberNickname()}</a></div>
-                                <div>작성일 : ${articles.getWrittenAt()}</div>
-                                <div>조회수 : ${articles.getViewCount()}</div>
+                                <div> 
+                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articles.getArticleIndex()}"><c:out value="제목 : ${articles.getTitle()}" /></a>
+                                <div><a href="#"><c:out value="닉네임 : ${articles.getNickname()}"/></a></div>
+                                <div><c:out value="작성일 : ${articles.getWrittenAt()}"/></div>
+                                <div><c:out value="조회수 : ${articles.getViewCount()}"/></div>
                                 <c:if test="${articles.getArticleLikeCount()!=null}">
-                                	<div>추천수 : ${articles.getArticleLikeCount()}</div>
+                                	<div><c:out value="추천수 : ${articles.getArticleLikeCount()}"/></div>
                                 </c:if>
                                 <c:if test="${articles.getArticleLikeCount() == null}">
-                                	<div>추천수 : 0</div>
+                                	<div><c:out value="추천수 : 0"/></div>
                                 </c:if>
                                 </div>
                             </li>

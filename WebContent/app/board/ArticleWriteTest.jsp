@@ -27,8 +27,8 @@
       <div class="title">
         <ul>
           <li>
-          	<select name="boardValue">
-              <option value="free" selected>자유</option>
+            <select id="boardValue" name="boardValue">
+              <option value="free">자유</option>
               <option value="coding">코딩</option>
               <option value="game">게임</option>
               <option value="notice">공지</option>
@@ -36,7 +36,7 @@
           </li>
           <li>
             <input type="text" placeholder="제목을 입력하세요." name="title" maxlength="100" style="width: 100%" />
-            <input type="hidden" name="memberNickname" value="${sessionMember}"/>
+            <input type="hidden" name="nickname" value="${sessionMember}"/>
           </li>
         </ul>
       </div>
@@ -64,5 +64,19 @@
         </li>
       </ul>
      </form>
+     
+ 	<script>
+     	const boardValue = '${sessionScope.boardValue}';
+    	const selectBoardValue = document.querySelectorAll('#boardValue option');
+    	const selectBoardValueFree = document.querySelector('#boardValue option[value="free"]');
+    	selectBoardValue.forEach((element) => {
+			if(boardValue == element.value){
+				element.setAttribute('selected',true);
+			}
+    	})
+    	if(boardValue == null){
+    		selectBoardValueFree.setAttribute('selected',true);
+		}
+     </script>
   </body>
 </html>

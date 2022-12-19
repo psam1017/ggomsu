@@ -2,6 +2,7 @@ package com.ggomsu.app.board.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
@@ -27,8 +28,8 @@ public class ArticleGetSearchListOk implements Action{
 		int pageSize = 10;
 		int totalCount = dao.getSearchTotal("%" + search + "%");
 		
-		int endRow = page * pageSize;
-		int startRow = endRow - (pageSize - 1);
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -55,6 +56,10 @@ public class ArticleGetSearchListOk implements Action{
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
 
+		// Session
+		HttpSession session = req.getSession();
+		session.setAttribute("boardValue", boardValue);
+		
 		return forward;
 	}
 

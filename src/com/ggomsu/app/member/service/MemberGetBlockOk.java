@@ -1,40 +1,32 @@
 package com.ggomsu.app.member.service;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.simple.JSONObject;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
+import com.ggomsu.app.member.vo.MemberVO;
 
-	//작성자 : 박성민
-public class MemberCheckNicknameOk implements Action {
+//작성자 : 손하늘
 
-	@SuppressWarnings("unchecked")
+public class MemberGetBlockOk implements Action{
+	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		String nickname = req.getParameter("nickname");
+		String nickname = req.getParameter("nickname"); 
+		
 		MemberDAO dao = new MemberDAO();
-		JSONObject json = new JSONObject();
-		PrintWriter out = resp.getWriter();
+		ActionForward forward = new ActionForward();
 		
-		if(dao.checkNickname(nickname)) {
-			json.put("nicknameStatus", "not-ok");
-		}
-		else {
-			json.put("nicknameStatus", "ok");
-		}
+		req.setAttribute("blockList", dao.getList(nickname));
 		
-		out.print(json.toJSONString());
-		out.close();
+		forward.setForward(true);
+		forward.setPath("/app/member/MemberBlock.jsp");
 		
-		return null;
+		return forward;
 	}
 }

@@ -4,9 +4,9 @@ package com.ggomsu.app.board.vo;
 
 public class ArticleVO {
 	
-	private int index;
+	private int articleIndex;
 	private String boardValue;
-	private String memberNickname;
+	private String nickname;
 	private String title;
 	private String content;
 	private int viewCount;
@@ -19,12 +19,12 @@ public class ArticleVO {
 
 	public ArticleVO() { ; }
 
-	public int getIndex() {
-		return index;
+	public int getArticleIndex() {
+		return articleIndex;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setArticleIndex(int articleIndex) {
+		this.articleIndex = articleIndex;
 	}
 
 	public String getBoardValue() {
@@ -35,12 +35,12 @@ public class ArticleVO {
 		this.boardValue = boardValue;
 	}
 
-	public String getMemberNickname() {
-		return memberNickname;
+	public String getNickname() {
+		return nickname;
 	}
 
-	public void setMemberNickname(String memberNickname) {
-		this.memberNickname = memberNickname;
+	public void setNickname(String memberNickname) {
+		this.nickname = memberNickname;
 	}
 
 	public String getTitle() {

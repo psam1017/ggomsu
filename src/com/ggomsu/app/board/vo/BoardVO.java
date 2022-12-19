@@ -1,17 +1,18 @@
 package com.ggomsu.app.board.vo;
 	// 작성자 : 이성호
 public class BoardVO {
-	String value;
+	
+	String boardValue;
 	String text;
 	
 	public BoardVO() {;}
 
-	public String getValue() {
-		return value;
+	public String getBoardValue() {
+		return boardValue;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setBoardValue(String boardValue) {
+		this.boardValue = boardValue;
 	}
 
 	public String getText() {

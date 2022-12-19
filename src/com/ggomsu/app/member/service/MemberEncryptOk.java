@@ -23,6 +23,8 @@ public class MemberEncryptOk{
 		info.setSalt(salt);
 		salt = info.getSalt().getBytes();
 		
+		// RFC 2898 - IETF와 포트폴리오로서의 성능을 고려하여 iteration을 1,000으로 설정
+		// 단, OWASP 2015는 iteration을 10,000으로 설정하기를 권장하였음.
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 1000, 128);
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 		byte[] hash = factory.generateSecret(spec).getEncoded();

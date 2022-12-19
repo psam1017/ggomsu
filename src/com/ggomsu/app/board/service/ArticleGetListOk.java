@@ -2,12 +2,13 @@ package com.ggomsu.app.board.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
-import com.ggomsu.app.board.vo.ArticleVO;
+
 	// 작성자 : 이성호
 public class ArticleGetListOk implements Action{
 
@@ -19,7 +20,7 @@ public class ArticleGetListOk implements Action{
 		
 		ArticleDAO dao = new ArticleDAO();
 		BoardDAO bDao = new BoardDAO();
-		ActionForward forward = new ActionForward();
+		ActionForward forward = new ActionForward(); 
 		
 		String boardValue = req.getParameter("boardValue"); // 게시판의 종류를 구별해주는 변수
 		String temp = req.getParameter("page");
@@ -27,8 +28,8 @@ public class ArticleGetListOk implements Action{
 		int pageSize = 10;
 		int totalCount = dao.getTotal(boardValue);
 		
-		int endRow = page * pageSize;
-		int startRow = endRow - (pageSize - 1);
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -53,6 +54,10 @@ public class ArticleGetListOk implements Action{
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
 
+		// Session
+		HttpSession session = req.getSession();
+		session.setAttribute("boardValue", boardValue);
+		
 		return forward;
 	}
 

@@ -8,9 +8,9 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
-	//작성자 : 손하늘
-public class MemberWithdrawalOk implements Action{
-	
+//작성자 : 손하늘
+public class MemberSingInOk implements Action{
+
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
@@ -22,9 +22,9 @@ public class MemberWithdrawalOk implements Action{
 		
 		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
 		vo.setEmail(req.getParameter("email"));
-		vo.setStatusValue(req.getParameter("statusValue"));
+		vo.setPassword(req.getParameter("password"));
 		
-		dao.withdrawal(vo);
+		//dao.singIn();
 		
 		forward.setForward(false);
 		System.out.println(req.getContextPath());
@@ -33,5 +33,4 @@ public class MemberWithdrawalOk implements Action{
 		return forward;
 		
 	}
-
 }
