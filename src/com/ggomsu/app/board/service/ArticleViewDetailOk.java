@@ -27,16 +27,23 @@ public class ArticleViewDetailOk implements Action {
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
 
-		forward.setForward(true);
-		forward.setPath("/app/board/ArticleViewDetailTest.jsp");
-		
 		// Session
 		HttpSession session = req.getSession();
 		String boardValue = (String)session.getAttribute("boardValue");
-		if(boardValue == null) {
+		String email = (String)session.getAttribute("email");
+		if( email == null) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath()+"/");
+		}else if(boardValue == null) {
 			boardValue = dao.getArticle(articleIndex).getBoardValue();
 			session.setAttribute("boardValue", boardValue);
+			forward.setForward(true);
+			forward.setPath("/app/board/ArticleViewDetailTest.jsp");
+		}else {
+			forward.setForward(true);
+			forward.setPath("/app/board/ArticleViewDetailTest.jsp");
 		}
+		
 		session.setAttribute("articleIndex", articleIndex);
 		return forward;
 	}
