@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+/*초기화*/
+*{margin: 0; padding: 0; box-sizing: border-box;}
+li {list-style: none;}
+a {text-decoration: none; color: black;}
+.hidden {display: none;}
+button {border: none;}
+body {background: #fff;}
+input:focus, select:focus, option:focus, textarea:focus, button:focus {outline: none;}
+
+/*웹폰트*/
+@font-face {
+font-family: 'NanumSquareNeo-Variable';
+src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2');
+font-weight: normal;
+font-style: normal;}
+* {font-family: 'NanumSquareNeo-Variable', sans-serif;}
+
+/*main*/
+/*서치*/
+#main {width: 1280px; margin: 0 auto; margin-bottom: 100px;}
+#searchWrap {position: relative; width: 550px; margin: 0 auto; margin-top: 50px;}
+#searchBar {margin: 10px; width: 550px; height: 50px; border-radius: 5px; border: 1px solid #c2c2c2; background: #fff;
+                box-shadow: 1px 1px 5px 1px #cecece; padding: 0 50px; font-size: 20px; color: #4a4a4a;}
+#searchBar:focus {border: 2px solid #ffc400; box-shadow: 1px 1px 5px 1px #cecece;}
+#searchIc {position: absolute; top: 10px; left:5px;
+                width: 50px; height: 50px; background: url(../../images/search.png) no-repeat center; background-size: 30px;}
+#recSearchText {display: flex; flex-flow: row nowrap; justify-content: center; margin: 10px;}
+.SearchTextBar {width: 1px; height: 15px; background: #bcbcbc; margin: 1px 10px;}
+#recSearchText a{color: #858585; font-size: 14px;}
+/*다크모드 서치*/
+#searchBar.dark {}
+#searchBar:focus.dark{}
+#recSearchText.dark{}
+.SearchTextBar.dark{background: #fff;}
+#recSearchText a.dark{color: #fff;}
+
+/*내 추천 게시판*/
+#recBoardWrap {width: 1000px; height: 350px; border-radius: 20px; background: #ffc400; text-align: center;
+                margin: 50px auto; padding-top: 30px; 
+                box-shadow: 1px 1px 5px 1px #cecece;}
+#recBoardWrap h2 {font-size: 40px; color: #fff; text-shadow: 2px 2px 3px #4e3c00; line-height: 50px;}
+#recBoard {display: flex; justify-content: space-evenly; position: relative; margin-top: 40px;}
+#recBoard > a {width: 450px; height: 200px; border-radius: 5px; background: #fff; box-shadow: 1px 1px 5px 1px #9e7900;}
+#recboardRecBest .recboardIc {position: absolute; left: 413px; top: -5px; width: 50px; height: 70px;
+                                background: url(../../images/bookmarker.png) no-repeat center; background-size: 70px;}
+#recboardViewBest .recboardIc {position: absolute; right: 50px; top: -5px; width: 50px; height: 70px;
+                                background: url(../../images/bookmarker.png) no-repeat center; background-size: 70px;}
+#recBoardWrap h3{padding: 10px 0; height: 50px; background: rgb(104, 104, 104); color: #fff; font-size: 25px;}
+#recBoardWrap > div p:nth-child(1) {font-size: 20px; font-weight: 600; margin: 30px 20px 10px; color: #474747;}
+#recBoardWrap > div p:nth-child(2) {font-size: 18px; margin: 30px 20px; color: #797979;
+                                white-space: noWrap; overflow: hidden; text-overflow: ellipsis;}
+/*다크모드 내 추천 게시판*/                  
+#recBoardWrap.dark {background: #405692; box-shadow: 1px 1px 5px 1px #3f465a;}
+#recBoardWrap h2.dark {text-shadow: 2px 2px 3px #405692;}
+#recBoard > a.dark  {}
+#recboardRecBest .recboardIc.dark{}
+#recboardViewBest .recboardIc.dark{}
+#recBoardWrap h3.dark{}
+#recBoardWrap > div p:nth-child(1).dark{}
+#recBoardWrap > div p:nth-child(2).dark{}
+
+
+/*베스트 게시글*/
+#mainBestWrap{display: flex; flex-flow: row nowrap; justify-content: center;}
+#mainBestWrap > div {width: 600px; height: 800px; margin: 20px; background: #fff;; border-radius: 5px;
+                        box-shadow: 1px 1px 5px 1px #cecece;}
+#mainBestWrap > div ul li {width: 550px; height: 125px; margin: 0 auto;}
+#mainBestWrap > div ul li:hover {background: #f0f0f0;}
+#mainBestWrap > div ul li:not(:nth-child(5)) {border-bottom: 1px solid #e5e7eb;}
+#mainBestWrap > div > div {width: 500px; height: 80px; border-radius: 10px; font-size: 20px;
+                        background: #ffc400; color: #423400;
+                        margin: 30px auto; text-align: center; line-height: 80px;}
+#mainBestWrap > div ul li p:nth-child(2) {width: 500px; margin: 10px auto; color: #272727; font-size: 18px; font-weight: 800;}
+#mainBestWrap > div ul li p:nth-child(3) {width: 500px; margin: 15px auto 10px; color: #7d82a8;
+                                        white-space: noWrap; overflow: hidden; text-overflow: ellipsis;}
+
+.recBestTopWrap {display: flex; justify-content: space-between; margin: 0px 10px; padding-top: 10px; height: 40px; line-height: 30px; font-size: 14px;}
+#mainRecBest ul li:nth-child(1) .recBestName {padding-left: 30px; background: url(../../images/medal1.png) no-repeat; background-size: 30px;}
+#mainRecBest ul li:nth-child(2) .recBestName {padding-left: 30px; background: url(../../images/medal2.png) no-repeat; background-size: 30px;}
+#mainRecBest ul li:nth-child(3) .recBestName {padding-left: 30px; background: url(../../images/medal3.png) no-repeat; background-size: 30px;}
+
+.recBextCount {width: 80px; padding-left: 30px; background: url(../../images/good.png) no-repeat; background-size: 30px; text-align: center;}
+
+.viewBestTopWrap {display: flex; justify-content: space-between; margin: 0px 10px; padding-top: 10px; height: 40px; line-height: 30px; font-size: 14px;}
+#mainViewBest ul li:nth-child(1) .viewBestName {padding-left: 30px; background: url(../../images/medal1.png) no-repeat; background-size: 30px;}
+#mainViewBest ul li:nth-child(2) .viewBestName {padding-left: 30px; background: url(../../images/medal2.png) no-repeat; background-size: 30px;}
+#mainViewBest ul li:nth-child(3) .viewBestName {padding-left: 30px; background: url(../../images/medal3.png) no-repeat; background-size: 30px;}
+
+.viewBextCount {width: 80px; padding-left: 30px; background: url(../../images/eye.png) no-repeat; background-size: 30px; text-align: center;}
+/*다크모드 베스트 게시글*/

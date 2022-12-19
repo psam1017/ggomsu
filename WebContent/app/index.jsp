@@ -12,6 +12,7 @@
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>꼼수닷컴</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/index.css">
 </head>
 <body>
     <jsp:include page="/app/fix/header.jsp" />
