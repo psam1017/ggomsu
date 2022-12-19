@@ -11,6 +11,8 @@ const passwordCheck = document.getElementById("passwordCheck");
 const passwordCheckResult = document.getElementById("passwordCheckResult");
 const nickname = document.getElementById("nickname");
 const nicknameResult = document.getElementById("nicknameResult");
+const eachContact = document.querySelectorAll(".eachContact");
+const contact = document.getElementById("contact");
 const terms = document.querySelectorAll(".agreedTermAt");
 const signUpSubmit = document.getElementById("signUpSubmit");
 
@@ -20,7 +22,8 @@ let isPasswordCheckValid = false;
 let isNicknameValid = false;
 let isTermOk = false;
 let emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-let passwordRegExp = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*?]).{8,}$/;;
+let passwordRegExp = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*?]).{8,}$/;
+let contactRegExp = /^[0-9]*$/;
 // 비밀번호는 소문자, 숫자, 특수문자를 포함한 8자 이상
 
 email.addEventListener("blur", function(){
@@ -37,6 +40,16 @@ passwordCheck.addEventListener("keyup", function(){
 
 nickname.addEventListener("blur", function(){
 	checkNickname(nickname.value);
+});
+
+eachContact.forEach(element => {
+	element.addEventListener("keyup", function(){
+		this.value = checkContact(this.value);
+	});
+});
+
+eachContact[2].addEventListener("blur", function(){
+	concatContact();
 });
 
 signUpSubmit.addEventListener("click", function(){
@@ -202,6 +215,19 @@ function checkNickname(nicknameValue){
     }
 }
 
+function concatContact(){
+	contact.value = eachContact[0].value.concat(eachContact[1].value).concat(eachContact[2].value);
+}
+
+function checkContact(contactValue){
+	if(!contactRegExp.test(contactValue)){
+		return contactValue.substring(0, contactValue.length - 1);
+	}
+	else{
+		return contactValue;
+	}
+}
+
 function formSubmit(){
 
 	if(!isEmailValid){
@@ -225,6 +251,18 @@ function formSubmit(){
 	if(!isNicknameValid){
 		alert("닉네임을 확인해주세요.");
 		nickname.focus();
+		return;
+	}
+	
+	if(birthDate.value == ""){
+		alert("생일을 확인해주세요.");
+		birthDate.focus();
+		return;
+	}
+	
+	if(!(contact.value.length == 10 || contact.value.length == 11)){
+		alert("전화번호가 너무 짧거나 올바르지 않습니다.");
+		eachContact[2].focus();
 		return;
 	}
 	
