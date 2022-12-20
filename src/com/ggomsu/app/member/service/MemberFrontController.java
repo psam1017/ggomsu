@@ -49,6 +49,13 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("닉네임 중복검사 오류!" + e);
 			}
 		}
+		else if(command.equals("/member/member-check-contact-ok")) {
+			try {
+				forward = new MemberCheckContact().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("전화번호 중복검사 오류!" + e);
+			}
+		}
 		else if(command.equals("/member/member-sign-up-ok")) {
 			try {
 				forward = new MemberSignUpOk().execute(req, resp);

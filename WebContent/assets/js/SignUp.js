@@ -2,7 +2,6 @@
  * 작성자 : 박성민
  */
 
-const signUpForm = document.getElementById("signUpForm");
 const email = document.getElementById("email");
 const emailResult = document.getElementById("emailResult");
 const password = document.getElementById("password");
@@ -11,27 +10,37 @@ const passwordCheck = document.getElementById("passwordCheck");
 const passwordCheckResult = document.getElementById("passwordCheckResult");
 const nickname = document.getElementById("nickname");
 const nicknameResult = document.getElementById("nicknameResult");
+const memberName = document.getElementById("name");
+const nameResult = document.getElementById("nameResult");
+const sex = document.querySelectorAll(".sex");
+const birthDate = document.getElementById("birthDate");
+const telecomValue = document.getElementById("telecomValue");
 const eachContact = document.querySelectorAll(".eachContact");
 const contact = document.getElementById("contact");
+const contactResult = document.getElementById("contactResult");
 const terms = document.querySelectorAll(".agreedTermAt");
-const signUpSubmit = document.getElementById("signUpSubmit");
 
 let isEmailValid = false;
 let isPasswordValid = false;
 let isPasswordCheckValid = false;
 let isNicknameValid = false;
+let isNameValid = false;
+let isSexValid = false;
+let isContactValid = false;
 let isTermOk = false;
 let emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 let passwordRegExp = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*?]).{8,}$/;
+let nicknameRegExp = /^[가-힣0-9]+$/;
+let nameRegExp = /^[가-힣]+$/;
 let contactRegExp = /^[0-9]*$/;
 // 비밀번호는 소문자, 숫자, 특수문자를 포함한 8자 이상
 
 email.addEventListener("blur", function(){
-    checkEmail(email.value);
+    checkEmail(this.value);
 });
 
 password.addEventListener("keyup", function(){
-	checkPassword(password.value);
+	checkPassword(this.value);
 });
 
 passwordCheck.addEventListener("keyup", function(){
@@ -39,17 +48,22 @@ passwordCheck.addEventListener("keyup", function(){
 });
 
 nickname.addEventListener("blur", function(){
-	checkNickname(nickname.value);
+	checkNickname(this.value);
+});
+
+memberName.addEventListener("blur", function(){
+	checkName(this.value);
 });
 
 eachContact.forEach(element => {
 	element.addEventListener("keyup", function(){
-		this.value = checkContact(this.value);
+		this.value = contactOnlyNumber(this.value);
 	});
 });
 
 eachContact[2].addEventListener("blur", function(){
 	concatContact();
+	checkContact(contact.value);
 });
 
 signUpSubmit.addEventListener("click", function(){
@@ -89,7 +103,7 @@ function checkEmail(emailValue){
 
     xhr.onreadystatechange = function(){
         if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
-        	let json = JSON.parse(xhr.responseText);
+        	let json = JSON.parse(xhr.responseText); // out.print(json.toJSONString())의 값을 받아온다.
             if(json.emailStatus == "ok"){
             	emailResult.innerText = "이메일을 사용할 수 있습니다.";
             	isEmailValid = true;
@@ -118,7 +132,7 @@ function checkPassword(passwordValue){
 	}
 	
 	if(!passwordRegExp.test(passwordValue)){
-		passwordResult.innerText = "비밀번호는 8자리 이상 소문자, 숫자, 특수문자를 포함해주세요.";
+		passwordResult.innerText = "비밀번호는 8자리 이상 소문자, 숫자, 특수문자(!@#$%^&*?)를 포함해주세요.";
 		return;
 	}
 	
@@ -168,6 +182,7 @@ function checkNickname(nicknameValue){
 	// 닉네임은...
 	// 필수항목이다.
 	// 2자 이상 10자 이하이어야 한다.
+	// 한글과 숫자만 사용할 수 있다.
 	// 숫자로 시작할 수 없다.
 	// 공백을 포함해선 안 된다.
 	// 기존 회원과 중복되어선 안 된다.
@@ -181,6 +196,11 @@ function checkNickname(nicknameValue){
 	
 	if(nicknameValue.length < 2 || nicknameValue.length > 10){
 		nicknameResult.innerText = "닉네임은 2자 이상 10자 이하로 입력해주세요.";
+		return;
+	}
+	
+	if(!nicknameRegExp.test(nicknameValue)){
+		nicknameResult.innerText = "한글과 숫자만 사용할 수 있습니다.";
 		return;
 	}
 
@@ -215,17 +235,72 @@ function checkNickname(nicknameValue){
     }
 }
 
+function checkName(nameValue){
+	// 이름은...
+	// 필수항목이다.
+	// 한국식 이름으로만 사용할 수 있다.
+
+	isNameValid = false;
+	
+	if(nameValue < 2 || nameValue > 5){
+		nameResult.innerText = "이름은 2자 이상 5자 이내로 입력해주세요.";
+		return;
+	}
+	
+	if(!nameRegExp.test(nameValue)){
+		nameResult.innerText = "한글 이름으로만 가입할 수 있습니다.";
+		return;
+	}
+	
+	nameResult.innerText = "";
+	isNameValid = true;
+}
+
+// 전화번호를 이어붙인다.
 function concatContact(){
 	contact.value = eachContact[0].value.concat(eachContact[1].value).concat(eachContact[2].value);
 }
 
-function checkContact(contactValue){
+// 사용자가 전화번호에 숫자 이외의 값을 집어넣으려고 하면 그 값을 삭제한다.
+function contactOnlyNumber(contactValue){
+
 	if(!contactRegExp.test(contactValue)){
 		return contactValue.substring(0, contactValue.length - 1);
 	}
 	else{
 		return contactValue;
 	}
+}
+
+// 전화번호의 유효성을 검사한다.
+function checkContact(contactValue){
+
+	isContactValid = false;
+
+	if(!(contact.value.length == 10 || contact.value.length == 11)){
+		contactResult.innerText = "전화번호 길이가 유효하지 않습니다.";
+		return;
+	}
+
+	let xhr = new XMLHttpRequest();
+    let requestURL = contextPath + "/member/member-check-contact-ok";
+
+    xhr.open("post", requestURL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("contact=" + contactValue);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+        	let json = JSON.parse(xhr.responseText);
+            if(json.contactStatus == "ok"){
+            	contactResult.innerText = "전화번호를 사용할 수 있습니다.";
+            	isContactValid = true;
+            }
+            else{
+            	contactResult.innerText = "이미 사용 중인 전화번호입니다.";
+            }
+        }
+    }
 }
 
 function formSubmit(){
@@ -254,18 +329,47 @@ function formSubmit(){
 		return;
 	}
 	
+	if(!isNameValid){
+		alert("이름을 확인해주세요.");
+		memberName.focus();
+		return;
+	}
+	
+	// 하나라도 값이 있다면 OK
+	isSexValid = false;
+
+	sex.forEach(element => {
+		if(element.checked == true){
+			isSexValid = true;
+			return;
+		}
+	});
+
+	if(!isSexValid){
+		alert("성별을 선택해주세요.");
+		sex[0].focus();
+		return;
+	}
+	
 	if(birthDate.value == ""){
-		alert("생일을 확인해주세요.");
+		alert("생일을 입력해주세요.");
 		birthDate.focus();
 		return;
 	}
 	
-	if(!(contact.value.length == 10 || contact.value.length == 11)){
-		alert("전화번호가 너무 짧거나 올바르지 않습니다.");
+	if(telecomValue.value == "NO"){
+		alert("통신사를 선택해주세요.");
+		telecomValue.focus();
+		return;
+	}
+	
+	if(!isContactValid){
+		alert("전화번호를 확인해주세요.");
 		eachContact[2].focus();
 		return;
 	}
 	
+	// 모두 값이 있어야 OK
 	let isTermOk = true;
 	
 	terms.forEach(element => {
@@ -283,6 +387,7 @@ function formSubmit(){
 	// 비밀번호 암호화
 	// 자문결과 front에서의 암호화는 SSL로 대체한다.
 	// 필요한 경우 Base64를 사용할 수 있다.
+	// 진짜 암호화는 JAVA에서 PBKDF2로 수행한다.
 
 	signUpForm.submit();
 }

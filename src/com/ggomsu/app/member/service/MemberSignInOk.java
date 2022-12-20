@@ -38,11 +38,13 @@ public class MemberSignInOk implements Action {
 		
 		// 차단된 유저인가?(신고 횟수)
 		// 휴면계정은 아닌가?(1년 동안 접속 X)
+		// 이메일 인증은 거쳤는가?
 
 		if(isSignInOk) {
 			// 로그인 성공 -> 현재 일자로 다시 signAt을 업데이트
 			session.setAttribute("email", vo.getEmail());
 			session.setAttribute("nickname", vo.getNickname());
+			session.setAttribute("statusValue", vo.getStatusValue());
 			
 			// 비밀번호를 변경할 때인가?(3개월) -> 변경 시 비밀번호 변경 일자를 다시 3개월 후로 갱신
 			// 약관에 다시 동의기간이 지났는가?(1년)
