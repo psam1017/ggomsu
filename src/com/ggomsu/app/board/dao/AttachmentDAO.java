@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.ggomsu.app.board.vo.AttachmentVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 
 public class AttachmentDAO {
@@ -23,4 +24,10 @@ public class AttachmentDAO {
 			sqlSession.insert("Attachment.insertAttachment", hash);
 		
 	}
+	
+	public AttachmentVO getAttachment(int articleIndex) {
+		return sqlSession.selectOne("Attachment.getAttachment", articleIndex);
+	}
+	
+	
 }

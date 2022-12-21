@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
+import com.ggomsu.app.board.dao.AttachmentDAO;
 
 	// 작성자 : 이성호
 public class ArticleViewDetailOk implements Action {
@@ -18,19 +19,20 @@ public class ArticleViewDetailOk implements Action {
 		resp.setCharacterEncoding("UTF-8");
 		
 		ArticleDAO dao = new ArticleDAO();
+		AttachmentDAO atDao = new AttachmentDAO();
 		ActionForward forward = new ActionForward();
 		
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		dao.updateArticleViewCount(articleIndex);
 		
-	
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
-
+		req.setAttribute("attachment", atDao.getAttachment(articleIndex));
 		// Session
 		HttpSession session = req.getSession();
 		String boardValue = (String)session.getAttribute("boardValue");
 		String email = (String)session.getAttribute("email");
+		
 		if( email == null) {
 			forward.setForward(false);
 			forward.setPath(req.getContextPath()+"/");
