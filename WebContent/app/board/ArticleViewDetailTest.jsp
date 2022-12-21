@@ -15,9 +15,7 @@
     <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
 </head>
 <body>
-	<c:set var="article" value="${article}"/>
-	<c:set var="articleIndex" value="${articleIndex}"/>
-	<c:set var="commentList" value="${commentList}"/>
+	
 	<c:set var="boardValue" value="${sessionScope.boardValue}"/>
 	
     <main id="main">
@@ -42,11 +40,9 @@
                 <p>첨부파일이 없습니다.</p>
             </c:when>
             <c:otherwise>
-                <c:forEach var="attachment" items="${attachment}">
-                    <a href="${pageContext.request.contextPath}/board/attachment-download-ok?attachmentName=${attachment.getAttachmentName()}">
-                        <c:out value="${attachment.getAttachmentName()}"/>
-                    </a>
-                </c:forEach>
+                <a href="${pageContext.request.contextPath}/board/attachment-download-ok?attachmentName=${attachment.getAttachmentName()}">
+                    <c:out value="${attachment.getAttachmentName()}"/>
+                </a>
             </c:otherwise>
         </c:choose>
         </section>
@@ -100,6 +96,7 @@
             <div id="refcomment">
                 <p> 대댓글 달기 및 보기는 댓글을 구현한 이후 다시 보도록 하겠습니다. </p>
             </div>
+            <a href="${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=${boardValue}">목록으로</a>
         </section>
     </main>
     

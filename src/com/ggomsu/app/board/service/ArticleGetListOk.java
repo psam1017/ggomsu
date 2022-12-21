@@ -27,10 +27,6 @@ public class ArticleGetListOk implements Action{
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = dao.getTotal(boardValue);
-		
-		// int endRow = page * pageSize;
-		// int startRow = endRow - (pageSize - 1);
-		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount/pageSize);

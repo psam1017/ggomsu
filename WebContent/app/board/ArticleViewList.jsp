@@ -17,27 +17,22 @@
 </head>
 <body>
 
-	<c:set var="totalCount" value="${totalCount}"/>
-	<c:set var="realEndPage" value="${realEndPage}"/>
-	<c:set var="startPage" value="${startPage}"/>
-	<c:set var="endPage" value="${endPage}"/>
-	<c:set var="nowPage" value="${nowPage}"/>
-	<c:set var="articleList" value="${articleList}"/>
-	<c:set var="prevPage" value="${prevPage}"/>
-	<c:set var="nextPage" value="${nextPage}"/>
-	<c:set var="articleLikeCount" value="${articleLikeCount}"/>
-	<c:set var="sortBy" value="${sortBy}"/> 
-	<!-- sortBy : 조회순, 최신순, 추천순 처럼 정렬기준을 전달하는 변수  -->
-	<c:set var="boardValue" value="${boardValue}"/>
-	<!-- boardVlaue : 공지사항, 코딩게시판, 게임게시판, 자유게시판을 구별해주는 변수 --> 
-	<c:set var="boardText" value="${boardText}"/>
-	<!-- boardText : 공지사항, 코딩게시판, 게임게시판, 자유게시판을 출력하는 변수 --> 
-	<c:set var="search" value="${search}"/>
-
 	<h1>게시판</h1>
         <h2>${boardText}</h2>
         <form action="${pageContext.request.contextPath}/board/article-get-search-list-ok" method="get">
         	<input type="hidden" name="boardValue" value="${boardValue}" >
+        	<select name="searchCategory">
+              <option value="Total" selected>전체</option>
+              <option value="Writer">작성자</option>
+              <option value="TitleContent">제목 및 내용</option>
+              <option value="Tag">태그</option>
+            </select>
+            <select name="searchPeriod">
+              <option value="1 SECOND" selected>전체</option>
+              <option value="7 DAY">일주일</option>
+              <option value="1 MONTH">1개월</option>
+              <option value="1 YEAR">1년</option>
+            </select>
             <input type="text" name="search">
             <input type="submit" value="검색">
         </form>
@@ -49,18 +44,17 @@
             <ul class="articleLine">
                 <c:choose>
                     <c:when test="${articleList != null and fn:length(articleList) > 0}">
-                        <c:forEach var="articles" items="${articleList}">
-                        	<c:set var="articleIndex" value="${articles.getArticleIndex()}"/>
+                        <c:forEach var="article" items="${articleList}">
                             <li>
                                 <div> 
-                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articles.getArticleIndex()}"><c:out value="제목 : ${articles.getTitle()}" /></a>
-                                <div><a href="#"><c:out value="닉네임 : ${articles.getNickname()}"/></a></div>
-                                <div><c:out value="작성일 : ${articles.getWrittenAt()}"/></div>
-                                <div><c:out value="조회수 : ${articles.getViewCount()}"/></div>
-                                <c:if test="${articles.getArticleLikeCount()!=null}">
-                                	<div><c:out value="추천수 : ${articles.getArticleLikeCount()}"/></div>
+                                <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${article.getArticleIndex()}"><c:out value="제목 : ${article.getTitle()}" /></a>
+                                <div><a href="#"><c:out value="닉네임 : ${article.getNickname()}"/></a></div>
+                                <div><c:out value="작성일 : ${article.getWrittenAt()}"/></div>
+                                <div><c:out value="조회수 : ${article.getViewCount()}"/></div>
+                                <c:if test="${article.getArticleLikeCount()!=null}">
+                                	<div><c:out value="추천수 : ${article.getArticleLikeCount()}"/></div>
                                 </c:if>
-                                <c:if test="${articles.getArticleLikeCount() == null}">
+                                <c:if test="${article.getArticleLikeCount() == null}">
                                 	<div><c:out value="추천수 : 0"/></div>
                                 </c:if>
                                 </div>
@@ -79,7 +73,7 @@
         	<tr>
         		<td>
         			<c:if test="${nowPage > 1}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${prevPage}&boardValue=${boardValue}&search=${search}">&lt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${prevPage}&boardValue=${boardValue}&search=${search}&searchCategory=${searchCategory}&searchPeriod=${searchPeriod}">&lt;</a>
         			</c:if>
         			
         			<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -88,13 +82,13 @@
         						<c:out value="[${i}]"/>&nbsp;
         					</c:when>
         					<c:otherwise>
-        						<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${i}&boardValue=${boardValue}&search=${search}"><c:out value="${i}"/></a>
+        						<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${i}&boardValue=${boardValue}&search=${search}&searchCategory=${searchCategory}&searchPeriod=${searchPeriod}"><c:out value="${i}"/></a>
         					</c:otherwise>
         				</c:choose>
         			</c:forEach>
         			
         			<c:if test="${nowPage != realEndPage}">
-        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${nextPage}&boardValue=${boardValue}&search=${search}">&gt;</a>
+        				<a href="${pageContext.request.contextPath}/board/article-get${sortBy}-list-ok?page=${nextPage}&boardValue=${boardValue}&search=${search}&searchCategory=${searchCategory}&searchPeriod=${searchPeriod}">&gt;</a>
         			</c:if>
         		</td>
         	</tr>

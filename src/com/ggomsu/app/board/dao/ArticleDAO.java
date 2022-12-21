@@ -37,15 +37,47 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getBestArticleList", hash);
 	}
 	
-	public int getSearchTotal(String search) {
-		return sqlSession.selectOne("Article.getSearchTotal", search);
+	public int getSearchTotalCount(String search, String searchPeriod) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("search", search);
+		hash.put("searchPeriod", searchPeriod);
+		return sqlSession.selectOne("Article.getSearchTotalCount", hash);
 	}
 	
-	public List<ArticleVO> getSearchList(String search, int page){
+	public int getSearchWriterCount(String search, String searchPeriod) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("search", search);
+		hash.put("searchPeriod", searchPeriod);
+		return sqlSession.selectOne("Article.getSearchWriterCount", hash);
+	}
+	
+	public int getSearchTitleContentCount(String search, String searchPeriod) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("search", search);
+		hash.put("searchPeriod", searchPeriod);
+		return sqlSession.selectOne("Article.getSearchTitleContentlCount", hash);
+	}
+	
+	public List<ArticleVO> getSearchTotalList(String search, int page, String searchPeriod){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
-		return sqlSession.selectList("Article.getSearchArticleList", hash);
+		hash.put("searchPeriod", searchPeriod);
+		return sqlSession.selectList("Article.getSearchTotalArticleList", hash);
+	}
+	
+	public List<ArticleVO> getSearchWriterList(String search, int page, String searchPeriod){
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("search", search);
+		hash.put("page", page);
+		return sqlSession.selectList("Article.getSearchWriterArticleList", hash);
+	}
+	
+	public List<ArticleVO> getSearchTitleContentList(String search, int page, String searchPeriod){
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("search", search);
+		hash.put("page", page);
+		return sqlSession.selectList("Article.getSearchTitleContentArticleList", hash);
 	}
 	
 	public ArticleVO getArticle(int articleIndex) {

@@ -6,4 +6,12 @@
 		INSERT INTO attachment
 		VALUES (#{systemName},#{articleIndex})
 	</insert>
+	
+	<select id="getAttachment" parameterType="_int" resultType="attachment">
+		SELECT attachmentName, articleIndex FROM attachment WHERE articleIndex = #{articleIndex}
+	</select>
+	
+	
+	
+	
 </mapper>
