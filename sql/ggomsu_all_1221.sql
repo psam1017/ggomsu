@@ -2,7 +2,7 @@
 # 22.12.07.
 # 변경사항 : member 테이블 통합 / 컬럼명 통일
 # 사유 : 1. 정규화 / 2. 컬럼명 구분에 따른 작업효율 저하
-# 비고 : 제1정규형을 만족시키기 위해 소셜 로그인 key를 모두 분리하였습니다.
+# 비고 : 제1정규형을 만족시키기 위해 소셜 로그인 key를 모두 분리
 
 CREATE SCHEMA psam1017;
 USE psam1017;
@@ -37,6 +37,7 @@ CREATE TABLE memberStatus
 INSERT INTO memberStatus
 VALUES	("ADM", "관리자"),
 		("MEM", "정상회원"),
+        ("EML", "이메일 인증 대기"),
 		("DOR", "휴면계정"),
 		("SUS", "관리자에 의해 정지"),
 		("DEL", "자발적 탈퇴");
@@ -64,19 +65,22 @@ CREATE TABLE members
     passwordAlertAt		DATETIME 		NOT NULL,
     nickname			VARCHAR(10) 	NOT NULL 	UNIQUE,
 	profileImageUrl		VARCHAR(128) 	NULL		UNIQUE,
-	name				VARCHAR(5) 		NULL,
-    birthDate			DATE 			NULL,
-    sex					VARCHAR(1) 		NULL,
-    telecomValue		VARCHAR(3) 		NULL,
-    contact				VARCHAR(12) 	NULL 		UNIQUE,
+	name				VARCHAR(5) 	NOT NULL,
+    birthDate			DATE 			NOT NULL,
+    sex					VARCHAR(1) 	NOT NULL,
+    telecomValue		VARCHAR(3) 	NOT NULL,
+    contact				VARCHAR(12) 	NOT NULL	UNIQUE,
 	zipcode				VARCHAR(5)		NULL,
 	address				VARCHAR(100)	NULL,
 	addressDetail		VARCHAR(100)	NULL,
     agreedTermAt		DATETIME 		NOT NULL	DEFAULT NOW(),
     agreedMarketingAt	DATETIME 		NULL,
     createdAt			DATETIME 		NOT NULL 	DEFAULT NOW(),
-    statusValue			VARCHAR(3) 		NOT NULL	DEFAULT "MEM",
-    abuseCount			TINYINT			NOT NULL	DEFAULT 0,
+    statusValue			VARCHAR(3) 	NOT NULL	DEFAULT "MEM",
+    abuseCount			TINYINT		NOT NULL	DEFAULT 0,
+    articleAlarmFlag	BOOLEAN		NOT NULL	DEFAULT 1,
+    commentAlarmFlag	BOOLEAN		NOT NULL	DEFAULT 1,
+    darkModeFlag		BOOLEAN		NOT NULL	DEFAULT 0,
 	CONSTRAINT FOREIGN KEY(sex)
 		REFERENCES memberSex(value)
         ON DELETE CASCADE
@@ -134,14 +138,15 @@ VALUES	("notice", "공지사항"),
 
 CREATE TABLE articles
 (
-    articleIndex	INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	boardValue		VARCHAR(10) NOT NULL,
-    nickname		VARCHAR(10) NOT NULL,
-    title			VARCHAR(100) NOT NULL,
-    content			VARCHAR(20000) NOT NULL,
-    viewCount		INT UNSIGNED NOT NULL DEFAULT 0,
-    writtenAt		DATETIME NOT NULL DEFAULT NOW(),
-    deletedAt		DATETIME NULL,
+    articleIndex		INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	boardValue			VARCHAR(10) NOT NULL,
+    nickname			VARCHAR(10) NOT NULL,
+    title				VARCHAR(100) NOT NULL,
+    content				VARCHAR(20000) NOT NULL,
+    viewCount			INT UNSIGNED NOT NULL DEFAULT 0,
+    writtenAt			DATETIME NOT NULL DEFAULT NOW(),
+    deletedAt			DATETIME NULL,
+    articleDeleteReason	VARCHAR(50) NULL,
     CONSTRAINT FOREIGN KEY(boardValue)
 		REFERENCES boards(boardValue)
         ON DELETE CASCADE
@@ -175,13 +180,14 @@ CREATE TABLE attachment
 
 CREATE TABLE comments
 (
-    commentIndex	INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    refIndex		INT UNSIGNED NULL,
-    articleIndex	INT UNSIGNED NOT NULL,
-    nickname		VARCHAR(10) NOT NULL,
-    content			VARCHAR(1000) NOT NULL,
-    writtenAt		DATETIME DEFAULT NOW(),
-    deletedAt		DATETIME NULL,
+    commentIndex		INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    refIndex			INT UNSIGNED NULL,
+    articleIndex		INT UNSIGNED NOT NULL,
+    nickname			VARCHAR(10) NOT NULL,
+    content				VARCHAR(1000) NOT NULL,
+    writtenAt			DATETIME DEFAULT NOW(),
+    deletedAt			DATETIME NULL,
+    commentDeleteReason	VARCHAR(50) NULL,
 	CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(articleIndex)
 		ON DELETE CASCADE
@@ -226,6 +232,80 @@ CREATE TABLE commentLike
         ON UPDATE CASCADE
 );
 
+CREATE TABLE articleReport
+(
+	nickname			VARCHAR(10)	NOT NULL,
+    articleIndex		INT UNSIGNED	NOT NULL,
+    articleReportReason	VARCHAR(50)	NOT NULL,
+    reportDate			DATETIME		NOT NULL,
+	CONSTRAINT PRIMARY KEY(nickname, articleIndex),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(articleIndex)
+		REFERENCES articles(articleIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE commentReport
+(
+	nickname			VARCHAR(10)	NOT NULL,
+    commentIndex		INT UNSIGNED	NOT NULL,
+    commentReportReason	VARCHAR(50)	NOT NULL,
+	CONSTRAINT PRIMARY KEY(nickname, commentIndex),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(commentIndex)
+		REFERENCES comments(commentIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE articleAlarm
+(
+	nickname			VARCHAR(10)	NOT NULL,
+    articleIndex		INT UNSIGNED	NOT NULL,
+    commentIndex		INT UNSIGNED	NOT NULL,
+	CONSTRAINT PRIMARY KEY(nickname, articleIndex),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(articleIndex)
+		REFERENCES articles(articleIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(commentIndex)
+		REFERENCES comments(commentIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE commentAlarm
+(
+	nickname		VARCHAR(10)	NOT NULL,
+    commentIndex	INT UNSIGNED	NOT NULL,
+    refIndex		INT UNSIGNED	NOT NULL,
+	CONSTRAINT PRIMARY KEY(nickname, commentIndex),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(commentIndex)
+		REFERENCES comments(commentIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(refIndex)
+		REFERENCES comments(refIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+# 더미데이터
 INSERT INTO members
 (email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name, birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 VALUES
