@@ -27,6 +27,10 @@ public class MemberDAO {
 		return (Integer)(sqlSession.selectOne("Member.checkNickname", nickname)) == 1;
 	}
 	
+	public boolean checkContact(String contact) {
+		return (Integer)(sqlSession.selectOne("Member.checkContact", contact)) == 1;
+	}
+	
 	public void signUp(MemberVO vo) {
 		sqlSession.insert("Member.signUp", vo);
 	}

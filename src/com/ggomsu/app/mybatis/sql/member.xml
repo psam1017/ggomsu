@@ -15,6 +15,11 @@
 		FROM members
 		WHERE nickname = #{nickname}
 	</select>
+	<select id="checkContact" parameterType="string" resultType="_int">
+		SELECT COUNT(contact)
+		FROM members
+		WHERE contact = #{contact}
+	</select>
 	<insert id="signUp" parameterType="member">
 		INSERT INTO members
 		(email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name,

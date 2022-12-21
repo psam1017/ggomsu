@@ -4,11 +4,18 @@ package com.ggomsu.app.board.vo;
 
 public class TagVO {
 	
+	private int articleIndex;
 	private String tagValue;
-	private int tagCount;
-	private int searchCount;
 	
 	public TagVO() { ; }
+
+	public int getArticleIndex() {
+		return articleIndex;
+	}
+
+	public void setArticleIndex(int articleIndex) {
+		this.articleIndex = articleIndex;
+	}
 
 	public String getTagValue() {
 		return tagValue;
@@ -17,20 +24,5 @@ public class TagVO {
 	public void setTagValue(String tagValue) {
 		this.tagValue = tagValue;
 	}
-
-	public int getTagCount() {
-		return tagCount;
-	}
-
-	public void setTagCount(int tagCount) {
-		this.tagCount = tagCount;
-	}
-
-	public int getSearchCount() {
-		return searchCount;
-	}
-
-	public void setSearchCount(int searchCount) {
-		this.searchCount = searchCount;
-	}
+	
 }

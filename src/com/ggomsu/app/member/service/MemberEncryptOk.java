@@ -12,6 +12,7 @@ public class MemberEncryptOk{
 	
 	// 반환된 info는 호출한 쪽에서 값을 담아서 DB에 저장.
 	// 예외처리가 필요함.
+	// 어차피 random으로 난수는 생성이 되었으므로, 편의상 이를 그대로 문자열로 저장하여 사용
 	public MemberEncryptInfo encrypt(String password) throws Exception {
 		
 		MemberEncryptInfo info = new MemberEncryptInfo();
