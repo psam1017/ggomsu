@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Article">
+	<select id="getTotal" resultType="_int">
+		SELECT COUNT(`articleIndex`) FROM psam1017.articles
+		WHERE boardValue LIKE #{boardValue}
+	</select>
+	
+	<select id="getArticleList" parameterType="hashmap" resultType="article">
+		SELECT `articleIndex`, title, nickname, viewCount, writtenAt
+		FROM psam1017.articles
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY articleIndex DESC
+		LIMIT 10 OFFSET #{page};
+	</select>
+	
+	<select id="getBestArticleList" parameterType="hashmap" resultType="article">
+		SELECT A.`articleIndex`, A.title, A.nickname , A.writtenAt, A.viewCount, B.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY articleLikeCount DESC
+		LIMIT 10 OFFSET #{page};
+	</select>
+	
+	<select id="getSearchTotalCount" parameterType="hashmap" resultType="_int">
+	<![CDATA[
+		SELECT COUNT(`articleIndex`)
+		FROM (
+		SELECT A.`articleIndex`
+		FROM psam1017.articles A
+		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod}))AS SL ;
+	]]>
+	</select>
+	
+	<select id="getSearchWriterCount" parameterType="hashmap" resultType="_int">
+	<![CDATA[
+		SELECT COUNT(`articleIndex`)
+		FROM (
+		SELECT A.`articleIndex`
+		FROM psam1017.articles A
+		WHERE A.nickname LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL ;
+	]]>
+	</select>
+	
+	<select id="getSearchTitleContentlCount" parameterType="hashmap" resultType="_int">
+	<![CDATA[
+		SELECT COUNT(`articleIndex`)
+		FROM (
+		SELECT A.`articleIndex`
+		FROM psam1017.articles A
+		WHERE CONCAT(A.title, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL ;
+	]]>
+	</select>
+		
+	<select id="getSearchTotalArticleList" parameterType="hashmap" resultType="article">
+	<![CDATA[
+		SELECT A.`articleIndex`, A.title, A.nickname, A.viewCount, A.writtenAt, B.articleLikeCount
+		FROM psam1017.articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		LIMIT 10 OFFSET #{page};
+	]]>
+	</select>
+	
+	<select id="getSearchWriterArticleList" parameterType="hashmap" resultType="article">
+	<![CDATA[
+		SELECT A.`articleIndex`, A.title, A.nickname, A.viewCount, A.writtenAt, B.articleLikeCount
+		FROM psam1017.articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE A.nickname LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		LIMIT 10 OFFSET #{page}
+	]]>
+	</select>
+	
+	<select id="getSearchTitleContentArticleList" parameterType="hashmap" resultType="article">
+	<![CDATA[
+		SELECT A.`articleIndex`, A.title, A.nickname, A.viewCount, A.writtenAt, B.articleLikeCount
+		FROM psam1017.articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE CONCAT(A.title, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		LIMIT 10 OFFSET #{page}
+	]]>
+	</select>
+	
+	<select id="getArticle" parameterType="_int" resultType="article">
+		SELECT A.`articleIndex`, A.boardValue, A.title, A.nickname , A.writtenAt, A.viewCount, A.content, AL.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS AL
+		ON A.`articleIndex` = AL.articleIndex
+		WHERE A.`articleIndex` = #{articleIndex};
+	</select>
+	
+	<select id="updateArticleViewCount" parameterType="_int">
+		UPDATE psam1017.articles
+		SET viewCount = viewCount + 1
+		WHERE `articleIndex` = #{articleIndex}
+	</select>
+	
+	<select id="getViewedOrderArticleList" parameterType="hashmap" resultType="article">
+		SELECT A.`articleIndex`, A.title, A.nickname , A.writtenAt, A.viewCount, B.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY viewCount DESC
+		LIMIT 10 OFFSET #{page};
+	</select>
+	
+	<delete id="deleteArticle" parameterType="_int">
+		DELETE FROM articles WHERE `articleIndex` = #{articleIndex}
+	</delete>
+	
+	<insert id="insertArticle" parameterType="article">
+		INSERT INTO psam1017.Articles(boardValue, nickname, title, content)
+		VALUES (#{boardValue},#{nickname},#{title},#{content})
+	</insert>
+	
+	<select id="getMaxIndex" resultType="_int">
+		SELECT `articleIndex` FROM psam1017.articles 
+		ORDER BY `articleIndex` DESC
+		LIMIT 1
+	</select>
+</mapper>

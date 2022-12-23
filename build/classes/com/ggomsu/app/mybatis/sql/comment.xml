@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Comment">
+	<select id ="getCommentList" parameterType="_int" resultType="comment">
+		SELECT * FROM comments
+		WHERE articleIndex = #{articleIndex}
+		ORDER BY refIndex ASC, commentIndex ASC
+	</select>
+	<insert id ="insertComment" parameterType="comment">
+		INSERT INTO comments(refIndex, articleIndex, nickname, content)
+		VALUES(#{refIndex}, #{articleIndex}, #{nickname}, #{content})
+	</insert>
+	<delete id="deleteComment" parameterType="comment">
+		DELETE FROM comments
+		WHERE articleIndex=${articleIndex}, commentIndex=${commentIndex}, refIndex=${refIndex}
+	</delete>
+</mapper>
