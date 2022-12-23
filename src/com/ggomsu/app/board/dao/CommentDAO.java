@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.ggomsu.app.board.vo.CommentVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 
+// 작성자 : 김지혜
 public class CommentDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
 	SqlSession sqlSession;
@@ -15,5 +16,17 @@ public class CommentDAO {
 	// openSession(true) : 오토 커밋을 true로 설정.
 	public CommentDAO() {
 		sqlSession = sessionFactory.openSession(true);
+	}
+	
+	public List<CommentVO> getCommentList(int articleIndex){
+		return sqlSession.selectList("Comment.getCommentList", articleIndex);
+	}
+	
+	public void insertComment(CommentVO commentVo) {
+		sqlSession.update("Comment.insertComment", commentVo);
+	}
+	
+	public void deleteComment() {
+		
 	}
 }
