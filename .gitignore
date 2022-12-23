@@ -1,1 +1,9 @@
 /build/
+.classpath
+.project
+.settings/
+.gitignore
+/WebContent/WEB-INF/lib/
+/WebContent/META-INF/
+/src/**/config.xml
+/bin/
