@@ -12,6 +12,7 @@ import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.AttachmentDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
 import com.ggomsu.app.board.vo.ArticleVO;
+import com.ggomsu.app.member.dao.MemberDAO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
@@ -29,7 +30,7 @@ public class ArticleWriteOk implements Action {
 
 		// upload의 경로 설정
 		// 호스팅시에 파일 경로 변경해야한다.
-		String saveFolder = "C:\\sungholee\\worksapce\\ggomsu\\WebContent\\app\\upload";
+		String saveFolder = "/Users/leesungho/project/workspace/ggomsu/WebContent/app/upload";
 	
 		// byte 단위의 크기 : 5Mb
 		int fileSize = 1024 * 1024 * 5;
@@ -51,21 +52,24 @@ public class ArticleWriteOk implements Action {
 		// String basic = multi.getParameter("basic"); // 해쉬태그 값
 		String content = multi.getParameter("content");
 		// String value = multi.getParameter("value");
+		int articleIndex = aDao.getMaxIndex();
+		
+		// Session
+		HttpSession session = req.getSession();
+		session.setAttribute("boardValue", boardValue);
+		session.setAttribute("articleIndex", articleIndex);
 		
 		aVo.setBoardValue(boardValue);
 		aVo.setTitle(title);
 		aVo.setContent(content);
+		aVo.setNickname((String)session.getAttribute("nickname"));
 		
 		aDao.insertArticle(aVo);
 		
-		int articleIndex = aDao.getMaxIndex();
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = aDao.getTotal(boardValue);
-		
-		// int endRow = page * pageSize;
-		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -85,17 +89,16 @@ public class ArticleWriteOk implements Action {
 		resp.setCharacterEncoding("utf-8");
 		resp.setContentType("text/html");
 		
-		req.setAttribute("totalCount", totalCount);
-		req.setAttribute("realEndPage", realEndPage);
-		req.setAttribute("startPage", startPage);
-		req.setAttribute("endPage", endPage);
-		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", aDao.getList((page-1)*10,"%"+boardValue));
-		req.setAttribute("prevPage", prevPage);
-		req.setAttribute("nextPage", nextPage);
-		req.setAttribute("boardValue", boardValue);
-		req.setAttribute("boardText", bDao.getBoardText(boardValue));
-		
+//		req.setAttribute("totalCount", totalCount);
+//		req.setAttribute("realEndPage", realEndPage);
+//		req.setAttribute("startPage", startPage);
+//		req.setAttribute("endPage", endPage);
+//		req.setAttribute("nowPage", page);
+//		req.setAttribute("articleList", aDao.getList((page-1)*10,"%"+boardValue));
+//		req.setAttribute("prevPage", prevPage);
+//		req.setAttribute("nextPage", nextPage);
+//		req.setAttribute("boardValue", boardValue);
+//		req.setAttribute("boardText", bDao.getBoardText(boardValue));
 		
 		Enumeration<String> files = multi.getFileNames();
 		while(files.hasMoreElements()) {
@@ -111,13 +114,8 @@ public class ArticleWriteOk implements Action {
 		}
 		
 		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/board/article-write");
-		
-		// Session
-		HttpSession session = req.getSession();
-		session.setAttribute("boardValue", boardValue);
-		session.setAttribute("articleIndex", articleIndex);
-		
+		forward.setPath(req.getContextPath() + "/board/article-get-list-ok?boardValue=" + boardValue);
+			
 		return forward;
 	}
 

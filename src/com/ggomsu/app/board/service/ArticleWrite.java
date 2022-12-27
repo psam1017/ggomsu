@@ -24,7 +24,7 @@ public class ArticleWrite implements Action {
 		// Cookie cookie = null;
 		// Cookie cookies [] = req.getCookies();
 		
-		String boardValue = null;
+		
 		
 //		if(cookies != null) {
 //			cookie = cookies[0];
@@ -32,12 +32,12 @@ public class ArticleWrite implements Action {
 //			req.setAttribute("boardValue", boardValue);
 //			cookie.setMaxAge(0);
 //		}
+		String boardValue = null;
+		int articleIndex = 0;
 		String temp = null;
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = dao.getTotal("%" + boardValue);
-		// int endRow = page * pageSize;
-		// int startRow = endRow - (pageSize - 1);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount/pageSize);
@@ -48,6 +48,7 @@ public class ArticleWrite implements Action {
 		//Session
 		HttpSession session = req.getSession();
 		boardValue = (String)session.getAttribute("boardValue");
+		articleIndex = (int)session.getAttribute("articleIndex");
 		
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("realEndPage", realEndPage);
@@ -58,7 +59,7 @@ public class ArticleWrite implements Action {
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
-				
+			
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
 		
