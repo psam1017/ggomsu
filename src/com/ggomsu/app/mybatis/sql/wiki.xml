@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 작성자 : 박성민 -->
+
+<mapper namespace="Wiki">
+	<select id="getWiki" parameterType="map" resultType="wiki">
+		<![CDATA[
+		SELECT *
+		FROM TESTWIKI
+		WHERE rvs <= ${rvs}
+		AND subject = #{subject}
+		ORDER BY rvs ASC, rvsIndex ASC
+		]]>
+	</select>
+</mapper>

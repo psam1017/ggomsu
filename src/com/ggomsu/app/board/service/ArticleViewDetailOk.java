@@ -26,7 +26,7 @@ public class ArticleViewDetailOk implements Action {
 		
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		dao.updateArticleViewCount(articleIndex);
-		
+
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
 		req.setAttribute("attachment", atDao.getAttachment(articleIndex));
