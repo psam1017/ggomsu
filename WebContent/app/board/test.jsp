@@ -10,4 +10,3 @@
 	<a href="${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=coding">test</a>
 </body>
 </html>
-

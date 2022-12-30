@@ -89,6 +89,25 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("게시글 작성 후 값 전달 실패!!!" + e);
 			}
+		}//comment
+		else if(command.equals("/board/comment-write-ok")) {
+			try {
+				forward = new CommentWriteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("댓글 작성 실패!" + e);
+			}
+		}else if(command.equals("/board/ref-comment-write-ok")) {
+			try {
+				forward = new RefCommentWriteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("대댓글 작성 실패!" + e);
+			}
+		}else if(command.equals("/board/comment-delete-ok")) {
+			try {
+				forward = new RefCommentWriteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("대댓글 작성 실패!" + e);
+			}
 		}
 		
 		

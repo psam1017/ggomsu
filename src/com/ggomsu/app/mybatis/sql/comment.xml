@@ -8,11 +8,20 @@
 		ORDER BY refIndex ASC, commentIndex ASC
 	</select>
 	<insert id ="insertComment" parameterType="comment">
-		INSERT INTO comments(refIndex, articleIndex, nickname, content)
-		VALUES(#{refIndex}, #{articleIndex}, #{nickname}, #{content})
+		INSERT INTO comments(articleIndex, commentIndex, refIndex, nickname, content)
+		VALUES(#{articleIndex}, #{commentIndex}, #{refIndex}, #{nickname}, #{content})
+	</insert>
+	<insert id ="insertRefComment" parameterType="comment">
+		INSERT INTO comments(articleIndex, commentIndex, refIndex, nickname, content)
+		VALUES(#{articleIndex}, #{commentIndex}, #{refIndex}, #{nickname}, #{content})
 	</insert>
 	<delete id="deleteComment" parameterType="comment">
 		DELETE FROM comments
-		WHERE articleIndex=${articleIndex}, commentIndex=${commentIndex}, refIndex=${refIndex}
+		WHERE articleIndex=${articleIndex} AND commentIndex=${commentIndex} AND refIndex=${refIndex}
 	</delete>
+	<select id="getCommentIndex" resultType="_int">
+		SELECT `commentIndex` FROM comments 
+		ORDER BY `commentIndex` DESC
+		LIMIT 1
+	</select>
 </mapper>

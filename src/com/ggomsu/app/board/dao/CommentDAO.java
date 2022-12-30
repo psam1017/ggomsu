@@ -23,10 +23,18 @@ public class CommentDAO {
 	}
 	
 	public void insertComment(CommentVO commentVo) {
-		sqlSession.update("Comment.insertComment", commentVo);
+		sqlSession.insert("Comment.insertComment", commentVo);
 	}
 	
-	public void deleteComment() {
-		
+	public void insertRefComment(CommentVO commentVo) {
+		sqlSession.insert("Comment.insertRefComment", commentVo);
+	}
+	
+	public void deleteComment(CommentVO commentVo) {
+		sqlSession.update("Comment.deleteComment", commentVo);
+	}
+	
+	public int getCommentIndex() {
+		return sqlSession.selectOne("Comment.getCommentIndex");
 	}
 }
