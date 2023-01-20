@@ -26,7 +26,7 @@ public class MemberSignInOk implements Action {
 		String password = req.getParameter("password");
 		boolean isSignInOk = false;
 		
-		MemberEncryptOk encrypt = new MemberEncryptOk();
+		EncryptionController encrypt = new EncryptionController();
 		
 		vo = dao.getMemberInfo(email);
 		

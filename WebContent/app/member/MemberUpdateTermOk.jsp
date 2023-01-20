@@ -13,7 +13,7 @@
     <title>약관확인</title>
 </head>
 <body>
-    <jsp:include page="/app/fix/myPageAside.jsp" />
+    <jsp:include page="/app/fix/MyPageAside.jsp" />
     <main id="main">
         <section id="terms">
             <div>

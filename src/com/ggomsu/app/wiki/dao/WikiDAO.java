@@ -8,10 +8,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
-import com.ggomsu.app.wiki.vo.WikiVO;
+import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.wiki.vo.WikiContentVO;
 
 // 작성자 : 박성민
-
 public class WikiDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
 	SqlSession sqlSession;
@@ -21,10 +21,32 @@ public class WikiDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 
-	public List<WikiVO> getList(String subject, int rvs) {
+	public List<WikiContentVO> getContentOne(String subject, int rvs) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("subject", subject);
 		map.put("rvs", rvs);
-		return sqlSession.selectList("Wiki.getWiki", map);
+		return sqlSession.selectList("Wiki.getContentOne", map);
+	}
+	
+	public List<WikiContentVO> getContentPast(String subject, int rvs) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("subject", subject);
+		map.put("rvs", rvs);
+		return sqlSession.selectList("Wiki.getContentPast", map);
+	}
+	
+	public WikiInfoVO getWikiInfo(String subject, int rvs) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("subject", subject);
+		map.put("rvs", rvs);
+		return sqlSession.selectOne("Wiki.getWikiInfo", map);
+	}
+	
+	public void insertWikiInfo(WikiInfoVO info) {
+		sqlSession.insert("Wiki.insertWikiInfo", info);
+	}
+	
+	public void insertWikiContents(List<WikiContentVO> contents) {
+		sqlSession.insert("Wiki.insertWikiContents", contents);
 	}
 }

@@ -2,7 +2,7 @@ package com.ggomsu.app.wiki.vo;
 
 // 작성자 : 박성민
 
-public class WikiVO {
+public class WikiContentVO {
 	
 	private String subject;
 	private int rvs;
@@ -11,7 +11,7 @@ public class WikiVO {
 	private int preRvsIndex;
 	private String content;
 	
-	public WikiVO() { ; }
+	public WikiContentVO() { ; }
 	
 	public String getSubject() {
 		return subject;
@@ -48,20 +48,5 @@ public class WikiVO {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof WikiVO) {
-			WikiVO wiki = (WikiVO)obj;
-//			System.out.print(this.getRvs() + ", " + wiki.getRvsIndex() + "/");
-//			System.out.println(this.getPreRvs() + ", " + wiki.getPreRvsIndex());
-			return (Integer.toString(this.getRvs()) + this.getRvsIndex()).equals((Integer.toString(wiki.getPreRvs()) + wiki.getPreRvsIndex()));
-		}
-		return false;
-	}
-	
-	public boolean isSelf() {
-		return (Integer.toString(this.getRvs()) + this.getRvsIndex()).equals((Integer.toString(this.getPreRvs()) + this.getPreRvsIndex()));
 	}
 }
