@@ -7,6 +7,7 @@ import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
+import com.ggomsu.app.member.vo.SimpleEncInfoVO;
 
 	//작성자 : 손하늘
 public class MemberSignUpOk implements Action{
@@ -19,8 +20,8 @@ public class MemberSignUpOk implements Action{
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
-		MemberEncryptOk encrypt = new MemberEncryptOk();
-		MemberEncryptInfo info = new MemberEncryptInfo();
+		EncryptionController encrypt = new EncryptionController();
+		SimpleEncInfoVO info = new SimpleEncInfoVO();
 		
 		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
 		vo.setEmail(req.getParameter("email"));

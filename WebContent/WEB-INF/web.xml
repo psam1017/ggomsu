@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-  <!-- 작성자 : 박성민 -->
   <display-name>ggomsu</display-name>
   <welcome-file-list>
     <welcome-file>/app/index.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <servlet-name>MemberFrontController</servlet-name>
     <servlet-class>com.ggomsu.app.member.service.MemberFrontController</servlet-class>
@@ -14,7 +12,6 @@
     <servlet-name>MemberFrontController</servlet-name>
     <url-pattern>/member/*</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>BoardFrontController</servlet-name>
     <servlet-class>com.ggomsu.app.board.service.BoardFrontController</servlet-class>
@@ -22,5 +19,13 @@
   <servlet-mapping>
     <servlet-name>BoardFrontController</servlet-name>
     <url-pattern>/board/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>WikiFrontController</servlet-name>
+    <servlet-class>com.ggomsu.app.wiki.service.WikiFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WikiFrontController</servlet-name>
+    <url-pattern>/wiki/*</url-pattern>
   </servlet-mapping>
 </web-app>
