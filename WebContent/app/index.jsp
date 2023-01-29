@@ -11,13 +11,13 @@
     <meta name="author" content="김지혜">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>꼼수닷컴</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom.css">
 </head>
 <body>
-    <jsp:include page="/app/fix/header.jsp" />
-	<jsp:include page="/app/fix/mainAsideLeft.jsp" />
-	<jsp:include page="/app/fix/mainAsideRight.jsp" />
+    <jsp:include page="/app/fix/Header.jsp" />
+	<jsp:include page="/app/fix/MainAsideLeft.jsp" />
+	<jsp:include page="/app/fix/MainAsideRight.jsp" />
     <main id="main">
         <section id="searchWrap">
             <form action="" name="searchForm">
@@ -170,7 +170,7 @@
             </div>
         </section>
     </main>
-    <jsp:include page="/app/fix/footer.jsp" />
-    <script src="${pageContext.request.contextPath}/assets/js/common.js" defer></script>
+    <jsp:include page="/app/fix/Footer.jsp" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

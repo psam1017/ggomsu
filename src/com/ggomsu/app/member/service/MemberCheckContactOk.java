@@ -12,7 +12,7 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 
 	//작성자 : 박성민
-public class MemberCheckContact implements Action {
+public class MemberCheckContactOk implements Action {
 
 	@SuppressWarnings("unchecked")
 	@Override

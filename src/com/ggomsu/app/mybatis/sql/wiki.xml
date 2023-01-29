@@ -2,15 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 작성자 : 박성민 -->
-
 <mapper namespace="Wiki">
-	<select id="getWiki" parameterType="map" resultType="wiki">
+	<select id="getContentOne" parameterType="map" resultType="wikiContent">
+		SELECT *
+		FROM wikiContents
+		WHERE (rvs, subject) = (#{rvs}, #{subject})
+		ORDER BY rvs ASC, rvsIndex ASC
+	</select>
+	<select id="getContentPast" parameterType="map" resultType="wikiContent">
 		<![CDATA[
 		SELECT *
-		FROM TESTWIKI
-		WHERE rvs <= ${rvs}
+		FROM wikiContents
+		WHERE rvs < ${rvs}
 		AND subject = #{subject}
+		AND content IS NOT NULL
 		ORDER BY rvs ASC, rvsIndex ASC
 		]]>
 	</select>
+	<select id="getWikiInfo" parameterType="map" resultType="wikiInfo">
+		SELECT *
+		FROM wikiInfo
+		WHERE (subject, rvs) = (#{subject}, #{rvs})
+		LIMIT 1
+	</select>
+	<insert id="insertWikiInfo" parameterType="wikiInfo">
+		INSERT INTO wikiInfo(subject, rvs, nickname, ip)
+		VALUES (#{subject}, #{rvs}, #{nickname}, #{ip})
+	</insert>
+	<insert id="insertWikiContents" parameterType="list">
+		INSERT INTO wikiContents
+		VALUES 
+		<foreach item="contents" collection="list" separator=",">
+			(#{contents.subject}, #{contents.rvs}, #{contents.rvsIndex}, #{contents.preRvs}, #{contents.preRvsIndex}, #{contents.content})
+		</foreach>
+	</insert>
 </mapper>

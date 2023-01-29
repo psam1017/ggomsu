@@ -6,16 +6,18 @@ import java.security.spec.KeySpec;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import com.ggomsu.app.member.vo.SimpleEncInfoVO;
+
 // 작성자 : 박성민
 
-public class MemberEncryptOk{
+public class EncryptionController{
 	
 	// 반환된 info는 호출한 쪽에서 값을 담아서 DB에 저장.
 	// 예외처리가 필요함.
 	// 어차피 random으로 난수는 생성이 되었으므로, 편의상 이를 그대로 문자열로 저장하여 사용
-	public MemberEncryptInfo encrypt(String password) throws Exception {
+	public SimpleEncInfoVO encrypt(String password) throws Exception {
 		
-		MemberEncryptInfo info = new MemberEncryptInfo();
+		SimpleEncInfoVO info = new SimpleEncInfoVO();
 		
 		SecureRandom random = new SecureRandom();
 		byte[] salt = new byte[16];

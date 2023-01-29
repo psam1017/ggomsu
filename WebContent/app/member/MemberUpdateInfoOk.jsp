@@ -14,7 +14,7 @@
     <title>회원정보</title>
 </head>
 	<body>
-	<jsp:include page="/app/fix/myPageAside.jsp" />
+	<jsp:include page="/app/fix/MyPageAside.jsp" />
 	<main id="main">
 	  <form id="updateMemberForm" action="${pageContext.request.contextPath}/member/member-update-info-ok" method="post">
 	    <fieldset id="viewProfile">

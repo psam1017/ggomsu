@@ -51,7 +51,7 @@ public class MemberFrontController extends HttpServlet {
 		}
 		else if(command.equals("/member/member-check-contact-ok")) {
 			try {
-				forward = new MemberCheckContact().execute(req, resp);
+				forward = new MemberCheckContactOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("전화번호 중복검사 오류!" + e);
 			}
