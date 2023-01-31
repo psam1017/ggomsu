@@ -10,8 +10,8 @@ import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
-	// 작성자 : 이성호
-public class ArticleGetOrderListOk implements Action {
+
+public class ArticleLikeGetListOk implements Action{
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -23,7 +23,8 @@ public class ArticleGetOrderListOk implements Action {
 		BoardDAO bDao = new BoardDAO();
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
-
+		String nickname = (String)session.getAttribute("nickname");
+		
 		String blockedString = "'',";
 		try {
 			List<String> blockedList = (List<String>)session.getAttribute("blockedList");
@@ -36,35 +37,31 @@ public class ArticleGetOrderListOk implements Action {
 		}
 		blockedString = blockedString.substring(0, blockedString.length()-1);
 		
-		String boardValue = req.getParameter("boardValue");
+		String boardValue = req.getParameter("boardValue"); // 게시판의 종류를 구별해주는 변수
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
-		int totalCount = dao.getTotal("%" + boardValue, blockedString);
-		
+		int totalCount = dao.getLikeTotal(nickname, blockedString);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount/pageSize);
 		
 		endPage = (endPage > realEndPage) ? realEndPage : endPage;
-		
 		int prevPage = (int)((page - 10) / 10) * 10 + 1;
 		int nextPage = (int)((page + 9) / 10) * 10 + 1;
-		
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("realEndPage", realEndPage);
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
 		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", dao.getViewedOrderList((page - 1) * 10, "%" + boardValue, blockedString));
+		req.setAttribute("articleLikeList", dao.getLikeList(nickname, blockedString,(page-1)*10));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardValue", boardValue); 
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
-		req.setAttribute("sortBy","-viewed-order");
 		
 		forward.setForward(true);
-		forward.setPath("/app/board/ArticleViewList.jsp");
+		forward.setPath("/app/board/ArticleLikeList.jsp");
 		
 		session.setAttribute("boardValue", boardValue);
 		
@@ -72,3 +69,4 @@ public class ArticleGetOrderListOk implements Action {
 	}
 
 }
+

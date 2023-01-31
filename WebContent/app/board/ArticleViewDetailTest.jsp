@@ -12,11 +12,31 @@
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>${article.getTitle()}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleViewDetail.css" />
-    <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
+	<style>
+	.articleLike{ text-indent : -9999px; width: 30px; }
+	.not-ok{ background: url(../images/good.png) no-repeat; background-size: 20px;}
+	.ok{ background: url(../images/goodOK.png) no-repeat; background-size: 20px;}
+	</style>
 </head>
 <body>
 	
 	<c:set var="boardValue" value="${sessionScope.boardValue}"/>
+	<c:set var="email" value="${sessionScope.email}"/>
+	<c:set var="blockedList" value="${sessionScope.blockedList}"/>
+	<c:if test="${email eq null}">
+		<script>
+			alert("로그인 후 이용하세요.");
+			location.replace("${pageContext.request.contextPath}/member/member-sign-in");
+		</script>
+	</c:if>
+	<c:forEach var="blockedMember" items="${blockedList}">
+		<c:if test="${blockedMember eq article.getNickname()}">
+			<script>
+				alert("차단된 유저의 게시글입니다..");
+				location.replace("${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=${boardValue}");
+			</script>
+		</c:if>
+	</c:forEach>
 	
     <main id="main">
         <!-- 게시글 작성자와 조회수 등 -->
@@ -46,7 +66,12 @@
             </c:otherwise>
         </c:choose>
         </section>
-        <a href="${pageContext.request.contextPath}/app/board/ArticleWriteTest.jsp">게시글 작성</a>
+        <form name="articleLikeForm" method="post">
+        	<input type="submit" class="articleLike" value="따봉">
+        	<input type="hidden" name="articleIndex" value="${articleIndex}">
+        	<input type="hidden" name="nickname" value="${article.getNickname()}">
+        </form>
+        <a href="${pageContext.request.contextPath}/board/get-article-write">게시글 작성</a>
         <button onclick="location.href='ArticleModify.jsp'">수정</button>
         <button onclick="location.href='${pageContext.request.contextPath}/board/article-delete-ok?articleIndex=${articleIndex}&boardValue=${article.getBoardValue()}'">삭제</button>
         <!-- 댓글 작성 -->
@@ -64,7 +89,7 @@
 	                <c:choose>
 	                    <c:when test="${comment.getRefIndex() eq comment.getCommentIndex()}">
 	                        <li class="originComment">
-	                            <c:out value="작성자 : ${comment.getNickname()}test"/>
+	                            <c:out value="작성자 : ${comment.getNickname()}"/>
 	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
 	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/><br>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"><c:out value="아직입니다."/></span><br>
@@ -101,7 +126,19 @@
     </main>
     
     <script>
+    	const contextPath = '${pageContext.request.contextPath}';
      	const boardValue = '${sessionScope.boardValue}';
+     	const nickname = '${sessionScope.nickname}';
+     	const articleIndex = '${article.getArticleIndex()}';
+     	const isArticleLike = '${isArticleLike}';
+     	const articleLikeImg = document.querySelector(".articleLike");
+     	
+     	if(isArticleLike == 'true')
+     		articleLikeImg.classList.add("ok");
+     	else
+     		articleLikeImg.classList.add("not-ok");
+     		
     </script>
+    <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
 </body>
 </html>

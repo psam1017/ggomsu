@@ -11,10 +11,10 @@
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>게시글 작성</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/writing.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/lib/dist/tagify.css" />
-    <script src="${pageContext.request.contextPath}/assets/js/writing.js" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/ArticleWriting.js" defer></script>
     <script src="${pageContext.request.contextPath}/assets/lib/dist/tagify.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleWrite.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/lib/dist/tagify2.css" type="text/css"/>
 </head>
   <body>
     <div class="modal_background"></div>
@@ -69,6 +69,7 @@
      	const boardValue = '${sessionScope.boardValue}';
     	const selectBoardValue = document.querySelectorAll('#boardValue option');
     	const selectBoardValueFree = document.querySelector('#boardValue option[value="free"]');
+    	const basic = document.querySelector('input[name="basic"]');
     	selectBoardValue.forEach((element) => {
 			if(boardValue == element.value){
 				element.setAttribute('selected',true);

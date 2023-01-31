@@ -28,4 +28,12 @@
     <servlet-name>WikiFrontController</servlet-name>
     <url-pattern>/wiki/*</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <servlet-name>AdminFrontController</servlet-name>
+    <servlet-class>com.ggomsu.app.admin.service.AdminFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminFrontController</servlet-name>
+    <url-pattern>/admin/*</url-pattern>
+  </servlet-mapping>
 </web-app>

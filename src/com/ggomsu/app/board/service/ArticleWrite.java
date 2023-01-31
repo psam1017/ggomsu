@@ -1,5 +1,7 @@
 package com.ggomsu.app.board.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,24 +22,26 @@ public class ArticleWrite implements Action {
 		ArticleDAO dao = new ArticleDAO();
 		BoardDAO bDao = new BoardDAO();
 		ActionForward forward = new ActionForward();
+		HttpSession session = req.getSession();
 		
-		// Cookie cookie = null;
-		// Cookie cookies [] = req.getCookies();
+		String blockedString = "'',";
+		try {
+			List<String> blockedList = (List<String>)session.getAttribute("blockedList");
+			for(String blockedMember : blockedList) {
+				blockedString += ("'" + blockedMember + "',");
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		blockedString = blockedString.substring(0, blockedString.length()-1);
 		
-		
-		
-//		if(cookies != null) {
-//			cookie = cookies[0];
-//			boardValue = URLDecoder.decode(cookie.getValue(), "utf-8");
-//			req.setAttribute("boardValue", boardValue);
-//			cookie.setMaxAge(0);
-//		}
 		String boardValue = null;
 		int articleIndex = 0;
 		String temp = null;
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
-		int totalCount = dao.getTotal("%" + boardValue);
+		int totalCount = dao.getTotal("%" + boardValue, blockedString);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount/pageSize);
@@ -45,8 +49,6 @@ public class ArticleWrite implements Action {
 		int prevPage = (int)((page - 10) / 10) * 10 + 1;
 		int nextPage = (int)((page + 9) / 10) * 10 + 1;
 		
-		//Session
-		HttpSession session = req.getSession();
 		boardValue = (String)session.getAttribute("boardValue");
 		articleIndex = (int)session.getAttribute("articleIndex");
 		
@@ -55,7 +57,7 @@ public class ArticleWrite implements Action {
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
 		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", dao.getList((page-1)*10,"%"+boardValue));
+		req.setAttribute("articleList", dao.getList((page-1)*10,"%"+boardValue, blockedString));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardText", bDao.getBoardText(boardValue));
