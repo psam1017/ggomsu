@@ -1,17 +1,16 @@
 package com.ggomsu.app.board.service;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
+import com.ggomsu.app.admin.service.AdminArticleReportOk;
+import com.ggomsu.app.admin.service.AdminArticleReportGetOk;
 	// 작성자 : 이성호
 @SuppressWarnings("serial")
 public class BoardFrontController extends HttpServlet {
@@ -77,6 +76,14 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("게시글 삭제 실패!!!" + e);
 			}
+		}else if(command.equals("/board/get-article-write")) {
+			try {
+				forward = new ActionForward();
+				forward.setForward(true);
+				forward.setPath("/app/board/ArticleWriteTest.jsp");
+			} catch (Exception e) {
+				System.out.println("게시글 작성 후 값 전달 실패!!!" + e);
+			}
 		}else if(command.equals("/board/article-write-ok")) {
 			try {
 				forward = new ArticleWriteOk().execute(req, resp);
@@ -88,6 +95,18 @@ public class BoardFrontController extends HttpServlet {
 				forward = new ArticleWrite().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("게시글 작성 후 값 전달 실패!!!" + e);
+			}
+		}else if(command.equals("/board/article-like-get-list-ok")) {
+			try {
+				forward = new ArticleLikeGetListOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("마에피이지 즐겨찾기리스트 가져오기 실패 !!!" + e);
+			}
+		}else if(command.equals("/board/article-like-check-ok")) {
+			try {
+				forward = new ArticleLikeCheckOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 좋아요(즐겨찾기) 상태확인 실패 !!!" + e);
 			}
 		}
 		

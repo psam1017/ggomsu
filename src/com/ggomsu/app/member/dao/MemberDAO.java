@@ -46,4 +46,9 @@ public class MemberDAO {
 	public List<String> getList(String nickname) {
 		return sqlSession.selectList("Member.blockView", nickname);
 	}
+	
+	public void updateAbuseCount(String nickname) {
+		sqlSession.update("Member.updateAbuseCount", nickname);
+	}
+	
 }
