@@ -27,7 +27,7 @@ public class WikiViewOk implements Action {
 		ActionForward forward = new ActionForward();
 		
 		String subject = req.getParameter("subject");
-		int rvs = Integer.parseInt(req.getParameter("rvs"));
+		int rvs = dao.getLastRvs(subject);
 		
 		// 작성정보 가져오기
 		infoVO = dao.getWikiInfo(subject, rvs);
@@ -38,8 +38,12 @@ public class WikiViewOk implements Action {
 		List<WikiContentVO> currentList = dao.getContentOne(subject, rvs);
 		wiki.setContentFromPast(currentList, pastList);
 		
+		// 최근 변경 목록 가져오기
+		List<String> recentSubjects = dao.getRecentSubject();
+		
 		req.setAttribute("wikiInfo", infoVO);
 		req.setAttribute("wikiContents", currentList);
+		req.setAttribute("recentSubjects", recentSubjects);
 		
 		forward.setForward(true);
 		forward.setPath("/app/wiki/WikiViewOk.jsp");
