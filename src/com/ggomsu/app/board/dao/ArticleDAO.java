@@ -2,13 +2,12 @@ package com.ggomsu.app.board.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.admin.vo.ArticleReportVO;
 import com.ggomsu.app.board.vo.ArticleVO;
-import com.ggomsu.app.board.vo.CommentVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 	// 작성자 : 이성호
 public class ArticleDAO {
@@ -20,95 +19,65 @@ public class ArticleDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public int getTotal(String boardValue, String blockedList) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("boardValue", boardValue);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectOne("Article.getTotal",hash);
+	public int getTotal(String boardValue) {
+		return sqlSession.selectOne("Article.getTotal",boardValue);
 	}
 	
-	public List<ArticleVO> getList(int page, String boardValue, String blockedList){
+	public List<ArticleVO> getList(int page, String boardValue){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getArticleList", hash);
 	}
 	
-	public List<ArticleVO> getBestList(int page, String boardValue, String blockedList){
+	public List<ArticleVO> getBestList(int page, String boardValue){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getBestArticleList", hash);
 	}
 	
-	public int getSearchTotalCount(String search, String searchPeriod, String blockedList) {
+	public int getSearchTotalCount(String search, String searchPeriod) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectOne("Article.getSearchTotalCount", hash);
 	}
 	
-	public int getSearchWriterCount(String search, String searchPeriod, String blockedList) {
+	public int getSearchWriterCount(String search, String searchPeriod) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectOne("Article.getSearchWriterCount", hash);
 	}
 	
-	public int getSearchTitleContentCount(String search, String searchPeriod, String blockedList) {
+	public int getSearchTitleContentCount(String search, String searchPeriod) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectOne("Article.getSearchTitleContentCount", hash);
+		return sqlSession.selectOne("Article.getSearchTitleContentlCount", hash);
 	}
 	
-	public int getSearchTagCount(String search, String searchPeriod, String blockedList) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("search", search);
-		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectOne("Article.getSearchTagCount", hash);
-	}
-	
-	public List<ArticleVO> getSearchTotalList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleVO> getSearchTotalList(String search, int page, String searchPeriod){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
 		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getSearchTotalArticleList", hash);
 	}
 	
-	public List<ArticleVO> getSearchWriterList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleVO> getSearchWriterList(String search, int page, String searchPeriod){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
-		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getSearchWriterArticleList", hash);
 	}
 	
-	public List<ArticleVO> getSearchTitleContentList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleVO> getSearchTitleContentList(String search, int page, String searchPeriod){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
-		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getSearchTitleContentArticleList", hash);
-	}
-	
-	public List<ArticleVO> getSearchTagList(String search, int page, String searchPeriod, String blockedList){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("search", search);
-		hash.put("page", page);
-		hash.put("searchPeriod", searchPeriod);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectList("Article.getSearchTagArticleList", hash);
 	}
 	
 	public ArticleVO getArticle(int articleIndex) {
@@ -119,11 +88,10 @@ public class ArticleDAO {
 		sqlSession.update("Article.updateArticleViewCount",articleIndex);
 	}
 	
-	public List<ArticleVO> getViewedOrderList(int page, String boardValue, String blockedList){
+	public List<ArticleVO> getViewedOrderList(int page, String boardValue){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
-		hash.put("blockedList", blockedList);
 		return sqlSession.selectList("Article.getViewedOrderArticleList", hash);
 	}
 	
@@ -139,58 +107,29 @@ public class ArticleDAO {
 		return sqlSession.selectOne("Article.getMaxIndex");
 	}
 	
-	public boolean checkGood(String nickname, int articleIndex){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("articleIndex", articleIndex);
-		return (Integer)(sqlSession.selectOne("Article.checkGood", hash)) == 1;
+	//index 게시판리스트
+	public List<ArticleVO> getBestLikeList() {
+		return sqlSession.selectList("Article.getBestLikeList");
 	}
 	
-	public void InsertArticleLike(String nickname, int articleIndex){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("articleIndex", articleIndex);
-		sqlSession.update("Article.insertArticleLike",hash);
+	public List<ArticleVO> getBestViewList() {
+		return sqlSession.selectList("Article.getBestViewList");
 	}
 	
-	public void DeleteArticleLike(String nickname, int articleIndex){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("articleIndex", articleIndex);
-		sqlSession.update("Article.deleteArticleLike",hash);
+	public ArticleVO getBestLikeOne(String boardValue) {
+		return sqlSession.selectOne("Article.getBestLikeOne", boardValue);
 	}
 	
-	public int getLikeTotal(String nickname, String blockedList) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectOne("Article.getLikeTotal",hash);
+	public ArticleVO getBestViewOne(String boardValue) {
+		return sqlSession.selectOne("Article.getBestViewOne", boardValue);
 	}
 	
-	public List<ArticleVO> getLikeList(String nickname, String blockedList, int page) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("blockedList", blockedList);
-		hash.put("page", page);
-		return sqlSession.selectList("Article.getLikeList",hash);
+	public ArticleVO getBestLikeBoard() {
+		return sqlSession.selectOne("Article.getBestLikeBoard");
 	}
 	
-	public void processReportArticle(int articleIndex, String articleDeleteReason) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleIndex", articleIndex);
-		hash.put("articleDeleteReason", articleDeleteReason);
-		sqlSession.update("Article.processReportArticle", hash);
-	}
-	
-	public CommentVO getComment(int commentIndex) {
-		return sqlSession.selectOne("Article.getComment", commentIndex);
-	}
-	
-	public void processReportComment(int commentIndex, String commentDeleteReason) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("commentIndex", commentIndex);
-		hash.put("commentDeleteReason", commentDeleteReason);
-		sqlSession.update("Article.processReportComment", hash);
+	public ArticleVO getBestViewBoard() {
+		return sqlSession.selectOne("Article.getBestViewBoard");
 	}
 	
 }

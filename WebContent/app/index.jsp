@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -15,9 +16,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom.css">
 </head>
 <body>
-    <jsp:include page="/app/fix/Header.jsp" />
+	<jsp:include page="/app/fix/Header.jsp" />
 	<jsp:include page="/app/fix/MainAsideLeft.jsp" />
 	<jsp:include page="/app/fix/MainAsideRight.jsp" />
+	
     <main id="main">
         <section id="searchWrap">
             <form action="" name="searchForm">
@@ -38,139 +40,102 @@
             <div id="recBoardWrap">
                 <h2>내 추천 게시판</h2>
                 <div id="recBoard">
-                    <a href="#" id="recboardRecBest">
-                        <h3>추천베스트</h3>
-                        <div>
-                            <p>글 제목</p>
-                            <p>글 내용</p>
-                        </div>
-                        <div class="recboardIc"></div>
-                    </a>
-                    <a href="#" id="recboardViewBest">
-                        <h3>조회베스트</h3>
-                        <div>
-                            <p>글 제목</p>
-                            <p>글 내용</p>
-                        </div>
-                        <div class="recboardIc"></div>
-                    </a>
+                	<c:choose>
+                		<c:when test="${boardValue ne null}">
+		                    <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleBestLikeOne.getArticleIndex()}" id="recboardRecBest">
+		                        <h3>추천베스트</h3>
+		                        <div>
+		                            <p>${articleBestLikeOne.getTitle()}</p>
+		                            <p>${articleBestLikeOne.getContent()}</p>
+		                        </div>
+		                        <div class="recboardIc"></div>
+		                    </a>
+		                    
+		                    <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleBestViewOne.getArticleIndex()}" id="recboardViewBest">
+		                        <h3>조회베스트</h3>
+		                        <div>
+		                            <p>${articleBestViewOne.getTitle()}</p>
+		                            <p>${articleBestViewOne.getContent()}</p>
+		                        </div>
+		                        <div class="recboardIc"></div>
+		                    </a>
+	                    </c:when>
+	                    <c:otherwise>
+		                    <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleBestLikeBoard.getArticleIndex()}" id="recboardRecBest">
+		                        <h3>추천베스트</h3>
+		                        <div>
+		                            <p>${articleBestLikeBoard.getTitle()}</p>
+		                            <p>${articleBestLikeBoard.getContent()}</p>
+		                        </div>
+		                        <div class="recboardIc"></div>
+		                    </a>
+		                    <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleBestViewBoard.getArticleIndex()}" id="recboardViewBest">
+		                        <h3>조회베스트</h3>
+		                        <div>
+		                            <p>${articleBestViewBoard.getTitle()}</p>
+		                            <p>${articleBestViewBoard.getContent()}</p>
+		                        </div>
+		                        <div class="recboardIc"></div>
+		                    </a>  
+						</c:otherwise>
+					</c:choose>
                 </div>
             </div>
             <div id="mainBestWrap">
                 <div id="mainRecBest">
                     <div id="recBestTitle"><h2>추천베스트</h2></div>
                     <ul id="recBestUi">
-                        <li class="recBestLi">
-                            <a href="#">
-                                <div class="recBestTopWrap">
-                                    <div class="recBestName">닉네임</div>
-                                    <div class="recBextCount">추천수</div>
-                                </div>
-                                <p class="recBestText1">글 제목</p>
-                                <p class="recBestText2">글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용</p>
-                            </a>
-                        </li>
-                        <li class="recBestLi">
-                            <a href="#">
-                                <div class="recBestTopWrap">
-                                    <div class="recBestName">닉네임</div>
-                                    <div class="recBextCount">추천수</div>
-                                </div>
-                                <p class="recBestText1">글 제목</p>
-                                <p class="recBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="recBestLi">
-                            <a href="#">
-                                <div class="recBestTopWrap">
-                                    <div class="recBestName">닉네임</div>
-                                    <div class="recBextCount">추천수</div>
-                                </div>
-                                <p class="recBestText1">글 제목</p>
-                                <p class="recBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="recBestLi">
-                            <a href="#">
-                                <div class="recBestTopWrap">
-                                    <div class="recBestName">닉네임</div>
-                                    <div class="recBextCount">추천수</div>
-                                </div>
-                                <p class="recBestText1">글 제목</p>
-                                <p class="recBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="recBestLi">
-                            <a href="#">
-                                <div class="recBestTopWrap">
-                                    <div class="recBestName">닉네임</div>
-                                    <div class="recBextCount">추천수</div>
-                                </div>
-                                <p class="recBestText1">글 제목</p>
-                                <p class="recBestText2">글 내용</p>
-                            </a>
-                        </li>
+	                    <c:choose>
+	                    	<c:when test="${articleLikeList != null and fn:length(articleLikeList) > 0}">
+		                    	<c:forEach var="articleLikeList" items="${articleLikeList}">
+			                        <li class="recBestLi">
+			                            <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleLikeList.getArticleIndex()}">
+			                                <div class="recBestTopWrap">
+			                                    <div class="recBestName">${articleLikeList.getNickname()}</div>
+			                                    <div class="recBextCount">${articleLikeList.getArticleLikeCount()}</div>
+			                                </div>
+			                                <p class="recBestText1">${articleLikeList.getTitle()}</p>
+			                                <p class="recBestText2">${articleLikeList.getContent()}</p>
+			                            </a>
+			                        </li>
+		                        </c:forEach>
+	                        </c:when>
+	                        <c:otherwise>
+	                        	<p>추천된 게시판이 없습니다</p>
+	                        </c:otherwise>
+	                   </c:choose>
                     </ul>
                 </div>
                 <div id="mainViewBest">
+                
                     <div id="viewBestTitle"><h2>조회베스트</h2></div>
+                    
                     <ul id="viewBestUi">
-                        <li class="viewBestLi">
-                            <a href="#">
-                                <div class="viewBestTopWrap">
-                                    <div class="viewBestName">닉네임</div>
-                                    <div class="viewBextCount">조회수</div>
-                                </div>
-                                <p class="viewBestText1">글 제목</p>
-                                <p class="viewBestText2">글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용글 내용</p>
-                            </a>
-                        </li>
-                        <li class="viewBestLi">
-                            <a href="#">
-                                <div class="viewBestTopWrap">
-                                    <div class="viewBestName">닉네임</div>
-                                    <div class="viewBextCount">조회수</div>
-                                </div>
-                                <p class="viewBestText1">글 제목</p>
-                                <p class="viewBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="viewBestLi">
-                            <a href="#">
-                                <div class="viewBestTopWrap">
-                                    <div class="viewBestName">닉네임</div>
-                                    <div class="viewBextCount">조회수</div>
-                                </div>
-                                <p class="viewBestText1">글 제목</p>
-                                <p class="viewBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="viewBestLi">
-                            <a href="#">
-                                <div class="viewBestTopWrap">
-                                    <div class="viewBestName">닉네임</div>
-                                    <div class="viewBextCount">조회수</div>
-                                </div>
-                                <p class="viewBestText1">글 제목</p>
-                                <p class="viewBestText2">글 내용</p>
-                            </a>
-                        </li>
-                        <li class="viewBestLi">
-                            <a href="#">
-                                <div class="viewBestTopWrap">
-                                    <div class="viewBestName">닉네임</div>
-                                    <div class="viewBextCount">조회수</div>
-                                </div>
-                                <p class="viewBestText1">글 제목</p>
-                                <p class="viewBestText2">글 내용</p>
-                            </a>
-                        </li>
+                    	<c:choose>
+	                    	<c:when test="${articleViewList != null and fn:length(articleViewList) > 0}">
+		                    	<c:forEach var="articleViewList" items="${articleViewList}">
+			                        <li class="recBestLi">
+			                            <a href="${pageContext.request.contextPath}/board/article-view-detail-ok?articleIndex=${articleViewList.getArticleIndex()}">
+			                                <div class="recBestTopWrap">
+			                                    <div class="recBestName">${articleViewList.getNickname()}</div>
+			                                    <div class="recBextCount">${articleViewList.getViewCount()}</div>
+			                                </div>
+			                                <p class="recBestText1">${articleViewList.getTitle()}</p>
+			                                <p class="recBestText2">${articleViewList.getContent()}</p>
+			                            </a>
+			                        </li>
+		                        </c:forEach>
+	                        </c:when>
+	                        <c:otherwise>
+	                        	<p>조회된 게시판이 없습니다</p>
+	                        </c:otherwise>
+	                   </c:choose>
                     </ul>
                 </div>
             </div>
         </section>
     </main>
-    <jsp:include page="/app/fix/Footer.jsp" />
+	<jsp:include page="/app/fix/Footer.jsp" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

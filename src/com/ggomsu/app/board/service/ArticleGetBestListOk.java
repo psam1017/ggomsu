@@ -1,7 +1,5 @@
 package com.ggomsu.app.board.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,25 +20,15 @@ public class ArticleGetBestListOk implements Action{
 		ArticleDAO dao = new ArticleDAO();
 		BoardDAO bDao = new BoardDAO();
 		ActionForward forward = new ActionForward();
-		HttpSession session = req.getSession();
-
-		String blockedString = "'',";
-		try {
-			List<String> blockedList = (List<String>)session.getAttribute("blockedList");
-			for(String blockedMember : blockedList) {
-				blockedString += ("'" + blockedMember + "',");
-			}
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		blockedString = blockedString.substring(0, blockedString.length()-1);
 		
 		String boardValue = req.getParameter("boardValue");
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
-		int totalCount = dao.getTotal("%" + boardValue, blockedString);
+		int totalCount = dao.getTotal(boardValue);
+		
+		// int endRow = page * pageSize;
+		// int startRow = endRow - (pageSize - 1);
 		
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
@@ -56,7 +44,7 @@ public class ArticleGetBestListOk implements Action{
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
 		req.setAttribute("nowPage", page);
-		req.setAttribute("articleList", dao.getBestList((page-1)*10, "%" + boardValue, blockedString));
+		req.setAttribute("articleList", dao.getBestList((page-1)*10,"%"+boardValue));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("boardValue", boardValue);
@@ -66,6 +54,8 @@ public class ArticleGetBestListOk implements Action{
 		forward.setForward(true);
 		forward.setPath("/app/board/ArticleViewList.jsp");
 		
+		// Session
+		HttpSession session = req.getSession();
 		session.setAttribute("boardValue", boardValue);
 		
 		return forward;
