@@ -1,7 +1,7 @@
 package com.ggomsu.app.board.dao;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -19,18 +19,27 @@ public class CommentDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<CommentVO> getCommentList(int articleIndex, String blockedList){
-		HashMap<String, Object> hash = new HashMap<>();
+	public List<CommentVO> getCommentList(int articleIndex, String nickname){
+		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("articleIndex", articleIndex);
-		hash.put("blockedList", blockedList);
+		hash.put("nickname", nickname);
 		return sqlSession.selectList("Comment.getCommentList", hash);
 	}
 	
 	public void insertComment(CommentVO commentVo) {
-		sqlSession.update("Comment.insertComment", commentVo);
+		sqlSession.insert("Comment.insertComment", commentVo);
 	}
 	
-	public void deleteComment() {
-		
+	public void insertRefComment(CommentVO commentVo) {
+		sqlSession.insert("Comment.insertRefComment", commentVo);
 	}
+	
+	public void deleteComment(CommentVO commentVo) {
+		sqlSession.update("Comment.deleteComment", commentVo);
+	}
+	
+	public int getCommentIndex() {
+		return sqlSession.selectOne("Comment.getCommentIndex");
+	}
+	
 }

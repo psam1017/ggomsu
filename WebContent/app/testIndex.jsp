@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=coding">test</a>
+	<a href="${pageContext.request.contextPath}/board/get-index-article-list-ok">test</a>
 </body>
 </html>
