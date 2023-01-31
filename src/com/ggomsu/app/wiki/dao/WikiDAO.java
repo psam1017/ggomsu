@@ -20,6 +20,14 @@ public class WikiDAO {
 	public WikiDAO() {
 		sqlSession = sessionFactory.openSession(true);
 	}
+	
+	public int getLastRvs(String subject) {
+		return sqlSession.selectOne("Wiki.getLastRvs", subject);
+	}
+	
+	public List<String> getRecentSubject(){
+		return sqlSession.selectList("Wiki.getRecentSubject");
+	}
 
 	public List<WikiContentVO> getContentOne(String subject, int rvs) {
 		Map<String, Object> map = new HashMap<>();

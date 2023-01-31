@@ -8,7 +8,7 @@ CREATE SCHEMA psam1017;
 USE psam1017;
 
 CREATE TABLE memberSex
-(
+(	
 	value VARCHAR(1) NOT NULL PRIMARY KEY,
     text VARCHAR(2) NOT NULL
 );
@@ -34,9 +34,12 @@ CREATE TABLE memberStatus
 # 탈퇴 테이블은 email과 statusValue를 반드시 가지고, 약관에 따라 개인정보를 일정 기간 소지할 수 있다.
 # 만약 회원이 요구한다면 DEL status로 두지 않고 데이터를 완전히 삭제한다.
 
+# 추가사항 : EML - 이메일 인증 시 사용 / TMP - 비회원으로서 사이트 이용
+
 INSERT INTO memberStatus
 VALUES	("ADM", "관리자"),
 		("MEM", "정상회원"),
+		("TMP", "비회원"),
         ("EML", "이메일 인증 대기"),
 		("DOR", "휴면계정"),
 		("SUS", "관리자에 의해 정지"),
@@ -237,7 +240,8 @@ CREATE TABLE articleReport
 	nickname			VARCHAR(10)	NOT NULL,
     articleIndex		INT UNSIGNED	NOT NULL,
     articleReportReason	VARCHAR(50)	NOT NULL,
-    reportDate			DATETIME		NOT NULL,
+    articleDeleteReason	VARCHAR(50)	NULL,
+    articleDeleteCheck	BOOLEAN		NOT NULL DEFAULT 0,
 	CONSTRAINT PRIMARY KEY(nickname, articleIndex),
     CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
@@ -254,6 +258,8 @@ CREATE TABLE commentReport
 	nickname			VARCHAR(10)	NOT NULL,
     commentIndex		INT UNSIGNED	NOT NULL,
     commentReportReason	VARCHAR(50)	NOT NULL,
+	commentDeleteReason	VARCHAR(50)	NULL,
+    commentDeleteCheck	BOOLEAN		NOT NULL DEFAULT 0,
 	CONSTRAINT PRIMARY KEY(nickname, commentIndex),
     CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
@@ -310,7 +316,7 @@ INSERT INTO members
 (email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name, birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 VALUES
 ('psam1017@naver.com', 'psam1017', '', NOW(), (NOW() + INTERVAL 90 DAY), 'psam-nick', 'psam-url', '박성민', '1996-10-17', 'M', 'CPK', '01077954671', '44332', '대구시 서구 케로로 10길 10', '20층(우동)', NOW(), NOW()),
-('test1234@google.com', 'test1234', '', NOW(), (NOW() + INTERVAL 90 DAY), 'test-nick', 'test-url', '테스터', '1998-04-25', 'F', 'LG', '01012345678', '12378', '서울시 지구 여기로 2길 84', '3층 301호(카츠동)', NOW(), NULL),
+('test1234@google.com', 'test1234', '', NOW(), (NOW() + INTERVAL 90 DAY), 'noname', 'test-url', '테스터', '1998-04-25', 'F', 'LG', '01012345678', '12378', '서울시 지구 여기로 2길 84', '3층 301호(카츠동)', NOW(), NULL),
 ('admin@google.com', 'admin', '', NOW(), (NOW() + INTERVAL 90 DAY), 'admin-nick', 'admin-url', '관리자', '2002-07-14', 'M', 'KT', '01744256982', '00154', '대구시 마구 통학로 21길 1', '우리집(금은동)', NOW(), NULL);
 
 INSERT INTO articles(boardValue, nickname, title, content)
@@ -353,15 +359,15 @@ VALUES
 INSERT INTO comments(refIndex, articleIndex, nickname, content)
 VALUES
 (1, 255, 'psam-nick', '새로운 기념비적인 게시글입니다.'),
-(2, 255, 'test-nick', '과연 프로젝트 잘 될 수 있을까?'),
+(2, 255, 'noname', '과연 프로젝트 잘 될 수 있을까?'),
 (3, 255, 'admin-nick', '오늘 저녁은 돈까스입니다.'),
-(1, 255, 'test-nick', '말투 되게 아저씨같네.'),
+(1, 255, 'noname', '말투 되게 아저씨같네.'),
 (1, 255, 'psam-nick', '왜 시비임?'),
 (2, 255, 'admin-nick', '과연이 아니라 어떻게 하면이라고 해주세요.');
 
 INSERT INTO articleLike
 VALUES
-(254, 'test-nick'),
+(254, 'noname'),
 (254, 'psam-nick'),
 (253, 'psam-nick'),
 (252, 'psam-nick'),
@@ -373,7 +379,7 @@ VALUES
 (1, 'admin-nick'),
 (6, 'admin-nick'),
 (6, 'psam-nick'),
-(2, 'test-nick');
+(2, 'noname');
 
 /*
 -- 프로시저

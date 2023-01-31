@@ -3,6 +3,19 @@
 
 <!-- 작성자 : 박성민 -->
 <mapper namespace="Wiki">
+	<select id="getLastRvs" parameterType="string" resultType="_int">
+		SELECT rvs
+		FROM wikiInfo
+		WHERE subject = #{subject}
+		ORDER BY rvs DESC
+		LIMIT 1
+	</select>
+	<select id="getRecentSubject" resultType="string">
+		SELECT DISTINCT subject
+		FROM wikiInfo
+		ORDER BY revisedAt DESC
+		LIMIT 10
+	</select>
 	<select id="getContentOne" parameterType="map" resultType="wikiContent">
 		SELECT *
 		FROM wikiContents
