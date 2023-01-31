@@ -1,5 +1,6 @@
 package com.ggomsu.app.board.service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,13 +31,16 @@ public class ArticleViewDetailOk implements Action {
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
 		req.setAttribute("attachment", atDao.getAttachment(articleIndex));
-		
-		
+	
 		// Session
 		HttpSession session = req.getSession();
 		String boardValue = (String)session.getAttribute("boardValue");
 		String email = (String)session.getAttribute("email");
 		String nickname =(String)session.getAttribute("nickname");
+		
+		//Cookie
+		Cookie cookie = new Cookie("boardValue", boardValue);
+		resp.addCookie(cookie);
 		
 		req.setAttribute("commentList", cDao.getCommentList(articleIndex, nickname));
 		

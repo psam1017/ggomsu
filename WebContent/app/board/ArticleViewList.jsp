@@ -14,11 +14,7 @@
     <script src="${pageContext.request.contextPath}/assets/js/jquery.min.js "></script>
     <script src="${pageContext.request.contextPath}/assets/js/jquery-migrate-1.4.1.min.js "></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
-	<%	
-		String boardValue = (String)session.getAttribute("boardValue");
-		Cookie cookie = new Cookie("boardValue", boardValue);
-		response.addCookie(cookie);
-	%>
+
 </head>
 <body>
 	

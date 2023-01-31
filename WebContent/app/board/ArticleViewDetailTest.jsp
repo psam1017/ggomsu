@@ -14,11 +14,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleViewDetail.css" />
     <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
     <script src="${pageContext.request.contextPath}/assets/js/comment.js" defer></script>
-	<%	
-		String boardValue = (String)session.getAttribute("boardValue");
-		Cookie cookie = new Cookie("boardValue", boardValue);
-		response.addCookie(cookie);
-	%>
+	
 </head>
 <body>
 	
@@ -58,7 +54,7 @@
         <button onclick="location.href='${pageContext.request.contextPath}/board/article-delete-ok?articleIndex=${articleIndex}&boardValue=${article.getBoardValue()}'">삭제</button>
         <!-- 댓글 작성 -->
         <section id="commentWrite" name="commentWrite">
-            <form id="cWrite" method="post" action="${pageContext.request.contextPath}/board/comment-write-ok?articleIndex=${articleIndex}">
+            <form id="commentWriteForm" method="post" action="${pageContext.request.contextPath}/board/comment-write-ok?articleIndex=${articleIndex}">
                 <textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                 <input type="button" id="register" value="등록">
             </form>
@@ -72,13 +68,13 @@
 	                    <c:when test="${comment.getRefIndex() eq comment.getCommentIndex()}">
 	                    	<c:if test="${comment.getDeletedAt() eq null}">
 	                        <li class="originComment">
-	                            <c:out value="작성자 : ${comment.getNickname()}"/>
-	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
-	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/><br>
+	                           	 작성자 : <c:out value="${comment.getNickname()}"/>
+	                           	댓글 내용 : <p><c:out value="${comment.getContent()}"/></p>
+	                         	작성일시 : <c:out value="${comment.getWrittenAt()}"/><br>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"><c:out value="아직입니다."/></span><br>
 	                            <input type="button" class="commentLikeBtn" name="commentLikeBtn" value="댓글추천">
 	                            <input type="button" class="refCommentWrite" name="refCommentWrite" value="답글쓰기">
-	                            <form class="cDelete" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
+	                            <form class="commentDeleteForm" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
 	                            	<button class="commentDeleteBtn">댓글삭제</button>
 	                            </form>
                             	<!-- 답글쓰기 버튼을 누르면 js로 답글쓰기 양식이 나타나도록 한다. -->
@@ -86,11 +82,11 @@
 	                        </c:if>
 	                        <c:if test="${comment.getDeletedAt() ne null}">
 	                        	<p>삭제된 댓글입니다</p>
-	                        	<c:out value="삭제일: ${comment.getDeletedAt()}"/>
+	                        	삭제일:<c:out value="${comment.getDeletedAt()}"/>
 	                        </c:if>
 	                        <li class="oneRefComment off">
                                 <div>
-                                	<form id="rcWrite" method="post" action="${pageContext.request.contextPath}/board/ref-comment-write-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}">
+                                	<form id="refCommentWriteForm" method="post" action="${pageContext.request.contextPath}/board/ref-comment-write-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}">
                                 		<textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                                     	<button value="refCommentCancle" class="BtnRefCommentCancel">취소</button>
                                     	<button value="refCommentEnter" class="BtnRefCommentEnter">등록</button>
@@ -101,12 +97,12 @@
 	                    <c:otherwise>
 	                    	<c:if test="${comment.getDeletedAt() eq null}">
 	                        <li class="refComment">
-	                            <c:out value="작성자 : ${comment.getNickname()}"/>
-	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
-	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/>
+	                             작성자 : <c:out value="${comment.getNickname()}"/>
+	                           	댓글 내용 : <p><c:out value="${comment.getContent()}"/></p>
+	                          	 작성일시 : <c:out value="${comment.getWrittenAt()}"/>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"></span>
 	                            <input type="button" class="commentLikeBtn" name="commentLikeBtn" value="댓글추천">
-	                            <form class="cDelete" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
+	                            <form class="commentDeleteForm" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
 	                            	<button class="commentDeleteBtn">댓글삭제</button>
 	                            </form>
 	                        </li>

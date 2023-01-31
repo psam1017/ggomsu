@@ -46,8 +46,8 @@
 	</update>
 	
 	<!-- 차단유저 -->
-	<select id="blockView" parameterType="member">
-		SELECT nickname
+	<select id="blockView" parameterType="string" resultType="string">
+		SELECT blockedMember
 		FROM memberBlock
 		WHERE nickname = #{nickname}
 	</select>	
@@ -57,4 +57,15 @@
 		VALUES
 		(#{nickname}, #{blockedMember})
 	</insert>
+	
+	<!-- 신고횟수 증가  -->
+	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">
+		{ CALL
+			updateBlockMember(
+				#{nickname}
+			)
+		}
+	</update>
+	
+	
 </mapper>
