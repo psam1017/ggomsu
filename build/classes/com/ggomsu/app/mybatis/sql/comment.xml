@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Comment">
-	<select id ="getCommentList" parameterType="_int" resultType="comment">
+	<select id ="getCommentList" parameterType="hashmap" resultType="comment">
 		SELECT * FROM comments
-		WHERE articleIndex = #{articleIndex}
+		WHERE articleIndex = #{articleIndex} AND
+		nickname NOT IN (SELECT blockedMember FROM psam1017.memberblock WHERE nickname= #{nickname})
 		ORDER BY refIndex ASC, commentIndex ASC
 	</select>
 	<insert id ="insertComment" parameterType="comment">
@@ -16,8 +17,8 @@
 		VALUES(#{articleIndex}, #{commentIndex}, #{refIndex}, #{nickname}, #{content})
 	</insert>
 	<delete id="deleteComment" parameterType="comment">
-		DELETE FROM comments
-		WHERE articleIndex=${articleIndex} AND commentIndex=${commentIndex} AND refIndex=${refIndex}
+		UPDATE comments SET deletedAt = NOW()
+		WHERE articleIndex=#{articleIndex} AND commentIndex=#{commentIndex} AND refIndex=#{refIndex}
 	</delete>
 	<select id="getCommentIndex" resultType="_int">
 		SELECT `commentIndex` FROM comments 

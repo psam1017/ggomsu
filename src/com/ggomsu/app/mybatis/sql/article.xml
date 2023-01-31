@@ -127,4 +127,47 @@
 		ORDER BY `articleIndex` DESC
 		LIMIT 1
 	</select>
+	
+	<!-- index.jsp -->
+	<select id="getBestLikeList" resultType="article">
+		SELECT A.`articleIndex`, A.nickname, A.title, A.content, B.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		ORDER BY articleLikeCount DESC LIMIT 5
+	</select>
+	
+	<select id="getBestViewList" resultType="article">
+		SELECT articleIndex, viewCount, nickname, title, content FROM articles
+		ORDER BY viewCount DESC LIMIT 5
+	</select>
+	
+	<select id="getBestLikeBoard" resultType="article">
+		SELECT A.`articleIndex`, A.nickname, A.title, A.content, B.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		ORDER BY articleLikeCount DESC LIMIT 1
+	</select>
+	
+	<select id="getBestViewBoard" resultType="article">
+		SELECT articleIndex, boardValue, viewCount, nickname, title, content FROM articles
+		ORDER BY viewCount DESC LIMIT 1
+	</select>
+	
+	<select id="getBestLikeOne"  parameterType="String" resultType="article">
+		SELECT A.`articleIndex`, A.boardValue, A.nickname, A.title, A.content, B.articleLikeCount 
+		FROM psam1017.articles AS A 
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY articleLikeCount DESC LIMIT 1
+	</select>
+	
+	<select id="getBestViewOne" parameterType="String" resultType="article">
+		SELECT articleIndex, viewCount, nickname, title, content FROM articles
+		WHERE boardValue LIKE #{boardValue}
+		ORDER BY viewCount DESC LIMIT 1
+	</select>
+	
 </mapper>

@@ -1,6 +1,7 @@
 package com.ggomsu.app.board.dao;
 
 import java.util.List;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -18,8 +19,11 @@ public class CommentDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<CommentVO> getCommentList(int articleIndex){
-		return sqlSession.selectList("Comment.getCommentList", articleIndex);
+	public List<CommentVO> getCommentList(int articleIndex, String nickname){
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("articleIndex", articleIndex);
+		hash.put("nickname", nickname);
+		return sqlSession.selectList("Comment.getCommentList", hash);
 	}
 	
 	public void insertComment(CommentVO commentVo) {
@@ -37,4 +41,5 @@ public class CommentDAO {
 	public int getCommentIndex() {
 		return sqlSession.selectOne("Comment.getCommentIndex");
 	}
+	
 }

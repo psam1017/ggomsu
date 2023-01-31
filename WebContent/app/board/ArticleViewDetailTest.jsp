@@ -14,9 +14,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleViewDetail.css" />
     <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
     <script src="${pageContext.request.contextPath}/assets/js/comment.js" defer></script>
-
+	<%	
+		String boardValue = (String)session.getAttribute("boardValue");
+		Cookie cookie = new Cookie("boardValue", boardValue);
+		response.addCookie(cookie);
+	%>
 </head>
 <body>
+	
 	
 	<c:set var="boardValue" value="${sessionScope.boardValue}"/>
 	
@@ -65,15 +70,24 @@
                 <c:forEach var="comment" items="${commentList}">
 	                <c:choose>
 	                    <c:when test="${comment.getRefIndex() eq comment.getCommentIndex()}">
+	                    	<c:if test="${comment.getDeletedAt() eq null}">
 	                        <li class="originComment">
-	                            <c:out value="작성자 : ${comment.getNickname()}test"/>
+	                            <c:out value="작성자 : ${comment.getNickname()}"/>
 	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
 	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/><br>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"><c:out value="아직입니다."/></span><br>
 	                            <input type="button" class="commentLikeBtn" name="commentLikeBtn" value="댓글추천">
 	                            <input type="button" class="refCommentWrite" name="refCommentWrite" value="답글쓰기">
+	                            <form class="cDelete" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
+	                            	<button class="commentDeleteBtn">댓글삭제</button>
+	                            </form>
                             	<!-- 답글쓰기 버튼을 누르면 js로 답글쓰기 양식이 나타나도록 한다. -->
 	                        </li>
+	                        </c:if>
+	                        <c:if test="${comment.getDeletedAt() ne null}">
+	                        	<p>삭제된 댓글입니다</p>
+	                        	<c:out value="삭제일: ${comment.getDeletedAt()}"/>
+	                        </c:if>
 	                        <li class="oneRefComment off">
                                 <div>
                                 	<form id="rcWrite" method="post" action="${pageContext.request.contextPath}/board/ref-comment-write-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}">
@@ -85,13 +99,22 @@
                             </li>
 	                    </c:when>
 	                    <c:otherwise>
+	                    	<c:if test="${comment.getDeletedAt() eq null}">
 	                        <li class="refComment">
 	                            <c:out value="작성자 : ${comment.getNickname()}"/>
 	                            <p><c:out value="댓글 내용 : ${comment.getContent()}"/></p>
 	                            <c:out value="작성일시 : ${comment.getWrittenAt()}"/>
 	                            추천개수 : <span class="commentLikeCount" name="commentLikeCount"></span>
 	                            <input type="button" class="commentLikeBtn" name="commentLikeBtn" value="댓글추천">
-	                        </li> 
+	                            <form class="cDelete" method="post" action="${pageContext.request.contextPath}/board/comment-delete-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}&commentIndex=${comment.getCommentIndex()}">
+	                            	<button class="commentDeleteBtn">댓글삭제</button>
+	                            </form>
+	                        </li>
+	                        </c:if>
+	                        <c:if test="${comment.getDeletedAt() ne null}">
+	                        	<p>삭제된 답글입니다</p>
+	                        	<c:out value="삭제일: ${comment.getDeletedAt()}"/>
+	                        </c:if>
 	                    </c:otherwise>
 	                </c:choose>
                 </c:forEach>

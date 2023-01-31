@@ -8,7 +8,7 @@ import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.CommentDAO;
 import com.ggomsu.app.board.vo.CommentVO;
-
+//작성자: 김지혜
 public class CommentWriteOk implements Action {
   @Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {

@@ -30,12 +30,15 @@ public class ArticleViewDetailOk implements Action {
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
 		req.setAttribute("attachment", atDao.getAttachment(articleIndex));
-		req.setAttribute("commentList", cDao.getCommentList(articleIndex));
+		
 		
 		// Session
 		HttpSession session = req.getSession();
 		String boardValue = (String)session.getAttribute("boardValue");
 		String email = (String)session.getAttribute("email");
+		String nickname =(String)session.getAttribute("nickname");
+		
+		req.setAttribute("commentList", cDao.getCommentList(articleIndex, nickname));
 		
 		if( email == null) {
 			forward.setForward(false);
@@ -51,6 +54,11 @@ public class ArticleViewDetailOk implements Action {
 		}
 		
 		session.setAttribute("articleIndex", articleIndex);
+		session.setAttribute("nickname", nickname);
+		
+		//System.out.println(articleIndex);
+		//System.out.println(nickname);
+		
 		return forward;
 	}
 }

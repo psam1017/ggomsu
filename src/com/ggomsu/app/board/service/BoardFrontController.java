@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
-	// 작성자 : 이성호
+	// 작성자 : 이성호(게시판), 김지혜(댓글)
 @SuppressWarnings("serial")
 public class BoardFrontController extends HttpServlet {
 
@@ -104,12 +104,20 @@ public class BoardFrontController extends HttpServlet {
 			}
 		}else if(command.equals("/board/comment-delete-ok")) {
 			try {
-				forward = new RefCommentWriteOk().execute(req, resp);
+				forward = new CommentDeleteOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("대댓글 작성 실패!" + e);
+				System.out.println("댓글 삭제 실패!" + e);
 			}
 		}
 		
+		//index Article
+		else if(command.equals("/board/get-index-article-list-ok")) {
+			try {
+				forward = new IndexGetArticleListOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("index 게시판 가져오기 실패" + e);
+			}
+		}
 		
 		if(forward != null) {
 			if(forward.isForward()) {

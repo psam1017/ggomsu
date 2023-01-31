@@ -107,4 +107,29 @@ public class ArticleDAO {
 		return sqlSession.selectOne("Article.getMaxIndex");
 	}
 	
+	//index 게시판리스트
+	public List<ArticleVO> getBestLikeList() {
+		return sqlSession.selectList("Article.getBestLikeList");
+	}
+	
+	public List<ArticleVO> getBestViewList() {
+		return sqlSession.selectList("Article.getBestViewList");
+	}
+	
+	public ArticleVO getBestLikeOne(String boardValue) {
+		return sqlSession.selectOne("Article.getBestLikeOne", boardValue);
+	}
+	
+	public ArticleVO getBestViewOne(String boardValue) {
+		return sqlSession.selectOne("Article.getBestViewOne", boardValue);
+	}
+	
+	public ArticleVO getBestLikeBoard() {
+		return sqlSession.selectOne("Article.getBestLikeBoard");
+	}
+	
+	public ArticleVO getBestViewBoard() {
+		return sqlSession.selectOne("Article.getBestViewBoard");
+	}
+	
 }
