@@ -88,21 +88,66 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		
-		
-		else if(command.equals("/member/member-get-block-ok")) {
+		else if(command.equals("/member/member-logout-ok")) {
 			try {
-				forward = new MemberGetBlockOk().execute(req, resp);
+				forward = new MemberLogoutOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("로그아웃 오류!" + e);
+			}
+		}
+		
+
+		else if(command.equals("/member/member-update-block-ok")) {
+			try {
+				forward = new MemberUpdateBlockOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("회원차단 오류!" + e);
 			}
 		}
-		else if(command.equals("/member/member-view-my-info-ok")){
-			
+		
+		else if(command.equals("/member/member-get-block")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/member/MemberBlock.jsp");
 		}
-		else if(command.equals("/member/member-updata-my-info-ok")) {
-			
+		else if(command.equals("/member/member-get-block-ok")) {
+			try {
+				forward = new MemberGetBlockOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원 차단리스트 불러오기 오류!" + e);
+			}
 		}
-		else if(command.equals("/member/member-delete-ok")) {
+		
+		else if(command.equals("/member/member-delete-block-ok")) {
+			try {
+				forward = new MemberDeleteBlockOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원 차단해제 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-view-my-info-ok")) {
+			try {
+				forward = new MemberViewMyInfoOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원정보 불러오기 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-update-info-ok")) {
+			try {
+				forward = new MemberUpdataMyInfoOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원정보 수정 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-withdrawal")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/member/MemberWithdrawal.jsp");
+		}
+		else if(command.equals("/member/member-withdrawal-ok")) {
 			try {
 				forward = new MemberWithdrawalOk().execute(req, resp);
 			} catch (Exception e) {

@@ -83,7 +83,7 @@
                 </li>
               </ul>
             </fieldset>
-            <button type="button" id="updateMemberSubmit">개인정보 수정</button>
+            <button type="submit" id="updateMemberSubmit">개인정보 수정</button>
           </form>
         </main>
     </body>

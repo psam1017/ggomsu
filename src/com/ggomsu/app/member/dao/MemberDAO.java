@@ -1,5 +1,6 @@
 package com.ggomsu.app.member.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -39,12 +40,30 @@ public class MemberDAO {
 		return sqlSession.selectOne("Member.getMemberInfo", email);
 	}
 	
+	public int signAt(String email) {
+		return sqlSession.update("Member.signAt", email);
+	}
+	
+	public void updataMemberMyInfo(MemberVO vo) {
+		sqlSession.update("Member.updataMemberMyInfo", vo);
+	} 
+	
 	public boolean withdrawal(MemberVO statusValue) {
 		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
 	}
+	
+	public void updateBlock(MemberVO vo) {
+		sqlSession.insert("Member.updateBlock", vo);
+	}
+	
+	public void deleteBlock(MemberVO vo) {
+		sqlSession.delete("Member.deleteBlock", vo);
+	}
 
-	public List<String> getList(String nickname) {
-		return sqlSession.selectList("Member.blockView", nickname);
+	public List<MemberVO> viewBlock(String nickname) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("nickname", nickname);
+		return sqlSession.selectList("Member.viewBlock", hash);
 	}
 	
 	public void updateAbuseCount(String nickname) {

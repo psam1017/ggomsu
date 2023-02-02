@@ -25,7 +25,7 @@
 		(email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name,
 		birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 		VALUES
-		(#{email}, #{password}, #{salt}, NOW(), NOW(),
+		(#{email}, #{password}, #{salt}, NOW(), DATE_ADD(NOW(), INTERVAL 3 MINUTE),
 		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
 		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW())
 	</insert>
@@ -37,6 +37,30 @@
 		WHERE	email = #{email}
 	</select>
 	
+	<!-- 로그인 접속일자 수정 -->
+	<update id="signAt" parameterType="member"> 
+	  UPDATE members 
+	  SET signAt = NOW() 
+	  WHERE email = #{email} 
+	</update>
+	
+	<!-- 마이페이지 -->
+	<update id="updataMemberMyInfo" parameterType="member">
+		UPDATE members 
+		SET 
+		profileImageUrl = #{profileImageUrl},
+		nickname = #{nickname},
+		password = #{password},
+		salt = #{salt},
+		telecomValue = #{telecomValue},
+		contact = #{contact},
+		zipcode = #{zipcode},
+		address = #{address},
+		addressDetail = #{addressDetail}
+		WHERE 
+		email = #{email}
+	</update>
+	
 	<!-- 회원탈퇴 : 탈퇴 후 바로 사용자DB 정보를 삭제하는 것 이 아니라 일정기간 이후 삭제 하기 때문 사용자상태 정보만 변경 하여 회원 탈퇴 구분 -->
 	<update id="withdrawal" parameterType="member">
 		UPDATE members 
@@ -46,17 +70,21 @@
 	</update>
 	
 	<!-- 차단유저 -->
-	<select id="blockView" parameterType="string" resultType="string">
+	<select id="viewBlock" parameterType="string" resultType="member">
 		SELECT blockedMember
 		FROM memberBlock
 		WHERE nickname = #{nickname}
-	</select>	
-	<insert id="blockOk" parameterType="member">
+	</select>
+	<insert id="updateBlock" parameterType="member">
 		INSERT INTO memberBlock
 		(nickname, blockedMember)
 		VALUES
 		(#{nickname}, #{blockedMember})
 	</insert>
+	<delete id="deleteBlock" parameterType="member">
+		DELETE FROM memberBlock
+		WHERE nickname = #{nickname} and blockedMember = ${blockedMember}
+	</delete>
 	
 	<!-- 신고횟수 증가  -->
 	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">

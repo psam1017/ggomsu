@@ -1,5 +1,8 @@
 package com.ggomsu.app.member.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +26,6 @@ public class MemberSignUpOk implements Action{
 		EncryptionController encrypt = new EncryptionController();
 		SimpleEncInfoVO info = new SimpleEncInfoVO();
 		
-		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
 		vo.setEmail(req.getParameter("email"));
 		String inserted = req.getParameter("password");
 		
@@ -50,7 +52,15 @@ public class MemberSignUpOk implements Action{
 		vo.setAddressDetail(req.getParameter("addressDetail"));
 		vo.setProfileImageUrl(req.getParameter("profileImageUrl"));
 		
-		//req.setAttribute("user", vo);
+		String agreedMarketingAt = req.getParameter("agreedMarketingAt");
+		
+		if(agreedMarketingAt != null) {
+			 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			 Date now = new Date();
+			 String nowTime = sdf.format(now);
+			 
+			vo.setAgreedMarketingAt(nowTime);
+		}
 		
 		dao.signUp(vo);
 		

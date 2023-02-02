@@ -9,8 +9,9 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
-	//작성자 : 손하늘
-public class MemberWithdrawalOk implements Action{
+//작성자 : 손하늘
+
+public class MemberUpdateBlockOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -22,23 +23,24 @@ public class MemberWithdrawalOk implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		String email = (String)session.getAttribute("email");
-		//세션이메일과 입력받은 이메일이 같을 때 회원탈퇴
-		if(email.equals(req.getParameter("email"))) {
-			vo.setEmail(req.getParameter("email"));
-			dao.withdrawal(vo);
-			session.invalidate();
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/app/index.jsp");
+		String nickname = (String)session.getAttribute("nickname");
+		String blockedMember = req.getParameter("blockedMember");
+		
+		vo.setNickname(nickname);
+		vo.setBlockedMember(blockedMember);
+		
+		//회원차단 insert
+		if(nickname.equals(blockedMember)) {
+			System.out.println("사용자는 차단할수 없습니다!");
+			forward.setPath(req.getContextPath() + "/member/member-get-block?code=userNickname");
 		}
 		else {
-			System.out.println("아이디가일치하지않습니다");
-			forward.setPath(req.getContextPath() + "/member/member-withdrawal?email=emailFail");
+			dao.updateBlock(vo); 
 		}
 		
-		return forward;
+		forward.setForward(true);
+		forward.setPath("/member/member-get-block-ok");
 		
+		return forward;
 	}
-
 }

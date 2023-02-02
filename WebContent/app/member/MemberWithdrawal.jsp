@@ -12,9 +12,13 @@
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>회원가입 : 꼼수닷컴</title>
 </head>
+	<c:if test="${param.email eq 'emailFail'}">
+		<script>alert("본인의 이메일계정을 입력해주세요");</script>
+	</c:if>
 <body>
-   <form action="${pageContext.request.contextPath}/member/member-view-my-info-ok" id="signUpForm" name="signUpForm" method="post">
-     	 이메일<input type="text" name="email">
+	<jsp:include page="/app/fix/MyPageAside.jsp" />
+   <form action="${pageContext.request.contextPath}/member/member-withdrawal-ok" id="signUpForm" name="signUpForm" method="post">
+     	 이메일<input type="text" name="email" placeholder="탈퇴할 이메일을 입력하세요">
      	<br>
         <input type="submit" value="회원탈퇴" name="withdrawal">
     </form>

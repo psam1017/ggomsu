@@ -9,13 +9,14 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
-	//작성자 : 손하늘
-public class MemberWithdrawalOk implements Action{
+//작성자 : 손하늘
+
+public class MemberViewMyInfoOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
+		
+		req.setCharacterEncoding("utf-8");
 		
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
@@ -23,22 +24,13 @@ public class MemberWithdrawalOk implements Action{
 		HttpSession session = req.getSession();
 		
 		String email = (String)session.getAttribute("email");
-		//세션이메일과 입력받은 이메일이 같을 때 회원탈퇴
-		if(email.equals(req.getParameter("email"))) {
-			vo.setEmail(req.getParameter("email"));
-			dao.withdrawal(vo);
-			session.invalidate();
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/app/index.jsp");
-		}
-		else {
-			System.out.println("아이디가일치하지않습니다");
-			forward.setPath(req.getContextPath() + "/member/member-withdrawal?email=emailFail");
-		}
+		
+		vo = dao.getMemberInfo(email);
+		req.setAttribute("member", vo);
+		
+		forward.setForward(true);
+		forward.setPath("/app/member/MemberViewMyInfoOk.jsp");
 		
 		return forward;
-		
 	}
-
 }
