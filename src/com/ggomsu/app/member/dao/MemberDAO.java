@@ -44,8 +44,16 @@ public class MemberDAO {
 		return sqlSession.update("Member.signAt", email);
 	}
 	
+	public MemberVO findId(MemberVO vo) {
+		return sqlSession.selectOne("Member.findId", vo);
+	}
+	
 	public void updataMemberMyInfo(MemberVO vo) {
 		sqlSession.update("Member.updataMemberMyInfo", vo);
+	} 
+	
+	public void updateTerm(String email) {
+		sqlSession.update("Member.updateTerm", email);
 	} 
 	
 	public boolean withdrawal(MemberVO statusValue) {
@@ -57,6 +65,7 @@ public class MemberDAO {
 	}
 	
 	public void deleteBlock(MemberVO vo) {
+		System.out.println("딜리트 개수" + sqlSession.delete("Member.deleteBlock", vo));
 		sqlSession.delete("Member.deleteBlock", vo);
 	}
 

@@ -13,7 +13,7 @@
     <meta name="author" content="손하늘" />
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다."/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<%--     <script src="${pageContext.request.contextPath}/assets/js/UpdateMyInfo.js" defer></script> --%>
+    <script src="${pageContext.request.contextPath}/assets/js/UpdateMyInfo.js" defer></script>
     <title>회원정보</title>
 </head>
 

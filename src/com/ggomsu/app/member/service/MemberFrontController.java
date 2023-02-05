@@ -88,6 +88,27 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		
+		else if(command.equals("/member/member-find-id-Ok")) {
+			try {
+				forward = new MemberFindIdOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("아이디 찾기 오류!" + e);
+			}
+		}
+		
+//		else if(command.equals("/member/member-check-password")) {
+//			forward = new ActionForward();
+//			forward.setForward(true);
+//			forward.setPath("/app/member/MemberCheckPassword.jsp");
+//		}
+//		else if(command.equals("/member/member-check-password-ok")){
+//			try {
+//				forward = new MemberCheckPwOk().execute(req, resp);
+//			} catch (Exception e) {
+//				System.out.println("비밀번호확인 오류!" + e);
+//			}
+//		}
+		
 		else if(command.equals("/member/member-logout-ok")) {
 			try {
 				forward = new MemberLogoutOk().execute(req, resp);
@@ -139,6 +160,21 @@ public class MemberFrontController extends HttpServlet {
 				forward = new MemberUpdataMyInfoOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("회원정보 수정 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-view-term-ok")) {
+			try {
+				forward = new MemberViewTermOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("약관정보 불러오기 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/member-update-term-ok")) {
+			try {
+				forward = new MemberUpdateTermOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("약관동의 업데이트 오류!" + e);
 			}
 		}
 		

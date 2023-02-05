@@ -108,6 +108,12 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("댓글 삭제 실패!" + e);
 			}
+		}else if(command.equals("/board/article-report-Ok")) {
+			try {
+				forward = new ArticleReportOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("신고사유 가져오기 실패!" + e);
+			}
 		}
 		
 		//index Article

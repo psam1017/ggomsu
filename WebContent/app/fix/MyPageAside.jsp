@@ -8,7 +8,7 @@
     	<li><a href="#">최근활동</a></li>
     	<li><a href="#">스크랩</a></li>
     	<li><a href="#">알림</a></li>
-    	<li><a href="${pageContext.request.contextPath}/app/member/MemberViewPolicy.jsp">약관확인</a></li>
+    	<li><a href="${pageContext.request.contextPath}/member/member-view-term-ok">약관확인</a></li>
     	<li><a href="${pageContext.request.contextPath}/member/member-get-block-ok">차단목록</a></li>
     	<li><a href="${pageContext.request.contextPath}/member/member-logout-ok">로그아웃</a></li>
     	<li><a href="${pageContext.request.contextPath}/app/member/MemberWithdrawal.jsp">회원탈퇴</a></li>

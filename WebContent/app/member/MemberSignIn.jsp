@@ -24,5 +24,6 @@
         </ul>
         <input type="submit" id="signInButton" value="로그인">
     </form>
+    <a href="${pageContext.request.contextPath}/app/member/MemberFindIdTest.jsp">아이디 찾기</a>
 </body>
 </html>

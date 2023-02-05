@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- 작성자 : 손하늘 -->
+<mapper namespace="Report">
+	<insert id="insertArticleReport" parameterType="articleReport">
+		INSERT INTO articlereport
+		(nickname, articleIndex, articleReportReason)
+		VALUES
+		(#{nickname}, #{articleIndex}, #{articleReportReason})
+	</insert>
+</mapper>

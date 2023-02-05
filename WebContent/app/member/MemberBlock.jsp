@@ -11,15 +11,16 @@
 </head>
 <body>
 <jsp:include page="/app/fix/MyPageAside.jsp" />
-	<form name="memberBlock" method="post">
+	<form name="memberBlock" id="memberBlock" method="post" >
 		<h3>차단할 사용자</h3>
         <label>닉네임<input type="text" name="blockedMember" placeholder="차단 할 사용자 아이디를 입력해주세요"></label>
         <button id="updateBlock">추가</button>
 	    <hr>
 	    <h3>차단 리스트</h3>
+	    <p><input type="checkbox" name="allcheck" id="allCheck" class="checkBox">전체선택</p>
 		<ul>
 			<c:forEach var="blockList" items="${blockList}">
-		 		<li><input type="checkbox" name="blockList" value="${blockList.getBlockedMember()}"> ${blockList.getBlockedMember()} </li>
+		 		<li><input type="radio" name="blockList" class="rowCheck checkBox" value="${blockList.getBlockedMember()}"> ${blockList.getBlockedMember()} </li>
 			</c:forEach>
 		</ul>
 		<hr>

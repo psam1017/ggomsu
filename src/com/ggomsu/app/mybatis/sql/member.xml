@@ -44,6 +44,19 @@
 	  WHERE email = #{email} 
 	</update>
 	
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="string" resultType="member">
+		SELECT 
+		email
+		FROM members
+		WHERE
+		name = #{name} 
+		AND sex = #{sex} 
+		AND birthDate = #{birthDate} 
+		AND telecomValue = #{telecomValue}
+		AND contact = #{contact}
+	</select>
+	
 	<!-- 마이페이지 -->
 	<update id="updataMemberMyInfo" parameterType="member">
 		UPDATE members 
@@ -83,8 +96,23 @@
 	</insert>
 	<delete id="deleteBlock" parameterType="member">
 		DELETE FROM memberBlock
-		WHERE nickname = #{nickname} and blockedMember = ${blockedMember}
+		WHERE 
+		nickname = #{nickname} 
+		and 
+		blockedMember = #{blockedMember}
+<!-- 		IN ( -->
+<!--         <foreach collection="blockedMember" item="blockedMember" separator=","> -->
+<!--         #{blockedMember} -->
+<!--         </foreach> -->
+<!--         ) -->
 	</delete>
+	
+	<!-- 약관동의일자 수정 -->
+	<update id="updateTerm" parameterType="member"> 
+	  UPDATE members 
+      SET agreedMarketingAt = #{agreedMarketingAt}
+	  WHERE email = #{email} 
+	</update>
 	
 	<!-- 신고횟수 증가  -->
 	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">

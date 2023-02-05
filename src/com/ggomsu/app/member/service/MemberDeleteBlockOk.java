@@ -1,7 +1,9 @@
 package com.ggomsu.app.member.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,25 +29,44 @@ public class MemberDeleteBlockOk implements Action{
 		HttpSession session = req.getSession();
 		
 		String nickname = (String)session.getAttribute("nickname");
-		
 		vo.setNickname(nickname);
-		String blockList = req.getParameter("blockList");
-		vo.setBlockedMember(blockList);
+		
+		String[] blockList = req.getParameterValues("blockList");
+		
+		for(int i = 0; i < blockList.length; i++) {
+			System.out.println("블랙리스트 갯수 : " + blockList.length);
+			vo.setBlockedMember(blockList[i]);
+			System.out.println("선택 블랙리스트[i] : " + blockList[i]);
+		}
+		dao.deleteBlock(vo); 
 		
 		//회원차단 delete
-		if(nickname.equals(blockList)) {
-			System.out.println("사용자는 차단해제 할수 없습니다!");
-			forward.setPath(req.getContextPath() + "/member/member-get-block?code=nicknameFail");
-		}
-//		else if(!vo.getBlockedMember().equals(delBlockedMember) || vo.getBlockedMember() == null) {
-//			System.out.println("차단 대상이 아닙니다!");
-//			forward.setPath(req.getContextPath() + "/member/member-get-block?code=blockedMemberFail");
+//		if(nickname.equals(blockList)) {
+//			System.out.println("사용자는 차단해제 할수 없습니다!");
+//			forward.setPath(req.getContextPath() + "/member/member-get-block?code=nicknameFail");
 //		}
-		else {
-			dao.deleteBlock(vo); 
-		}
+////		else if(!vo.getBlockedMember().equals(delBlockedMember) || vo.getBlockedMember() == null) {
+////			System.out.println("차단 대상이 아닙니다!");
+////			forward.setPath(req.getContextPath() + "/member/member-get-block?code=blockedMemberFail");
+////		}
+//		else {
+//	    	List<String> fruitList = new ArrayList<>();
+//	    	String[] blockList = req.getParameterValues("fruitList");
+//	        System.out.println("=fruit=");
+//	        for(String fruit : fruitList) {
+//	            vo.setBlockedMember(fruit);
+//	        }
+//	        //리턴값
+//	        Map<String, Object> retVal = new HashMap<String, Object>();
+//	        //성공했다고 처리
+//	        retVal.put("code", "OK");
+//	        retVal.put("message", "등록에 성공 하였습니다.");
+//	        
+//			dao.deleteBlock(vo); 
+//		}
 		
-		forward.setForward(false);
+		forward.setForward(true);
+		forward.setPath("/member/member-get-block-ok");
 		return forward;
 	}
 }
