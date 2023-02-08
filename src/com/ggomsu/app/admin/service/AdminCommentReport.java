@@ -1,32 +1,28 @@
-package com.ggomsu.app.member.service;
+package com.ggomsu.app.admin.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
-import com.ggomsu.app.member.dao.MemberDAO;
-import com.ggomsu.app.member.vo.MemberVO;
+import com.ggomsu.app.admin.dao.ArticleReportDAO;
+import com.ggomsu.app.admin.dao.CommentReportDAO;
 
-//작성자 : 손하늘
+public class AdminCommentReport implements Action{
 
-public class MemberGetBlockOk implements Action{
-	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
-		
-		String nickname = req.getParameter("nickname"); 
-		
-		MemberDAO dao = new MemberDAO();
+	
+		CommentReportDAO crDao = new CommentReportDAO();
 		ActionForward forward = new ActionForward();
 		
-		req.setAttribute("blockList", dao.getBlockedList(nickname));
+		req.setAttribute("commentReportList", crDao.getCommentReportList());
 		
 		forward.setForward(true);
-		forward.setPath("/app/member/MemberBlock.jsp");
-		
+		forward.setPath("/app/admin/AdminCommentReport.jsp");
 		return forward;
 	}
+
 }

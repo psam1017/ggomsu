@@ -110,6 +110,12 @@
 	              댓글 관리
 	            </a>
 	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="${pageContext.request.contextPath}/admin/admin-member-block">
+	              <span data-feather="shopping-cart" class="align-text-bottom"></span>
+	              유저 관리
+	            </a>
+	          </li>
 	        </ul>
 	
 	        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
@@ -202,9 +208,15 @@
 	          			<td><button id="reportPreserve" class="btn btn-primary">보존</button></td>
 	          			<td>
 	          				<button id="reportDelete" class="btn btn-danger">삭제</button><br>
-	          				<input type = "checkbox" name = "deleteReason" value="광고성 게시물">광고성 게시물<br>
-							<input type = "checkbox" name = "deleteReason" value="부적절한 언어 포함">부적절한 언어 포함<br>
-							<input type = "checkbox" name = "deleteReason" value="사용자간 분란 조장">사용자간 분란 조장<br>
+	          				<input type="radio" name="deleteReason" value="광고성 게시물">음란성/선정성<br>
+							<input type="radio" name="deleteReason" value="부적절한 언어 포함">광고/홍보성<br>
+							<input type="radio" name="deleteReason" value="사용자간 분란 조장">혐오감 유발<br>
+							<input type="radio" name="deleteReason" value="개인정보 침해">개인정보 침해<br>
+							<input type="radio" name="deleteReason" value="지나친 욕설">지나친 욕설<br>
+							<input type="radio" name="deleteReason" value="저작권 위반">저작권 위반<br>
+							<input type="radio" name="deleteReason" value="허위정보/조작/오보">허위정보/조작/오보<br>
+							<input type="radio" name="deleteReason" value="지나친 추천 유도">지나친 추천 유도<br>
+							<input type="radio" name="deleteReason" value="기타사유">기타사유<br> 
 	          			</td>
 	          		</tr>
 	    		</table>
@@ -212,15 +224,11 @@
 	    </main>
 	  </div>
 	</div>
-
-    <script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script>
+    <%-- <script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script> --%>
 	<script src="${pageContext.request.contextPath}/assets/js/AdminArticleReport.js"></script>
-	
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-    
 	<script>
         const contextPath = "${pageContext.request.contextPath}";
-        
     </script>
   </body>
 </html>

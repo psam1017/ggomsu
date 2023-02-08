@@ -43,7 +43,7 @@ public class MemberDAO {
 		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
 	}
 
-	public List<String> getList(String nickname) {
+	public List<String> getBlockedList(String nickname) {
 		return sqlSession.selectList("Member.blockView", nickname);
 	}
 	
@@ -51,4 +51,7 @@ public class MemberDAO {
 		sqlSession.update("Member.updateAbuseCount", nickname);
 	}
 	
+	public List<MemberVO> getAllMember() {
+		return sqlSession.selectList("Member.getAllMember");
+	}
 }

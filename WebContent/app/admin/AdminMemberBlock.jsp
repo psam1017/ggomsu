@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -109,6 +110,12 @@
 	              댓글 관리
 	            </a>
 	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="${pageContext.request.contextPath}/admin/admin-member-block">
+	              <span data-feather="shopping-cart" class="align-text-bottom"></span>
+	              유저 관리
+	            </a>
+	          </li>
 	        </ul>
 	
 	        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
@@ -131,97 +138,70 @@
 	    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 	        <div class="table-responsive" style="width:100%; height:40vh; overflow:auto">
 	          <table class="table">
-	            <caption>댓글 신고 목록</caption>
+	            <caption>멤버 목록</caption>
 	            <thead>
 	              <tr>
-	                <th scope="col">commentIndex</th>
-	                <th scope="col">nickname</th>
-	                <th scope="col">reason</th>
-	                <th scope="col">Handle</th>
+	                <th scope="col">이름</th>
+	                <th scope="col">닉네임</th>
+	                <th scope="col">신고횟수</th>
+	                <th scope="col">상태</th>
+	                <th scope="col">상태변경</th>
 	              </tr>
 	            </thead>
 	            <tbody>
 	            <c:choose>
-	                <c:when test="${commentReportList != null and fn:length(commentReportList) > 0}">
-	                    <c:forEach var="commentReport" items="${commentReportList}">
-	                    	<c:if test="${commentReport.getCommentDeleteCheck() == 0}">
-		                        <tr class="clickable-tr">
-		                            <th scope="row"><c:out value="${commentReport.getCommentIndex()}"/></th>
-		                            <td><c:out value="${commentReport.getNickname()}"/></td>
-				                     <td><c:out value="${commentReport.getCommentReportReason()}"/></td>
-				                     <td>
-				                      	<a class="btn btn-primary" href="#">
-				                            	상세보기
-				                        </a>
-		                      		</td>
-		                   		</tr>
-	                   		</c:if>
+	                <c:when test="${members != null and fn:length(members) > 0}">
+	                    <c:forEach var="member" items="${members}">
+	                        <tr class="clickable-tr">
+	                            <th scope="row"><c:out value="${member.getName()}"/></th>
+                             	<td><c:out value="${member.getNickname()}"/></td>
+                             	<td><c:out value="${member.getAbuseCount()}"/></td>
+                             	<td>
+                             		<c:set var="memberStatus" value="${member.getStatusValue()}"/>
+                   					<form action="${pageContext.request.contextPath}/admin/admin-member-status-update-ok" method="post" class="memberStatus">
+		                             	<input type="hidden" name="memberNickname" value="${member.getNickname()}">
+		                             	<select name="memberStatus" class="form-select selectMemberStatus">
+		                             		<option value="ADM" <c:if test="${'ADM' eq memberStatus}">selected</c:if> >관리자</option>
+										    <option value="MEM" <c:if test="${'MEM' eq member.getStatusValue()}">selected</c:if>>정상회원</option>
+										    <option value="SUS" <c:if test="${'SUS' eq member.getStatusValue()}">selected</c:if>>관리자에 의해 정지</option>
+										    <option value="TMP" <c:if test="${'TMP' eq member.getStatusValue()}">selected</c:if>>비회원</option>
+										    <option value="DEL" <c:if test="${'DEL' eq member.getStatusValue()}">selected</c:if>>자발적 탈퇴</option>
+										    <option value="DOR" <c:if test="${'DOR' eq member.getStatusValue()}">selected</c:if>>휴면 계정</option>
+										    <option value="EML" <c:if test="${'EML' eq member.getStatusValue()}">selected</c:if>>이메일 인증 대기</option>
+		                             	</select>
+	                             	</form>
+                             	</td>
+		                    	<td><a class="btn btn-secondary updateMemberStatus">적용</a></td>
+	                   		</tr>
 	                    </c:forEach>
 	                </c:when>
 	                <c:otherwise>
 	                    <tr>
-	                        <td colspan="5"> 신고된 게시글이 없습니다. </td>
+	                        <td colspan="5"> 멤버가 없습니다. </td>
 	                    </tr>
 	                </c:otherwise>
 	              </c:choose>
 	              </tbody>
 	          </table>
 	          </div>
-	    	<div  class="table-responsive table-" >
-	          	<table id="con" class="table thead-dark">
-	          		<tr>
-		                <th width="20%" scope="col">분류</th>
-		                <th scope="col" >내용</th>
-	               </tr>
-	          		<tr>
-	          			<th scope="row">댓글 번호</th>
-	          			<td id="commentIndex"> </td>
-	          		</tr>
-	          		<tr>
-	          			<th scope="row">신고내용</th>
-	          			<td id="reportReason"> </td>
-	          		</tr>
-	          		<tr>
-	          			<th scope="row">댓글 내용</th>
-	          			<td id="commentContent"> </td>
-	          		</tr>
-	          		<tr>
-	          			<th scope="row">신고자</th>
-	          			<td id="reportMember"> </td>
-	          		</tr>
-	          		<tr>
-	          			<th scope="row">신고받은사람</th>
-	          			<td id="reportedMember"> </td>
-	          		</tr>
-	          		<tr>
-	          			<td><button id="reportPreserve" class="btn btn-primary">보존</button></td>
-	          			<td>
-	          				<button id="reportDelete" class="btn btn-danger">삭제</button><br>
-	          				<input type="radio" name="deleteReason" value="광고성 게시물">음란성/선정성<br>
-							<input type="radio" name="deleteReason" value="부적절한 언어 포함">광고/홍보성<br>
-							<input type="radio" name="deleteReason" value="사용자간 분란 조장">혐오감 유발<br>
-							<input type="radio" name="deleteReason" value="개인정보 침해">개인정보 침해<br>
-							<input type="radio" name="deleteReason" value="지나친 욕설">지나친 욕설<br>
-							<input type="radio" name="deleteReason" value="저작권 위반">저작권 위반<br>
-							<input type="radio" name="deleteReason" value="허위정보/조작/오보">허위정보/조작/오보<br>
-							<input type="radio" name="deleteReason" value="지나친 추천 유도">지나친 추천 유도<br>
-							<input type="radio" name="deleteReason" value="기타사유">기타사유<br>
-	          			</td>
-	          		</tr>
-	    		</table>
-	    	</div>
 	    </main>
 	  </div>
 	</div>
-
-    <script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script>
-	<script src="${pageContext.request.contextPath}/assets/js/AdminCommentReport.js"></script>
-	
+    <%-- <script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script> --%>
+	<script src="${pageContext.request.contextPath}/assets/js/AdminMemberBlock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-    
 	<script>
         const contextPath = "${pageContext.request.contextPath}";
+        const updateMemberStatus = document.querySelectorAll(".updateMemberStatus");
+        const memberStatunsFrom = document.querySelectorAll(".memberStatus");
         
+        updateMemberStatus.forEach((element,index) => {
+        	
+        	element.preventDefault;
+        	element.addEventListener("click",function() {
+        		memberStatunsFrom[index].submit();
+        	})
+        })
     </script>
   </body>
 </html>

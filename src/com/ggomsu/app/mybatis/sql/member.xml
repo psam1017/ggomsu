@@ -50,7 +50,8 @@
 		SELECT blockedMember
 		FROM memberBlock
 		WHERE nickname = #{nickname}
-	</select>	
+	</select>
+	
 	<insert id="blockOk" parameterType="member">
 		INSERT INTO memberBlock
 		(nickname, blockedMember)
@@ -67,5 +68,10 @@
 		}
 	</update>
 	
+	<select id="getAllMember" resultType="member">
+		SELECT nickname, name, statusValue, abuseCount 
+		FROM members
+		ORDER BY statusValue
+	</select>	
 	
 </mapper>
