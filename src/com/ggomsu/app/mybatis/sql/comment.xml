@@ -4,8 +4,7 @@
 <mapper namespace="Comment">
 	<select id ="getCommentList" parameterType="hashmap" resultType="comment">
 		SELECT * FROM comments
-		WHERE articleIndex = #{articleIndex} AND
-		nickname NOT IN (SELECT blockedMember FROM psam1017.memberblock WHERE nickname= #{nickname})
+		WHERE articleIndex = #{articleIndex} AND NOT nickname IN (${blockedList})
 		ORDER BY refIndex ASC, commentIndex ASC
 	</select>
 	<insert id ="insertComment" parameterType="comment">

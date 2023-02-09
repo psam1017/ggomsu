@@ -1,4 +1,6 @@
-package com.ggomsu.app.member.service;
+package com.ggomsu.app.admin.service;
+
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,25 +10,23 @@ import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
-//작성자 : 손하늘
+public class AdminMemberBlockOk implements Action{
 
-public class MemberGetBlockOk implements Action{
-	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
-		
-		String nickname = req.getParameter("nickname"); 
-		
-		MemberDAO dao = new MemberDAO();
+	
 		ActionForward forward = new ActionForward();
+		MemberDAO mDao = new MemberDAO();
 		
-		req.setAttribute("blockList", dao.getBlockedList(nickname));
+		List<MemberVO> members = mDao.getAllMember();
+		
+		req.setAttribute("members", members);
 		
 		forward.setForward(true);
-		forward.setPath("/app/member/MemberBlock.jsp");
-		
+		forward.setPath("/app/admin/AdminMemberBlock.jsp");
 		return forward;
 	}
+
 }

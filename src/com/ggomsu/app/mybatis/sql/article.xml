@@ -3,15 +3,15 @@
 
 
 <mapper namespace="Article">
-	<select id="getTotal" resultType="_int">
+	<select id="getTotal" parameterType="hashmap" resultType="_int">
 		SELECT COUNT(`articleIndex`) FROM psam1017.articles
-		WHERE boardValue LIKE #{boardValue}
+		WHERE boardValue LIKE #{boardValue} AND NOT nickname IN (${blockedList})
 	</select>
 	
 	<select id="getArticleList" parameterType="hashmap" resultType="article">
 		SELECT `articleIndex`, title, nickname, viewCount, writtenAt
 		FROM psam1017.articles
-		WHERE boardValue LIKE #{boardValue}
+		WHERE boardValue LIKE #{boardValue} AND NOT nickname IN (${blockedList})
 		ORDER BY articleIndex DESC
 		LIMIT 10 OFFSET #{page};
 	</select>
@@ -21,7 +21,7 @@
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`articleIndex` = B.articleIndex
-		WHERE boardValue LIKE #{boardValue}
+		WHERE boardValue LIKE #{boardValue} AND NOT nickname IN (${blockedList})
 		ORDER BY articleLikeCount DESC
 		LIMIT 10 OFFSET #{page};
 	</select>
@@ -32,7 +32,9 @@
 		FROM (
 		SELECT A.`articleIndex`
 		FROM psam1017.articles A
-		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod}))AS SL ;
+		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod}))AS SL
 	]]>
 	</select>
 	
@@ -42,17 +44,32 @@
 		FROM (
 		SELECT A.`articleIndex`
 		FROM psam1017.articles A
-		WHERE A.nickname LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL ;
+		WHERE A.nickname LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL
 	]]>
 	</select>
 	
-	<select id="getSearchTitleContentlCount" parameterType="hashmap" resultType="_int">
+	<select id="getSearchTitleContentCount" parameterType="hashmap" resultType="_int">
 	<![CDATA[
 		SELECT COUNT(`articleIndex`)
 		FROM (
 		SELECT A.`articleIndex`
 		FROM psam1017.articles A
-		WHERE CONCAT(A.title, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL ;
+		WHERE CONCAT(A.title, A.content) LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})) AS SL
+	]]>
+	</select>
+	
+	<select id="getSearchTagCount" parameterType="hashmap" resultType="_int">
+	<![CDATA[
+		SELECT COUNT(1)
+		FROM psam1017.articles A,
+		(SELECT * FROM tags WHERE tagValue LIKE #{search}) T
+		WHERE A.`articleIndex` = T.articleIndex
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
 	]]>
 	</select>
 		
@@ -62,8 +79,10 @@
 		FROM psam1017.articles A
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`articleIndex` = B.articleIndex
-		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
-		LIMIT 10 OFFSET #{page};
+		WHERE CONCAT(A.title, A.nickname, A.content) LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		LIMIT 10 OFFSET #{page}
 	]]>
 	</select>
 	
@@ -73,8 +92,9 @@
 		FROM psam1017.articles A
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`articleIndex` = B.articleIndex
-		WHERE A.nickname LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
-		LIMIT 10 OFFSET #{page}
+		WHERE A.nickname LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
 	]]>
 	</select>
 	
@@ -84,7 +104,23 @@
 		FROM psam1017.articles A
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`articleIndex` = B.articleIndex
-		WHERE CONCAT(A.title, A.content) LIKE #{search} AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		WHERE CONCAT(A.title, A.content) LIKE #{search} 
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
+		LIMIT 10 OFFSET #{page}
+	]]>
+	</select>
+	
+	<select id="getSearchTagArticleList" parameterType="hashmap" resultType="article">
+	<![CDATA[
+		SELECT A.`articleIndex`, A.title, A.nickname, A.viewCount, A.writtenAt, B.articleLikeCount
+		FROM psam1017.articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex,
+		(SELECT * FROM tags WHERE tagValue LIKE #{search}) T
+		WHERE A.`articleIndex` = T.articleIndex
+		AND NOT nickname IN (${blockedList})
+		AND writtenAt <= DATE_SUB(now(),interval ${searchPeriod})
 		LIMIT 10 OFFSET #{page}
 	]]>
 	</select>
@@ -94,7 +130,7 @@
 		FROM psam1017.articles AS A 
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS AL
 		ON A.`articleIndex` = AL.articleIndex
-		WHERE A.`articleIndex` = #{articleIndex};
+		WHERE A.`articleIndex` = #{articleIndex}
 	</select>
 	
 	<select id="updateArticleViewCount" parameterType="_int">
@@ -109,8 +145,9 @@
 		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
 		ON A.`articleIndex` = B.articleIndex
 		WHERE boardValue LIKE #{boardValue}
+		AND NOT nickname IN (${blockedList})
 		ORDER BY viewCount DESC
-		LIMIT 10 OFFSET #{page};
+		LIMIT 10 OFFSET #{page}
 	</select>
 	
 	<delete id="deleteArticle" parameterType="_int">
@@ -127,6 +164,60 @@
 		ORDER BY `articleIndex` DESC
 		LIMIT 1
 	</select>
+	
+	<select id="checkGood" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM articleLike
+		WHERE nickname = #{nickname}
+		AND articleIndex = #{articleIndex}
+	</select>
+
+	<insert id="insertArticleLike" parameterType="hashmap">
+		INSERT INTO articleLike(articleIndex, nickname)
+		VALUES (#{articleIndex}, #{nickname})
+	</insert>
+
+	<delete id="deleteArticleLike" parameterType="hashmap">
+		DELETE FROM articleLike
+		WHERE articleIndex = #{articleIndex}
+		AND nickname = #{nickname}
+	</delete>
+
+	<select id="getLikeTotal" parameterType="hashmap" resultType="_int">
+		SELECT count(1)
+		FROM articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex,
+ 		(SELECT * FROM articleLike WHERE nickname = #{nickname}) AL
+		WHERE A.articleIndex = AL.articleIndex
+	</select>
+
+	<select id="getLikeList" parameterType="hashmap" resultType="article">
+		SELECT A.*, B.articleLikeCount 
+		FROM articles A
+		LEFT OUTER JOIN (SELECT COUNT(1) AS articleLikeCount, articleIndex FROM articleLike GROUP BY articleIndex) AS B
+		ON A.`articleIndex` = B.articleIndex,
+	 	(SELECT * FROM articleLike WHERE nickname = #{nickname}) AL
+		WHERE A.articleIndex = AL.articleIndex
+		LIMIT 10 OFFSET #{page}
+	</select>
+
+	<update id="processReportArticle" parameterType="hashmap">
+		UPDATE articles SET deletedAt = now(), articleDeleteReason = #{articleDeleteReason} WHERE `articleIndex` = #{articleIndex}
+	</update>
+
+	<select id="getComment" parameterType="_int" resultType="comment">
+		SELECT C.*, CL.commentLikeCount 
+		FROM comments AS C
+		LEFT OUTER JOIN (SELECT COUNT(1) AS commentLikeCount, commentIndex FROM commentLike GROUP BY commentIndex) AS CL
+		ON C.`commentIndex` = CL.commentIndex
+		WHERE C.`commentIndex` = #{commentIndex}
+	</select>
+
+	<update id="processReportComment" parameterType="hashmap">
+		UPDATE comments SET deletedAt = now(), commentDeleteReason = #{commentDeleteReason} 
+		WHERE `commentIndex` = #{commentIndex}
+	</update>
 	
 	<!-- index.jsp -->
 	<select id="getBestLikeList" resultType="article">
