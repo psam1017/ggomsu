@@ -27,26 +27,34 @@ public class WikiViewOk implements Action {
 		ActionForward forward = new ActionForward();
 		
 		String subject = req.getParameter("subject");
-		int rvs = dao.getLastRvs(subject);
+		int rvs = Integer.parseInt(req.getParameter("rvs"));
 		
 		// 작성정보 가져오기
 		infoVO = dao.getWikiInfo(subject, rvs);
 		
-		// 콘텐츠 가져오기
-		LinkedList<WikiContentVO> pastList = new LinkedList<>();
-		pastList.addAll(dao.getContentPast(subject, rvs));
-		List<WikiContentVO> currentList = dao.getContentOne(subject, rvs);
-		wiki.setContentFromPast(currentList, pastList);
-		
-		// 최근 변경 목록 가져오기
-		List<String> recentSubjects = dao.getRecentSubject();
-		
-		req.setAttribute("wikiInfo", infoVO);
-		req.setAttribute("wikiContents", currentList);
-		req.setAttribute("recentSubjects", recentSubjects);
-		
-		forward.setForward(true);
-		forward.setPath("/app/wiki/WikiViewOk.jsp");
+		// 오용으로 인해 삭제된 버전일 때
+		if(infoVO.getDeletedAt() != null) {
+			forward.setForward(true);
+			forward.setPath("/app/wiki/WikiDeleted.jsp");
+		}
+		// 정상적으로 볼 수 있는 버전일 때
+		else {
+			// 콘텐츠 가져오기
+			List<WikiContentVO> pastList = new LinkedList<>();
+			pastList.addAll(dao.getContentPast(subject, rvs));
+			List<WikiContentVO> currentList = dao.getContentOne(subject, rvs);
+			wiki.setContentFromPast(currentList, pastList);
+			
+			// ★최근 변경 목록 가져오기 -> wiki home에서 필요로 하는 기능 -> ajax로 써야 할 듯
+			// List<String> recentSubjects = dao.getRecentSubject();
+			
+			req.setAttribute("wikiInfo", infoVO);
+			req.setAttribute("wikiContents", currentList);
+			// req.setAttribute("recentSubjects", recentSubjects);
+			
+			forward.setForward(true);
+			forward.setPath("/app/wiki/WikiViewOk.jsp");
+		}
 		
 		return forward;
 	}

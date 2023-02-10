@@ -42,6 +42,16 @@ public class WikiFrontController extends HttpServlet {
 				System.out.println("위키 화면 조회 오류!" + e);
 			}
 		}
+		else if(command.equals("/wiki/wiki-write")) {
+			try {
+				forward = new WikiCheckAbuse().execute(req, resp);
+				if(forward.getPath() == null) {
+					forward.setPath("/app/wiki/WikiWrite.jsp");
+				}
+			} catch (Exception e) {
+				System.out.println("위키 생성 오류!" + e);
+			}
+		}
 		else if(command.equals("/wiki/wiki-write-ok")) {
 			try {
 				forward = new WikiWriteOk().execute(req, resp);
@@ -49,16 +59,12 @@ public class WikiFrontController extends HttpServlet {
 				System.out.println("위키 생성 오류!" + e);
 			}
 		}
-		else if(command.equals("/wiki/wiki-check-latest-ok")) {
-			try {
-				forward = new WikiCheckLatestOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("위키 최신 여부 확인 오류!" + e);
-			}
-		}
 		else if(command.equals("/wiki/wiki-revise")) {
 			try {
-				forward = new WikiRevise().execute(req, resp);
+				forward = new WikiCheckAbuse().execute(req, resp);
+				if(forward.getPath() == null) {
+					forward.setPath("/app/wiki/WikiRevise.jsp");
+				}
 			} catch (Exception e) {
 				System.out.println("위키 개정 페이지 이동 오류!" + e);
 			}
@@ -70,6 +76,12 @@ public class WikiFrontController extends HttpServlet {
 				System.out.println("위키 개정 완료 오류!" + e);
 			}
 		}
+		else if(command.equals("/wiki/wiki-abuse")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/wiki/WikiAbuse.jsp");
+		}
+		
 
 		if(forward != null) {
 			if(forward.isForward()) {
