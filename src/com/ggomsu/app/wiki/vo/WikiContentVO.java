@@ -1,7 +1,6 @@
 package com.ggomsu.app.wiki.vo;
 
 // 작성자 : 박성민
-
 public class WikiContentVO {
 	
 	private String subject;

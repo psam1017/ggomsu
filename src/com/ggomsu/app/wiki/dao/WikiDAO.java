@@ -57,4 +57,8 @@ public class WikiDAO {
 	public void insertWikiContents(List<WikiContentVO> contents) {
 		sqlSession.insert("Wiki.insertWikiContents", contents);
 	}
+	
+	public boolean checkBlockedIp(String ip) {
+		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedIp", ip)) == 1;
+	}
 }

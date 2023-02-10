@@ -8,7 +8,7 @@ public class WikiInfoVO {
 	private String nickname;
 	private String ip;
 	private String revisedAt;
-	private int latestFlag;
+	private String deletedAt;
 
 	public WikiInfoVO() { ; }
 
@@ -42,10 +42,10 @@ public class WikiInfoVO {
 	public void setRevisedAt(String revisedAt) {
 		this.revisedAt = revisedAt;
 	}
-	public int getLatestFlag() {
-		return latestFlag;
+	public String getDeletedAt() {
+		return deletedAt;
 	}
-	public void setLatestFlag(int latestFlag) {
-		this.latestFlag = latestFlag;
+	public void setDeletedAt(String deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 }
