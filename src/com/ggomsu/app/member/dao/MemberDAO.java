@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.ggomsu.app.member.vo.MemberSnsVO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 
@@ -53,5 +54,10 @@ public class MemberDAO {
 	
 	public List<MemberVO> getAllMember() {
 		return sqlSession.selectList("Member.getAllMember");
+	}
+	
+	// 네이버
+	public void snsSignUp(MemberSnsVO vo) {
+		sqlSession.insert("Member.snsSignUp", vo);
 	}
 }

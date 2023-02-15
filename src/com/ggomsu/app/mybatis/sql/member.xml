@@ -74,4 +74,11 @@
 		ORDER BY statusValue
 	</select>	
 	
+	<insert id="snsSignUp" parameterType="memberSns">
+		INSERT INTO memberSNS
+		(email, snsKey)
+		VALUES
+		(#{email}, #{accessToken}) 
+	</insert>
+	
 </mapper>

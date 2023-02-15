@@ -261,4 +261,9 @@
 		ORDER BY viewCount DESC LIMIT 1
 	</select>
 	
+	<insert id="insertTag" parameterType="hashmap">
+		INSERT INTO tags(articleIndex, tagValue)
+		VALUES (#{articleIndex}, #{tagValue})
+	</insert>
+	
 </mapper>

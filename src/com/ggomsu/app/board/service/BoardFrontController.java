@@ -39,14 +39,12 @@ public class BoardFrontController extends HttpServlet {
 		ActionForward forward = null;
 	
 		if(command.equals("/board/article-get-list-ok")) {
-			// 개별 컨트롤러 호출
 			try {
 				forward = new ArticleGetListOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("게시판 리스트 가져오기 실패!!!" + e);
 			}
 		}else if(command.equals("/board/article-get-best-list-ok")) {
-			// 개별 컨트롤러 호출
 			try {
 				forward = new ArticleGetBestListOk().execute(req, resp);
 			} catch (Exception e) {
