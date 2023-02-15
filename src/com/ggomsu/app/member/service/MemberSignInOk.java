@@ -42,13 +42,12 @@ public class MemberSignInOk implements Action {
 			System.out.println("암호화 로그인 예외 발생! " + e);
 		}
 		
-		if(isSignInOk && statusValue.equals("MEM")) {
-			// 로그인 성공 -> 현재 일자로 다시 signAt을 업데이트
-			dao.signAt(email);
-			
+		//회원상태가 MEM, ADM, DOR : 로그인 가능 (DOR 즉 휴면계정상태일때는 휴면계정해제 페이지로)
+		if(isSignInOk && statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("DOR")) {
 			session.setAttribute("email", vo.getEmail());
 			session.setAttribute("nickname", vo.getNickname());
 			session.setAttribute("statusValue", vo.getStatusValue());
+			session.setAttribute("signAt", vo.getSignAt());
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date now = new Date(); //현재날짜
@@ -72,7 +71,20 @@ public class MemberSignInOk implements Action {
 			}
 			
 			// 차단 유저 목록을 불러와서 세션에 저장해둘 것인가?(YES)
+			session.setAttribute("blockedMember", vo.getBlockedMember());
+			
 			// 생일에 축하 메시지를 띄울 것인가?(NO?)
+			
+			if(session.getAttribute("statusValue").equals("DOR")) {
+				//db이벤트 스케줄러로 하루에 한번 로그인시점 기준으로 휴면회원 업데이트 
+				//휴면상태로 전환된 계정 로그인
+				//휴면계정해제 페이지에서 해제 하도록
+				resp.sendRedirect(req.getContextPath() + "/app/member/MemberWakeUp.jsp");
+				return null;
+			}
+			
+			// 로그인 성공 -> 현재 일자로 다시 signAt을 업데이트
+			dao.signAt(email);
 			
 			// 세션으로 이전 페이지 값을 기억하여 값이 있으면 그 페이지로, 아니면 index로 redirect
 			if(session.getAttribute("articleIndex") != null) {
@@ -86,26 +98,9 @@ public class MemberSignInOk implements Action {
 				return null;
 			}
 		}
-		else if(!statusValue.equals("MEM")) {
-			//회원상태로 인한 로그인 실패
-			// 차단된 유저인가?(신고 횟수)
-			if(statusValue.equals("DEL")) { //자발적탈퇴은 아닌가?
-				forward.setPath(req.getContextPath() + "/member/member-sign-in?code=del");
-				System.out.println("탈퇴한 회원입니다");
-			}
-			else if(statusValue.equals("DOR")) { // 휴면계정은 아닌가?(1년 동안 접속 X)
-				//db이벤트 스케줄러로 하루에 한번 로그인시점 기준으로 휴면회원 업데이트
-				forward.setPath(req.getContextPath() + "/member/member-sign-in?code=dor");
-				System.out.println("휴면 회원입니다");
-			}
-			else if(statusValue.equals("SUS")) { //정지회원일 경우
-				forward.setPath(req.getContextPath() + "/member/member-sign-in?code=sus");
-				System.out.println("관리자에 의한 정지 회원입니다");
-			}
-			else if(statusValue.equals("EML")) { // 이메일 인증은 거쳤는가?
-				forward.setPath(req.getContextPath() + "/member/member-sign-in?code=eml");
-				System.out.println("이메일인증 전 계정입니다");
-			}
+		else if(statusValue.equals("DEL") || statusValue.equals("SUS")) {
+			//회원상태(자발적 탈퇴, 관리자에 의한 정지)로 인한 로그인 실패
+			forward.setPath(req.getContextPath() + "/member/member-sign-in?status=" + statusValue);
 		}
 		else {
 			// 로그인 실패

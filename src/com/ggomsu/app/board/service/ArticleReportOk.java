@@ -7,7 +7,8 @@ import javax.servlet.http.HttpSession;
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleReportDAO;
-import com.ggomsu.app.board.vo.ArticlereportVO;
+import com.ggomsu.app.board.vo.ArticleReportVO;
+import com.sun.javafx.fxml.ParseTraceElement;
 
 // 작성자 : 손하늘
 public class ArticleReportOk implements Action{
@@ -18,22 +19,20 @@ public class ArticleReportOk implements Action{
 		resp.setCharacterEncoding("UTF-8");
 		
 		ArticleReportDAO dao = new ArticleReportDAO();
-		ArticlereportVO aVo = new ArticlereportVO();
+		ArticleReportVO aVo = new ArticleReportVO();
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-//		String nickname = (String)session.getAttribute("nickname");
-//		int articleIndex = (Integer)session.getAttribute("articleIndex");
-		String nickname = "psam1017";
-		int articleIndex = 376;
-		aVo.setNickname(nickname);
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
+		
+		aVo.setNickname(req.getParameter("articleNickname"));
 		aVo.setArticleIndex(articleIndex);
 		aVo.setArticleReportReason(req.getParameter("declaration"));
 		
-		dao.articleReport(aVo);
+		dao.insertArticleReport(aVo);
 			
 		forward.setForward(true);
-		forward.setPath("/app/board/ArticleViewList.jsp");
+		forward.setPath("/board/article-get-list-ok?boardValue=" + session.getAttribute("boardValue"));
 		
 		return forward;
 	}

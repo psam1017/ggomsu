@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
-	// 작성자 : 이성호(게시판), 김지혜(댓글)
+	// 작성자 : 이성호(게시판), 김지혜(댓글), 손하늘(신고)
 @SuppressWarnings("serial")
 public class BoardFrontController extends HttpServlet {
 
@@ -108,6 +108,10 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("댓글 삭제 실패!" + e);
 			}
+		}else if(command.equals("/board/article-report")) {
+				forward = new ActionForward();
+				forward.setForward(true);
+				forward.setPath("/app/board/Articlereport.jsp");
 		}else if(command.equals("/board/article-report-Ok")) {
 			try {
 				forward = new ArticleReportOk().execute(req, resp);

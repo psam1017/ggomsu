@@ -14,11 +14,14 @@
 </head>
 <body>
 	<form action="${pageContext.request.contextPath}/board/article-report-Ok" method="post">
-		<label>확실하지않은 정보입니다.<input type="checkbox" value="확실하지 않은 정보입니다" name="declaration"></label>
-		<label>누군가를 비방하는 글입니다.<input type="checkbox" value="누군가를 비방하는 글입니다" name="declaration"></label>
-		<label>이용 방해할 정도의 도배.<input type="checkbox" value="이용 방해할 정도의 도배" name="declaration"></label>
-		<label>불법광고.<input type="checkbox" value="불법광고 " name="declaration"></label>
-		<label>음란물.<input type="checkbox" value="음란물 " name="declaration"></label>
+		<label>게시글 유저<input text="text" name="articleIndex" value="<c:out value="${param.articleIndex}"/>" readonly></label>
+		<label>게시글 번호<input text="text" name="articleNickname" value="<c:out value="${param.articleNickname}"/>" readonly></label>
+		<br>
+		<label>확실하지않은 정보입니다.<input type="radio" value="확실하지 않은 정보입니다" name="declaration"></label><br>
+		<label>누군가를 비방하는 글입니다.<input type="radio" value="누군가를 비방하는 글입니다" name="declaration"></label><br>
+		<label>이용 방해할 정도의 도배.<input type="radio" value="이용 방해할 정도의 도배" name="declaration"></label><br>
+		<label>불법광고.<input type="radio" value="불법광고 " name="declaration"></label><br>
+		<label>음란물.<input type="radio" value="음란물 " name="declaration"></label><br>
 		<input type="submit" value="확인">
 	</form>
 </body>

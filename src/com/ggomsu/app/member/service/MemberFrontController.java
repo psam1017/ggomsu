@@ -88,11 +88,34 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		
+		else if(command.equals("/member/member-wake-up-ok")) {
+			try {
+				forward = new MemberWakeUpOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("휴면계정 해제 실패!" + e);
+			}
+		}
+		
 		else if(command.equals("/member/member-find-id-Ok")) {
 			try {
 				forward = new MemberFindIdOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("아이디 찾기 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-certification-ok")) {
+			try {
+				forward = new MemberCertificationOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("인증번호 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/member-change-pw-ok")) {
+			try {
+				forward = new MemberChangePwOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("비밀번호 변경 오류!" + e);
 			}
 		}
 		
@@ -155,11 +178,26 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		
-		else if(command.equals("/member/member-update-info-ok")) {
+		else if(command.equals("/member/member-update-my-profile-ok")) {
 			try {
-				forward = new MemberUpdataMyInfoOk().execute(req, resp);
+				forward = new MemberUpdateMyProfileOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("회원정보 수정 오류!" + e);
+				System.out.println("회원프로필 편집 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/member-update-my-nickname-ok")) {
+			try {
+				forward = new MemberUpdateMyNicknameOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("회원닉네임변경 오류!" + e);
+			}
+		}
+		
+		else if(command.equals("/member/member-update-my-privacy-ok")) {
+			try {
+				forward = new MemberUpdateMyPrivacyOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("개인정보 수정 오류!" + e);
 			}
 		}
 		

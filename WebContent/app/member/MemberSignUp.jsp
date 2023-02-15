@@ -56,11 +56,11 @@
                 <legend>선택항목</legend>
 	                <ul>
 	                    <li>
-	                        우편번호 <input type="text" name="zipcode" id="zipcode" class="postcodify_postcode5" maxlength="5" value="" disabled>
+	                        우편번호 <input type="text" name="zipcode" id="zipcode" class="postcodify_postcode5" maxlength="5" value="" readonly>
 	                                 <button id="postcodify_search_button" type="button">검색</button>
 	                    </li>
 	                    <li>
-	                        도로명주소 <input type="text" name="address" id="address" class="postcodify_address" maxlength="100" value="" disabled>
+	                        도로명주소 <input type="text" name="address" id="address" class="postcodify_address" maxlength="100" value="" readonly>
 	                    </li>
 	                    <li>
 	                        상세주소 <input type="text" name="addressDetail" id="addressDetail" class="postcodify_details" maxlength="100" value="" placeholder="상세주소를 입력해주세요.">

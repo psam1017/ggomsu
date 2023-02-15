@@ -2,14 +2,14 @@ package com.ggomsu.app.board.vo;
 
 //작성자 : 손하늘
 
-public class ArticlereportVO {
+public class ArticleReportVO {
 	private int articleIndex;
 	private String nickname;
 	private String articleReportReason;
 	private String articleDeleteReason;
 	private int articleDeleteCheck;
 	
-	public ArticlereportVO() { ; }
+	public ArticleReportVO() { ; }
 
 	public int getArticleIndex() {
 		return articleIndex;

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>회원가입 : 꼼수닷컴</title>
+    <title>회원탈퇴</title>
 </head>
 	<c:if test="${param.email eq 'emailFail'}">
 		<script>alert("본인의 이메일계정을 입력해주세요");</script>

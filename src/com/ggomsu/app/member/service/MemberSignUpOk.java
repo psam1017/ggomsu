@@ -52,17 +52,14 @@ public class MemberSignUpOk implements Action{
 		vo.setAddressDetail(req.getParameter("addressDetail"));
 		vo.setProfileImageUrl(req.getParameter("profileImageUrl"));
 		
-		String agreedMarketingAt = req.getParameter("agreedMarketingAt");
-		
-		if(agreedMarketingAt != null) {
-			 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			 Date now = new Date();
-			 String nowTime = sdf.format(now);
-			 
-			vo.setAgreedMarketingAt(nowTime);
-		}
-		
 		dao.signUp(vo);
+		
+		String agreedMarketingAt = req.getParameter("agreedMarketingAt");
+		if(agreedMarketingAt != null) {
+			 String email = req.getParameter("email");
+			 vo.setAgreedMarketingAt(agreedMarketingAt);
+			 dao.updateAgreedMarketingAt(email);
+		}
 		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/member/welcome");

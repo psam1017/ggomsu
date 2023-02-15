@@ -36,6 +36,10 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
+	public void updateAgreedMarketingAt(String email) {
+		sqlSession.update("Member.updateAgreedMarketingAt", email);
+	}
+	
 	public MemberVO getMemberInfo(String email) {
 		return sqlSession.selectOne("Member.getMemberInfo", email);
 	}
@@ -44,12 +48,28 @@ public class MemberDAO {
 		return sqlSession.update("Member.signAt", email);
 	}
 	
+	public int updateWakeUp(String email) {
+		return sqlSession.update("Member.updateWakeUp", email);
+	}
+	
 	public MemberVO findId(MemberVO vo) {
 		return sqlSession.selectOne("Member.findId", vo);
 	}
 	
-	public void updataMemberMyInfo(MemberVO vo) {
-		sqlSession.update("Member.updataMemberMyInfo", vo);
+	public void updateMemberPassword(MemberVO vo) {
+		sqlSession.update("Member.updateMemberPassword", vo);
+	} 
+	
+	public void updateMemberMyProfile(MemberVO vo) {
+		sqlSession.update("Member.updateMemberMyProfile", vo);
+	} 
+	
+	public void updateMemberMyNickname(MemberVO vo) {
+		sqlSession.update("Member.updateMemberMyNickname", vo);
+	} 
+	
+	public void updataMemberMyPrivacy(MemberVO vo) {
+		sqlSession.update("Member.updataMemberMyPrivacy", vo);
 	} 
 	
 	public void updateTerm(String email) {
@@ -65,7 +85,6 @@ public class MemberDAO {
 	}
 	
 	public void deleteBlock(MemberVO vo) {
-		System.out.println("딜리트 개수" + sqlSession.delete("Member.deleteBlock", vo));
 		sqlSession.delete("Member.deleteBlock", vo);
 	}
 

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>아이디찾기 : 꼼수닷컴</title>
+    <title>아이디찾기</title>
 </head>
 <body>
 	<h2>로고</h2>

@@ -16,6 +16,16 @@
 	<c:if test="${param.code eq 'fail'}">
 		<script>alert("로그인 정보가 일치하지 않습니다.");</script>
 	</c:if>
+	
+   	<c:choose>
+  	 	<c:when test = "${param.status eq 'DEL'}">
+         		<script>alert("탈퇴한 회원입니다");</script>
+       	</c:when>
+       	<c:when test = "${param.status eq 'SUS'}">
+         		<script>alert("관리자에 의한 정지 회원입니다");</script>
+       	</c:when>
+   	 </c:choose>
+	
 	<h2>로고</h2>
     <form action="${pageContext.request.contextPath}/member/member-sign-in-ok" name="signInForm" method="post">
         <ul>
@@ -25,5 +35,6 @@
         <input type="submit" id="signInButton" value="로그인">
     </form>
     <a href="${pageContext.request.contextPath}/app/member/MemberFindIdTest.jsp">아이디 찾기</a>
+    <a href="${pageContext.request.contextPath}/app/member/MemberChangePw.jsp">비밀번호 변경</a>
 </body>
 </html>

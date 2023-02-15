@@ -22,6 +22,7 @@
 	<main id="main">
 	  <form id="viewMemberForm" name="viewMemberForm" action="${pageContext.request.contextPath}/member/member-update-info-ok" method="post" enctype="multipart/form-data">
 	    <input type="hidden" value="email">
+	    <c:if test="${myPage eq myProfile}">
 	    <fieldset id="viewProfile">
 	      <legend>프로필</legend>
 		      <ul>
@@ -38,12 +39,14 @@
 		        </li>
 		      </ul>
 		    </fieldset>
+		    </c:if>
+		    <c:if test="${myPage eq myInfo}">
 		    <fieldset id="viewPersonal">
 		      <legend>회원정보</legend>
 		      <ul>
 		        <li>이메일 <span><c:out value="${member.getEmail()}" /></span></li>
 		        <li>비밀번호 변경
-		          <span><input type="password" name="password" id="password" value="${member.getPassword()}"></span>
+		          <span><input type="password" name="password" id="password" value=""></span>
 		          <span name="passwordResult" id="passwordResult"></span>
 		        </li>
 		        <li>비밀번호 확인 
@@ -58,6 +61,8 @@
 		        <li>가입일<span><c:out value="${member.getCreatedAt()}"/></span></li>
   	          </ul>
             </fieldset>
+            </c:if>
+             <c:if test="${myPage eq myPrivacy}">
             <fieldset id="viewPersonalOption">
               <legend>개인정보 변경</legend>
               <ul>
@@ -112,6 +117,7 @@
                 </li>
               </ul>
             </fieldset>
+            </c:if>
             <button type="submit">수정</button>
             <button type="button" name="updateMemberSubmit" id="updateMemberSubmit">개인정보 수정</button>
           </form>

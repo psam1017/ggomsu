@@ -10,16 +10,20 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 
 	//작성자 : 손하늘
-public class MemberLogoutOk implements Action{
+public class MemberWakeUpOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		HttpSession session = req.getSession();
+		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
+		HttpSession session = req.getSession();
 		
+		String email = (String)session.getAttribute("email");
+		
+		dao.updateWakeUp(email);
 		session.invalidate();
 		
 		forward.setForward(false);
