@@ -36,8 +36,16 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
+	public void updateAgreedTermAt(String email) {
+		sqlSession.update("Member.updateAgreedTermAt", email);
+	}
+	
 	public void updateAgreedMarketingAt(String email) {
 		sqlSession.update("Member.updateAgreedMarketingAt", email);
+	}
+	
+	public void deleteAgreedMarketingAt(String email) {
+		sqlSession.delete("Member.deleteAgreedMarketingAt", email);
 	}
 	
 	public MemberVO getMemberInfo(String email) {

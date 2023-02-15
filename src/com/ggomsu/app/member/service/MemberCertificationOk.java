@@ -48,7 +48,7 @@ public class MemberCertificationOk implements Action{
         }
         String AuthenticationKey = temp.toString();
         
-       session.setAttribute("AuthenticationKey", AuthenticationKey);
+        session.setAttribute("AuthenticationKey", AuthenticationKey);
         System.out.println("인증번호 : " + AuthenticationKey);
 		
         forward.setForward(true);

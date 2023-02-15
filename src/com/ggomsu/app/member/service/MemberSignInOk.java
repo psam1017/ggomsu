@@ -60,6 +60,7 @@ public class MemberSignInOk implements Action {
 			
 			// 약관에 다시 동의기간이 지났는가?(1년)
 			String agreedTermAt = vo.getAgreedTermAt();
+			System.out.println("약관동의시간" + agreedTermAt);
 			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date = sdf.parse(agreedTermAt);
 			Calendar cal = Calendar.getInstance();

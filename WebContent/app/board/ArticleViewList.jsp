@@ -58,8 +58,6 @@
                                 <c:if test="${article.getArticleLikeCount() == null}">
                                 	<div><c:out value="추천수 : 0"/></div>
                                 </c:if>
-                                <!--게시글신고 -->
-                                <div><a href="${pageContext.request.contextPath}/board/article-report?articleIndex=${article.getArticleIndex()}&articleNickname=${article.getNickname()}">게시글 신고</a></div>
                                 </div>
                             </li>
                         </c:forEach>

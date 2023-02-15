@@ -38,8 +38,8 @@ public class MemberUpdateBlockOk implements Action{
 			dao.updateBlock(vo); 
 		}
 		
-		forward.setForward(true);
-		forward.setPath("/member/member-get-block-ok");
+		forward.setForward(false);
+		forward.setPath(req.getContextPath() + "/member/member-get-block-ok");
 		
 		return forward;
 	}

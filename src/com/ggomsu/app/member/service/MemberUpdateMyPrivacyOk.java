@@ -46,8 +46,8 @@ public class MemberUpdateMyPrivacyOk implements Action{
 		
 		dao.updataMemberMyPrivacy(vo);
 		
-		forward.setForward(true);
-		forward.setPath("/member/member-view-my-info-ok?myPage=myPrivacy");
+		forward.setForward(false);
+		forward.setPath(req.getContextPath() + "/member/member-view-my-info-ok?myPage=myPrivacy");
 		
 		return forward;
 	}

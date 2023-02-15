@@ -14,22 +14,34 @@
 </head>
 <body>
 <jsp:include page="/app/fix/MyPageAside.jsp" />
-	<form name="memberAlarmFlag" id="memberAlarmFlag" action="${pageContext.request.contextPath}/member/member-alarm-flag-ok" method="post" >
+	<form name="memberAlarmFlag" id="memberAlarmFlag" action="${pageContext.request.contextPath}/member/member-update-alarm-flag-ok" method="post" >
 		<fieldset>
 	      	<legend>게시글 알람</legend>
-			<label>on<input type="radio" value="1"></label>
-			<label>off<input type="radio" value="0"></label>
+			<label>on<input type="radio" name="articleAlarmFlag" value="1" id="articleAlarmFlagOn"></label>
+			<label>off<input type="radio" name="articleAlarmFlag" value="0" id="articleAlarmFlagOff"></label>
 		</fieldset>
 		<fieldset>
 	      	<legend>댓글 알람</legend>
-			<label>on<input type="radio" value="1"></label>
-			<label>off<input type="radio" value="0"></label>
+			<label>on<input type="radio" name="commentAlarmFlag" value="1" id="commentAlarmFlagOn"></label>
+			<label>off<input type="radio" name="commentAlarmFlag" value="0" id="commentAlarmFlagOff"></label>
 		</fieldset>
 		<fieldset>
 	      	<legend>모드</legend>
-			<label>white<input type="radio" value="0"></label>
-			<label>dark<input type="radio" value="1"></label>
+			<label>white<input type="radio" name="darkModeFlag" value="0" id="darkModeFlagOff"></label>
+			<label>dark<input type="radio" name="darkModeFlag" value="1" id="darkModeFlagOn"></label>
 		</fieldset>
+		<button type="submit">설정</button>
   	</form>
+  	<script>
+	  	const afon = document.getElementById("articleAlarmFlagOn");
+	  	const afoff = document.getElementById("articleAlarmFlagOff");
+	  	const cfon = document.getElementById("commentAlarmFlagOn");
+	  	const cfoff = document.getElementById("commentAlarmFlagOff");
+	  	const dfoff = document.getElementById("darkModeFlagOff");
+	  	const dfon = document.getElementById("darkModeFlagOn");
+	  	"${setting.getArticleAlarmFlag()}" == 1?afon.setAttribute('checked',true):afoff.setAttribute('checked',true);
+	  	"${setting.getCommentAlarmFlag()}" == 1?cfon.setAttribute('checked',true):cfoff.setAttribute('checked',true);
+	  	"${setting.getDarkModeFlag()}" == 1?dfon.setAttribute('checked',true):dfoff.setAttribute('checked',true);
+  	</script>
 </body>
 </html>

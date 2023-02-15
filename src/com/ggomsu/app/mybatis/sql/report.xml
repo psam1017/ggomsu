@@ -4,17 +4,17 @@
 <mapper namespace="Report">
 
 	<!-- 게시글 신고 -->
-	<insert id="insertArticleReport" parameterType="articleReport">
+	<insert id="insertArticleReport" parameterType="report">
 		INSERT INTO articlereport
 		(nickname, articleIndex, articleReportReason)
 		VALUES
 		(#{nickname}, #{articleIndex}, #{articleReportReason})
 	</insert>
 	<!-- 댓글 신고 -->
-<!-- 	<insert id="insertCommentReport" parameterType="commentReport"> -->
-<!-- 		INSERT INTO commentReport -->
-<!-- 		(nickname, commentIndex, commentReportReason) -->
-<!-- 		VALUES -->
-<!-- 		(#{nickname}, #{commentIndex}, #{commentReportReason}) -->
-<!-- 	</insert> -->
+	<insert id="insertCommentReport" parameterType="report">
+		INSERT INTO commentreport
+		(nickname, commentIndex, commentReportReason)
+		VALUES
+		(#{nickname}, #{commentIndex}, #{commentReportReason})
+	</insert>
 </mapper>

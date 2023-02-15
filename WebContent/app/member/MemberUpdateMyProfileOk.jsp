@@ -20,29 +20,19 @@
 	<jsp:include page="/app/fix/MyPageAside.jsp" />
 	<main id="main">
 	  <form id="updateMyProfileForm" name="updateMyProfileForm" action="${pageContext.request.contextPath}/member/member-update-my-profile-ok" method="post" enctype="multipart/form-data">
-	      <legend>프로필</legend>
-		      <ul>
-		        <li>
-		         	 프로필 이미지 <img id="profileImage" src="${member.getProfileImageUrl()}" alt="프로필 이미지">
-		          <br>
-		        	  변경할 프로필 이미지를 골라주세요. <input type="file" name="profileImageUrl" id="profileImageUrl" value="">
-		        </li>
-		        <li id="nicknameChanege">
-		         	 닉네임 <input type="text" id="nickname" name="nickname" value="${member.getNickname()}"> 
-		         	 <span id="nicknameResult"></span>
-		         	 <button type="button" id="nicknameChanegeBtn">닉네임 변경</button>
-		        </li>
-		      </ul>
-            <button type="submit">저장</button>
-          </form>
+      	<legend>프로필</legend>
+      	<div>
+	       	 프로필 이미지 <img id="profileImage" src="${member.getProfileImageUrl()}" alt="프로필 이미지">
+	        <br>변경할 프로필 이미지를 골라주세요. <input type="file" name="profileImageUrl" id="profileImageUrl" value="">
+	    </div>
+	    <button type="submit">프로필사진 저장</button>
+      </form>
+      <form id="updateMyNicknameForm" name="updateMyNicknameForm" action="${pageContext.request.contextPath}/member/member-update-my-nickname-ok" method="post">
+       	<legend>닉네임변경</legend> 
+       	 닉네임<input type="text" id="nickname" name="nickname" value="${member.getNickname()}"> 
+       	 <span id="nicknameResult"></span>
+       	 <button type="submit" id="nicknameChanegeBtn">닉네임 변경</button>
+      </form> 
         </main>
-   	<script type="text/javascript" defer>
-	   	const nicknameChanegeBtn = document.getElementById("nicknameChanegeBtn");
-	   	const updateMyProfileForm = document.getElementById("updateMyProfileForm");
-	   	nicknameChanegeBtn.addEventListener("click", function(){
-	   		updateMyProfileForm.setAttribute("action","${pageContext.request.contextPath}/member/member-update-my-nickname-ok");
-	   		updateMyProfileForm.setAttribute("enctype", "none");
-	   	});
-   	</script>
     </body>
 </html>

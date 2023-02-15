@@ -81,8 +81,8 @@ public class MemberUpdateMyProfileOk implements Action{
 		
 		dao.updateMemberMyProfile(vo);
 		
-		forward.setForward(true);
-		forward.setPath("/member/member-view-my-info-ok");
+		forward.setForward(false);
+		forward.setPath(req.getContextPath() + "/member/member-view-my-info-ok");
 		
 		return forward;
 	}

@@ -1,6 +1,7 @@
 package com.ggomsu.app.member.service;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,24 +29,35 @@ public class MemberUpdateTermOk implements Action{
 		
 		String email = (String)session.getAttribute("email");
 		String agreedMarketingAt = req.getParameter("agreedMarketingAt");
+		String agreedTermAt = req.getParameter("agreedTermAt");
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now = new Date();
-		String nowTime = sdf.format(now);
-		if(agreedMarketingAt != null) {
-			vo.setAgreedMarketingAt(nowTime);
-			System.out.println(now + " 날짜로 마케팅 동의하였습니다!");
+		Date now = new Date(); //현재날짜
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //출력형태
+		Date date = sdf.parse(agreedTermAt); //형변환
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.YEAR, 1); //vo.getAgreedTermAt() + 1year
+		//저장된 필수약관날짜 + 1년 < 현재날짜(now)
+		int result = sdf.format(now).compareTo(sdf.format(cal.getTime()));
+		if(result >= 0) {
+			dao.updateAgreedTermAt(email);
+			//agreedMarketingAt가 null값이 아니라면 선택동의도 같이 업데이트
+			if(agreedMarketingAt != null){
+				vo.setAgreedMarketingAt(agreedMarketingAt);
+				dao.updateAgreedMarketingAt(email);
+			}
 		}
-		else {
-			System.out.println(agreedMarketingAt);
+		else if(agreedMarketingAt == null){
 			vo.setAgreedMarketingAt(agreedMarketingAt);
-			System.out.println(now + " 날짜로 마케팅 취소하였습니다!");
+			dao.deleteAgreedMarketingAt(email);
 		}
-		dao.updateTerm(email);
+		else{
+			vo.setAgreedMarketingAt(agreedMarketingAt);
+			dao.updateAgreedMarketingAt(email);
+		}
 		
-		forward.setForward(true);
-		forward.setPath("/member/member-view-term-ok");
-		
+		forward.setForward(false);
+		forward.setPath(req.getContextPath() + "/member/member-view-term-ok");
 		return forward;
 	}
 }

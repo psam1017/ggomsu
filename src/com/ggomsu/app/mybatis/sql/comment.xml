@@ -25,4 +25,13 @@
 		ORDER BY `commentIndex` DESC
 		LIMIT 1
 	</select>
+	
+	<!-- 최근활동 -->
+	<select id="selectMyHistorycomment" parameterType="string" resultType="comment">
+		SELECT 
+		*
+		FROM comments
+		WHERE
+		nickname = #{nickname} 
+	</select>
 </mapper>

@@ -16,10 +16,11 @@
     <jsp:include page="/app/fix/MyPageAside.jsp" />
     <main id="main">
         <section id="terms">
-       	 	<form action="${pageContext.request.contextPath}/member/member-update-term-ok">
+       	 	<form action="${pageContext.request.contextPath}/member/member-update-term-ok" method="post">
+       	 		<input type="hidden" name="agreedTermAt" value="${member.getAgreedTermAt()}">
 	            <div>
 	                <h2>개인정보 수집 및 이용 약관</h2>
-	                <input type="checkbox" name="agreedTermAt" checked>
+	                <input type="checkbox" checked readonly>
 	                <p>동의일자 : <c:out value="${member.getAgreedTermAt()}"/></p>
 	                <p><span>유효기간</span></p>
 	                <textarea name="" id="" cols="30" rows="10">
@@ -28,7 +29,7 @@
 	            </div>
 	            <div>
 	                <h2>서비스 이용약관</h2>
-	                <input type="checkbox" name="agreedTermAt" checked>
+	                <input type="checkbox" checked readonly>
 	                <p>동의일자 : <c:out value="${member.getAgreedTermAt()}"/></p>
 	                <p><span>유효기간</span></p>
 	                <textarea name="" id="" cols="30" rows="10">
@@ -44,7 +45,7 @@
 	                	 약관 내용 서술
 	                </textarea>
 	            </div>
-	            <input type="submit" value="수신동의 변경">
+	            <input type="submit" value="수신동의">
              </form>
         </section>
     </main>

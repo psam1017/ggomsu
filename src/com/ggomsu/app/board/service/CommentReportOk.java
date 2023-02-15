@@ -10,7 +10,7 @@ import com.ggomsu.app.board.dao.ReportDAO;
 import com.ggomsu.app.board.vo.ReportVO;
 
 // 작성자 : 손하늘
-public class ArticleReportOk implements Action{
+public class CommentReportOk implements Action{
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -23,15 +23,16 @@ public class ArticleReportOk implements Action{
 		HttpSession session = req.getSession();
 		
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
+		int commentIndex = Integer.parseInt(req.getParameter("commentIndex"));
 		
-		aVo.setNickname(req.getParameter("articleNickname"));
-		aVo.setArticleIndex(articleIndex);
-		aVo.setArticleReportReason(req.getParameter("declaration"));
+		aVo.setNickname(req.getParameter("commentNickname"));
+		aVo.setCommentIndex(commentIndex);
+		aVo.setCommentReportReason(req.getParameter("commentReportReason"));
 		
-		dao.insertArticleReport(aVo);
+		dao.insertCommentReport(aVo);
 			
 		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/board/article-get-list-ok?boardValue=" + session.getAttribute("boardValue"));
+		forward.setPath(req.getContextPath() + "/board/article-view-detail-ok?articleIndex=" + articleIndex);
 		
 		return forward;
 	}

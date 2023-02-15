@@ -2,14 +2,20 @@ package com.ggomsu.app.board.vo;
 
 //작성자 : 손하늘
 
-public class ArticleReportVO {
+public class ReportVO {
+	
+	//게시글신고
 	private int articleIndex;
 	private String nickname;
 	private String articleReportReason;
 	private String articleDeleteReason;
 	private int articleDeleteCheck;
 	
-	public ArticleReportVO() { ; }
+	//댓글신고
+	private int commentIndex;
+	private String commentReportReason;
+	
+	public ReportVO() { ; }
 
 	public int getArticleIndex() {
 		return articleIndex;
@@ -51,4 +57,20 @@ public class ArticleReportVO {
 		this.articleDeleteCheck = articleDeleteCheck;
 	}
 
+	public int getCommentIndex() {
+		return commentIndex;
+	}
+
+	public void setCommentIndex(int commentIndex) {
+		this.commentIndex = commentIndex;
+	}
+
+	public String getCommentReportReason() {
+		return commentReportReason;
+	}
+
+	public void setCommentReportReason(String commentReportReason) {
+		this.commentReportReason = commentReportReason;
+	}
+	
 }

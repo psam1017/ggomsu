@@ -140,7 +140,6 @@ public class MemberFrontController extends HttpServlet {
 			}
 		}
 		
-
 		else if(command.equals("/member/member-update-block-ok")) {
 			try {
 				forward = new MemberUpdateBlockOk().execute(req, resp);
@@ -177,7 +176,6 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("회원정보 불러오기 오류!" + e);
 			}
 		}
-		
 		else if(command.equals("/member/member-update-my-profile-ok")) {
 			try {
 				forward = new MemberUpdateMyProfileOk().execute(req, resp);
@@ -192,7 +190,6 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("회원닉네임변경 오류!" + e);
 			}
 		}
-		
 		else if(command.equals("/member/member-update-my-privacy-ok")) {
 			try {
 				forward = new MemberUpdateMyPrivacyOk().execute(req, resp);
@@ -200,7 +197,27 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("개인정보 수정 오류!" + e);
 			}
 		}
-		
+		else if(command.equals("/member/member-view-my-history-ok")) {
+			try {
+				forward = new MemberViewMyHistoryOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("최근활동 불러오기 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/member-view-alarm-flag-ok")) {
+			try {
+				forward = new MemberViewAlarmFlagOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("시스템 설정 불러오기 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/member-update-alarm-flag-ok")) {
+			try {
+				forward = new MemberUpdateAlarmFlagOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("시스템 설정 변경 오류!" + e);
+			}
+		}
 		else if(command.equals("/member/member-view-term-ok")) {
 			try {
 				forward = new MemberViewTermOk().execute(req, resp);

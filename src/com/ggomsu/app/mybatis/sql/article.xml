@@ -170,4 +170,13 @@
 		ORDER BY viewCount DESC LIMIT 1
 	</select>
 	
+	<!-- 최근활동 -->
+	<select id="selectMyHistoryarticle" parameterType="string" resultType="article">
+		SELECT 
+		*
+		FROM articles
+		WHERE
+		nickname = #{nickname} 
+	</select>
+	
 </mapper>

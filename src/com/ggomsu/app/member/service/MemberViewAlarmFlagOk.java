@@ -6,29 +6,30 @@ import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
-import com.ggomsu.app.member.dao.MemberDAO;
-import com.ggomsu.app.member.vo.MemberVO;
+import com.ggomsu.app.member.dao.SettingDAO;
+import com.ggomsu.app.member.vo.SettingVO;
 
 //작성자 : 손하늘
 
-public class MemberViewTermOk implements Action{
+public class MemberViewAlarmFlagOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		req.setCharacterEncoding("utf-8");
 		
-		MemberVO vo = new MemberVO();
-		MemberDAO dao = new MemberDAO();
+		SettingVO sVo = new SettingVO();
+		SettingDAO sDao = new SettingDAO();
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
 		String email = (String)session.getAttribute("email");
-		vo = dao.getMemberInfo(email);
-		req.setAttribute("member", vo);
+		sVo = sDao.selectSetting(email);
+		req.setAttribute("setting", sVo);
 		
 		forward.setForward(true);
-		forward.setPath("/app/member/MemberUpdateTermOkTest.jsp");
+		forward.setPath("/app/member/MemberAlarmFlagOk.jsp");
+		
 		return forward;
 	}
 }

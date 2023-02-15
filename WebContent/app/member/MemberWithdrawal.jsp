@@ -17,7 +17,7 @@
 	</c:if>
 <body>
 	<jsp:include page="/app/fix/MyPageAside.jsp" />
-   <form action="${pageContext.request.contextPath}/member/member-withdrawal-ok" id="signUpForm" name="signUpForm" method="post">
+   <form action="${pageContext.request.contextPath}/member/member-withdrawal-ok" method="post">
      	 이메일<input type="text" name="email" placeholder="탈퇴할 이메일을 입력하세요">
      	<br>
         <input type="submit" value="회원탈퇴" name="withdrawal">
