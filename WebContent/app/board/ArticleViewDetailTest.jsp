@@ -78,8 +78,10 @@
         <button onclick="location.href='ArticleModify.jsp'">수정</button>
         <button onclick="location.href='${pageContext.request.contextPath}/board/article-delete-ok?articleIndex=${articleIndex}&boardValue=${article.getBoardValue()}'">삭제</button>
         <!-- 댓글 작성 -->
-        <section id="commentWrite" name="commentWrite">
+         <section id="commentWrite" name="commentWrite">
             <form id="commentWriteForm" method="post" action="${pageContext.request.contextPath}/board/comment-write-ok?articleIndex=${articleIndex}">
+                <input type="hidden" name="articleWriter" value="${article.getNickname()}">
+                <input type="hidden" name="commentWriter" value="${nickname}">
                 <textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                 <input type="button" id="register" value="등록">
             </form>
@@ -110,8 +112,10 @@
 	                        	삭제일:<c:out value="${comment.getDeletedAt()}"/>
 	                        </c:if>
 	                        <li class="oneRefComment off">
-                                <div>
+                                 <div>
                                 	<form id="refCommentWriteForm" method="post" action="${pageContext.request.contextPath}/board/ref-comment-write-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}">
+                                		<input type="hidden" name="commentNickname" value="${comment.getNickname()}">
+                                		<input type="hidden" name="refNickname" value="${nickname}">
                                 		<textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                                     	<button value="refCommentCancle" class="BtnRefCommentCancel">취소</button>
                                     	<button value="refCommentEnter" class="BtnRefCommentEnter">등록</button>

@@ -123,13 +123,26 @@ public class BoardFrontController extends HttpServlet {
 				System.out.println("댓글 삭제 실패!" + e);
 			}
 		}
-		
-		//index Article
-		else if(command.equals("/board/get-index-article-list-ok")) {
+		//alarm
+		else if(command.equals("/board/comment-alarm-delete-ok")) {
 			try {
-				forward = new IndexGetArticleListOk().execute(req, resp);
+				forward = new CommentAlarmDeleteOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("index 게시판 가져오기 실패" + e);
+				System.out.println("댓글알림 삭제 실패" + e);
+			}
+		}else if(command.equals("/board/ref-comment-alarm-delete-ok")) {
+			try {
+				forward = new RefCommentAlarmDeleteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("대댓글알림 삭제 실패" + e);
+			}
+		}
+		//index
+		else if(command.equals("/board/get-index-list-ok")) {
+			try {
+				forward = new IndexGetListOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("index 게시판, 알림 가져오기 실패" + e);
 			}
 		}
 		

@@ -19,10 +19,10 @@ public class CommentDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<CommentVO> getCommentList(int articleIndex, String blockedList){
-		HashMap<String, Object> hash = new HashMap<>();
+	public List<CommentVO> getCommentList(int articleIndex, String nickname){
+		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("articleIndex", articleIndex);
-		hash.put("blockedList", blockedList);
+		hash.put("nickname", nickname);
 		return sqlSession.selectList("Comment.getCommentList", hash);
 	}
 	
