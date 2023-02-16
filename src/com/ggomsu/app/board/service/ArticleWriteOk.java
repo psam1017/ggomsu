@@ -1,5 +1,6 @@
 package com.ggomsu.app.board.service;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -52,12 +54,13 @@ public class ArticleWriteOk implements Action {
 		MultipartRequest multi = null;
 		multi = new MultipartRequest(req, saveFolder, fileSize, encoding, frp);
 		
+		String tags3 = multi.getParameter("tags3");
 		String boardValue = multi.getParameter("boardValue");
 		String title = multi.getParameter("title");
-		String basic = multi.getParameter("basic"); // 해쉬태그 값
 		String content = multi.getParameter("content");
 		// String value = multi.getParameter("value");
 		int articleIndex = aDao.getMaxIndex();
+		
 		
 		session.setAttribute("boardValue", boardValue);
 		session.setAttribute("articleIndex", articleIndex);
@@ -68,6 +71,13 @@ public class ArticleWriteOk implements Action {
 		aVo.setNickname((String)session.getAttribute("nickname"));
 		
 		aDao.insertArticle(aVo);
+		
+		JSONArray jsonArr = (JSONArray) new JSONParser().parse(tags3.toString());
+		
+		for(Object tags : jsonArr) {
+			JSONObject tag = (JSONObject) tags;
+			aDao.insertTag(aDao.getMaxIndex(), (String)tag.get("value"));
+		}
 		
 		String temp = req.getParameter("page");
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
@@ -85,6 +95,7 @@ public class ArticleWriteOk implements Action {
 		
 		resp.setCharacterEncoding("utf-8");
 		resp.setContentType("text/html");
+		
 		
 		Enumeration<String> files = multi.getFileNames();
 		while(files.hasMoreElements()) {

@@ -217,5 +217,13 @@ public class ArticleDAO {
 		hash.put("commentDeleteReason", commentDeleteReason);
 		sqlSession.update("Article.processReportComment", hash);
 	}
+
+	public void insertTag(int articleIndex, String tagValue) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
+		hash.put("articleIndex", articleIndex);
+		hash.put("tagValue", tagValue);
+		sqlSession.update("Article.insertTag", hash);
+		
+	}
 	
 }

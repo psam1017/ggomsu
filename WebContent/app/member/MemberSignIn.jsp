@@ -24,5 +24,10 @@
         </ul>
         <input type="submit" id="signInButton" value="로그인">
     </form>
+    <c:if test="${sessionId != null}">
+    	<c:out value="${sessionId}님 환영합니다."/>
+    </c:if>
+    
+    <a href="${url}"><img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG"/></a>
 </body>
 </html>
