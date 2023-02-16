@@ -14,12 +14,32 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleViewDetail.css" />
     <script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
     <script src="${pageContext.request.contextPath}/assets/js/comment.js" defer></script>
-	
+	<style>
+	.articleLike{ text-indent : -9999px; width: 30px; }
+	.not-ok{ background: url(../images/good.png) no-repeat; background-size: 20px;}
+	.ok{ background: url(../images/goodOK.png) no-repeat; background-size: 20px;}
+	</style>
 </head>
 <body>
 	
 	
 	<c:set var="boardValue" value="${sessionScope.boardValue}"/>
+	<c:set var="email" value="${sessionScope.email}"/>
+	<c:set var="blockedList" value="${sessionScope.blockedList}"/>
+	<c:if test="${email eq null}">
+		<script>
+			alert("로그인 후 이용하세요.");
+			location.replace("${pageContext.request.contextPath}/member/member-sign-in");
+		</script>
+	</c:if>
+	<c:forEach var="blockedMember" items="${blockedList}">
+		<c:if test="${blockedMember eq article.getNickname()}">
+			<script>
+				alert("차단된 유저의 게시글입니다..");
+				location.replace("${pageContext.request.contextPath}/board/article-get-list-ok?boardValue=${boardValue}");
+			</script>
+		</c:if>
+	</c:forEach>
 	
     <main id="main">
         <!-- 게시글 작성자와 조회수 등 -->
@@ -53,12 +73,19 @@
         <div><a href="${pageContext.request.contextPath}/board/article-report?articleIndex=${article.getArticleIndex()}&articleNickname=${article.getNickname()}">게시글 신고</a></div>
         
         </section>
-        <a href="${pageContext.request.contextPath}/app/board/ArticleWriteTest.jsp">게시글 작성</a>
+        <form name="articleLikeForm" method="post">
+        	<input type="submit" class="articleLike" value="따봉">
+        	<input type="hidden" name="articleIndex" value="${articleIndex}">
+        	<input type="hidden" name="nickname" value="${article.getNickname()}">
+        </form>
+        <a href="${pageContext.request.contextPath}/board/get-article-write">게시글 작성</a>
         <button onclick="location.href='ArticleModify.jsp'">수정</button>
         <button onclick="location.href='${pageContext.request.contextPath}/board/article-delete-ok?articleIndex=${articleIndex}&boardValue=${article.getBoardValue()}'">삭제</button>
         <!-- 댓글 작성 -->
-        <section id="commentWrite" name="commentWrite">
+         <section id="commentWrite" name="commentWrite">
             <form id="commentWriteForm" method="post" action="${pageContext.request.contextPath}/board/comment-write-ok?articleIndex=${articleIndex}">
+                <input type="hidden" name="articleWriter" value="${article.getNickname()}">
+                <input type="hidden" name="commentWriter" value="${nickname}">
                 <textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                 <input type="button" id="register" value="등록">
             </form>
@@ -89,8 +116,10 @@
 	                        	삭제일:<c:out value="${comment.getDeletedAt()}"/>
 	                        </c:if>
 	                        <li class="oneRefComment off">
-                                <div>
+                                 <div>
                                 	<form id="refCommentWriteForm" method="post" action="${pageContext.request.contextPath}/board/ref-comment-write-ok?articleIndex=${articleIndex}&refIndex=${comment.getRefIndex()}">
+                                		<input type="hidden" name="commentNickname" value="${comment.getNickname()}">
+                                		<input type="hidden" name="refNickname" value="${nickname}">
                                 		<textarea name="content" id="content" rows="5" cols="100" style="resize:none;" placeholder="남에게 상처를 주는 말을 하지 말아주세요."></textarea>
                                     	<button value="refCommentCancle" class="BtnRefCommentCancel">취소</button>
                                     	<button value="refCommentEnter" class="BtnRefCommentEnter">등록</button>
@@ -130,7 +159,18 @@
     </main>
     
     <script>
-     	const boardValue = '${sessionScope.boardValue}';
-    </script>
+	    const contextPath = '${pageContext.request.contextPath}';
+	 	const boardValue = '${sessionScope.boardValue}';
+	 	const nickname = '${sessionScope.nickname}';
+	 	const articleIndex = '${article.getArticleIndex()}';
+	 	const isArticleLike = '${isArticleLike}';
+	 	const articleLikeImg = document.querySelector(".articleLike");
+	 	
+	 	if(isArticleLike == 'true')
+	 		articleLikeImg.classList.add("ok");
+	 	else
+	 		articleLikeImg.classList.add("not-ok");	
+	</script>
+	<script src="${pageContext.request.contextPath}/assets/js/ArticleViewDetail.js" defer></script>
 </body>
 </html>

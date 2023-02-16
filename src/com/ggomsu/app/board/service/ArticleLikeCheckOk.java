@@ -1,4 +1,4 @@
-package com.ggomsu.app.wiki.service;
+package com.ggomsu.app.board.service;
 
 import java.io.PrintWriter;
 
@@ -9,12 +9,9 @@ import org.json.simple.JSONObject;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
-import com.ggomsu.app.member.dao.MemberDAO;
-import com.ggomsu.app.wiki.dao.WikiDAO;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.board.dao.ArticleDAO;
 
-// 작성자 : 박성민
-public class WikiCheckLatestOk implements Action {
+public class ArticleLikeCheckOk implements Action {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -23,20 +20,20 @@ public class WikiCheckLatestOk implements Action {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		int rvs = Integer.parseInt(req.getParameter("rvs"));
-		String subject = req.getParameter("subject");
+		String nickname = req.getParameter("nickname");
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		
-		WikiDAO dao = new WikiDAO();
+		ArticleDAO aDao = new ArticleDAO();
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		WikiInfoVO vo = dao.getWikiInfo(subject, rvs);
-		
-		if(vo.getLatestFlag() == 1) {
-			json.put("reviseStatus", "ok");
+		if(aDao.checkGood(nickname, articleIndex)) {
+			json.put("goodStatus", "ok");
+			aDao.DeleteArticleLike(nickname, articleIndex);
 		}
 		else {
-			json.put("reviseStatus", "not-ok");
+			json.put("goodStatus", "not-ok");
+			aDao.InsertArticleLike(nickname, articleIndex);
 		}
 		
 		out.print(json.toJSONString());
@@ -44,4 +41,5 @@ public class WikiCheckLatestOk implements Action {
 		
 		return null;
 	}
+
 }

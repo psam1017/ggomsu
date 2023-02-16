@@ -1,5 +1,7 @@
 package com.ggomsu.app.board.service;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,44 +26,44 @@ public class ArticleViewDetailOk implements Action {
 		CommentDAO cDao = new CommentDAO();
 		AttachmentDAO atDao = new AttachmentDAO();
 		ActionForward forward = new ActionForward();
+		HttpSession session = req.getSession();
+
+		String blockedString = "'',";
+		List<String> blockedList = (List<String>)session.getAttribute("blockedList");
+		if(blockedList != null) {
+			for(String blockedMember : blockedList) {
+				blockedString += ("'" + blockedMember + "',");
+			}
+		}
 		
+		blockedString = blockedString.substring(0, blockedString.length()-1);
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
+		String boardValue = (String)session.getAttribute("boardValue");
+		String nickname = (String)session.getAttribute("nickname");
 		dao.updateArticleViewCount(articleIndex);
 
 		req.setAttribute("article", dao.getArticle(articleIndex));
 		req.setAttribute("articleIndex", articleIndex);
 		req.setAttribute("attachment", atDao.getAttachment(articleIndex));
-	
-		// Session
-		HttpSession session = req.getSession();
-		String boardValue = (String)session.getAttribute("boardValue");
-		String email = (String)session.getAttribute("email");
-		String nickname =(String)session.getAttribute("nickname");
+		req.setAttribute("commentList", cDao.getCommentList(articleIndex, blockedString));
+		req.setAttribute("isArticleLike", dao.checkGood(nickname, articleIndex));
 		
 		//Cookie
 		Cookie cookie = new Cookie("boardValue", boardValue);
 		resp.addCookie(cookie);
 		
-		req.setAttribute("commentList", cDao.getCommentList(articleIndex, nickname));
 		
-		if( email == null) {
-			forward.setForward(false);
-			forward.setPath(req.getContextPath()+"/");
-		}else if(boardValue == null) {
+		if(boardValue == null) {
 			boardValue = dao.getArticle(articleIndex).getBoardValue();
 			session.setAttribute("boardValue", boardValue);
-			forward.setForward(true);
-			forward.setPath("/app/board/ArticleViewDetailTest.jsp");
-		}else {
-			forward.setForward(true);
-			forward.setPath("/app/board/ArticleViewDetailTest.jsp");
 		}
+		forward.setForward(true);
+		forward.setPath("/app/board/ArticleViewDetailTest.jsp");
 		
-		session.setAttribute("articleIndex", articleIndex);
-		session.setAttribute("nickname", nickname);
 		
-		//System.out.println(articleIndex);
-		//System.out.println(nickname);
+		if((Integer)articleIndex == null) {
+			session.setAttribute("articleIndex", articleIndex);	
+		}
 		
 		return forward;
 	}

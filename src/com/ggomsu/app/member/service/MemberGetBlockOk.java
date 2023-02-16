@@ -25,6 +25,7 @@ public class MemberGetBlockOk implements Action{
 		
 		String nickname = (String)session.getAttribute("nickname");
 		
+    // 메인과 충돌했었던 부분
 		req.setAttribute("blockList", dao.viewBlock(nickname));
 		
 		forward.setForward(true);

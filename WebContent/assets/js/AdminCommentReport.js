@@ -8,7 +8,7 @@ const commentContent = document.getElementById("commentContent");
 const reportMember = document.getElementById("reportMember");
 const reportedMember = document.getElementById("reportedMember");
 const reportDate = document.getElementById("reportDate");
-const deleteReason = document.getElementsByName("deleteReason");
+const deleteReason = document.querySelector('input[type=radio][name=deleteReason]:checked')
   
     var nickname;
     var reportCommentIndex;
@@ -58,23 +58,16 @@ const deleteReason = document.getElementsByName("deleteReason");
 // 신고글 삭제 처리
 const btnDelete = document.getElementById("reportDelete");
 const btnPreserve = document.getElementById("reportPreserve");
-    
+const reasonValue = deleteReason.value;
+
 btnDelete.addEventListener('click', function() {
-	var msg = '';
-	
-	for(var i=0; i<deleteReason.length; i++){
-	 if(deleteReason[i].checked){
-		 msg += deleteReason[i].value + ", ";
-	 }
-	}
-	if(msg == '') {
-		alert('삭제 사유를 선택하세요!');
+	if(reasonValue == null){
+		alert('신고 사유를 선택해주세요!');
 		return false;
 	}
-	 
 	var isDelete = confirm('한번 삭제하면 되돌릴 수 없습니다.\n 정말로 삭제 하시겠습니까? ');
 	if(isDelete){
-		reportDeleteURL = contextPath + "/admin/admin-comment-report-ok?isDelete=on&commentIndex=" + reportCommentIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&commentDeleteReason=" + msg ;
+		reportDeleteURL = contextPath + "/admin/admin-comment-report-ok?isDelete=on&commentIndex=" + reportCommentIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&commentDeleteReason=" + reasonValue;
 		location.href = reportDeleteURL;
 	}else {
 		alert('삭제취소');
@@ -84,7 +77,7 @@ btnDelete.addEventListener('click', function() {
 btnPreserve.addEventListener('click', function() {
 	var isDelete = confirm('신고처리는 하고 .\n 정말로 삭제 하시겠습니까? ');
 	if(isDelete){
-		reportDeleteURL = contextPath + "/admin/admin-comment-report-ok?isDelete=off&commentIndex=" + reportCommentIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&commentDeleteReason=" + msg ;
+		reportDeleteURL = contextPath + "/admin/admin-comment-report-ok?isDelete=off&commentIndex=" + reportCommentIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&commentDeleteReason=" + reasonValue;
 		location.href = reportDeleteURL;
 	}else {
 		alert('보존취소');

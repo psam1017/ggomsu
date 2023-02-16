@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.ggomsu.app.member.vo.MemberSnsVO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
 
@@ -96,7 +97,8 @@ public class MemberDAO {
 		sqlSession.delete("Member.deleteBlock", vo);
 	}
 
-	public List<MemberVO> viewBlock(String nickname) {
+// 메인과 충돌했었던 부분
+  public List<MemberVO> viewBlock(String nickname) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("nickname", nickname);
 		return sqlSession.selectList("Member.viewBlock", hash);
@@ -106,4 +108,12 @@ public class MemberDAO {
 		sqlSession.update("Member.updateAbuseCount", nickname);
 	}
 	
+	public List<MemberVO> getAllMember() {
+		return sqlSession.selectList("Member.getAllMember");
+	}
+	
+	// 네이버
+	public void snsSignUp(MemberSnsVO vo) {
+		sqlSession.insert("Member.snsSignUp", vo);
+	}
 }

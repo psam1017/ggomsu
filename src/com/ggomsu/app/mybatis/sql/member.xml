@@ -170,5 +170,17 @@
 		}
 	</update>
 	
+	<select id="getAllMember" resultType="member">
+		SELECT nickname, name, statusValue, abuseCount 
+		FROM members
+		ORDER BY statusValue
+	</select>	
+	
+	<insert id="snsSignUp" parameterType="memberSns">
+		INSERT INTO memberSNS
+		(email, snsKey)
+		VALUES
+		(#{email}, #{accessToken}) 
+	</insert>
 	
 </mapper>

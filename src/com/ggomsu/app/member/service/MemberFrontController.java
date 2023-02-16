@@ -245,6 +245,36 @@ public class MemberFrontController extends HttpServlet {
 				System.out.println("회원탈퇴 오류!" + e);
 			}
 		}
+		
+		// 네이버 로그인 API 구현
+		else if(command.equals("/member/naver-login")) {
+			try {
+				forward = new NaverLogin().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("네이버 로그인 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/naver-callback")) {
+			try {
+				forward = new NaverLoginCallback().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("네이버 콜백 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/naver-nickname")) {
+			try {
+				forward = new NaverNickname().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("네이버 멤버 닉네임 받기 페이지 이동 오류!" + e);
+			}
+		}
+		else if(command.equals("/member/naver-nickname-ok")) {
+			try {
+				forward = new NaverNicknameOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("네이버 멤버 등록 닉네임 받기 오류!" + e);
+			}
+		}
 		if(forward != null) {
 			if(forward.isForward()) {
 				RequestDispatcher dispatcher = req.getRequestDispatcher(forward.getPath());
@@ -254,5 +284,7 @@ public class MemberFrontController extends HttpServlet {
 				resp.sendRedirect(forward.getPath());
 			}
 		}
+	
+		
 	}
 }

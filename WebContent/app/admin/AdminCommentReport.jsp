@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -198,9 +197,15 @@
 	          			<td><button id="reportPreserve" class="btn btn-primary">보존</button></td>
 	          			<td>
 	          				<button id="reportDelete" class="btn btn-danger">삭제</button><br>
-	          				<input type = "checkbox" name = "deleteReason" value="광고성 게시물">광고성 댓글<br>
-							<input type = "checkbox" name = "deleteReason" value="부적절한 언어 포함">부적절한 언어 포함<br>
-							<input type = "checkbox" name = "deleteReason" value="사용자간 분란 조장">사용자간 분란 조장<br>
+	          				<input type="radio" name="deleteReason" value="광고성 게시물">음란성/선정성<br>
+							<input type="radio" name="deleteReason" value="부적절한 언어 포함">광고/홍보성<br>
+							<input type="radio" name="deleteReason" value="사용자간 분란 조장">혐오감 유발<br>
+							<input type="radio" name="deleteReason" value="개인정보 침해">개인정보 침해<br>
+							<input type="radio" name="deleteReason" value="지나친 욕설">지나친 욕설<br>
+							<input type="radio" name="deleteReason" value="저작권 위반">저작권 위반<br>
+							<input type="radio" name="deleteReason" value="허위정보/조작/오보">허위정보/조작/오보<br>
+							<input type="radio" name="deleteReason" value="지나친 추천 유도">지나친 추천 유도<br>
+							<input type="radio" name="deleteReason" value="기타사유">기타사유<br>
 	          			</td>
 	          		</tr>
 	    		</table>

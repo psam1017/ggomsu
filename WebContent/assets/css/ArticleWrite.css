@@ -65,3 +65,9 @@ input:focus {
   width: 100%;
   height: 100%;
 }
+
+
+/* 태기파이 */
+.advance .tagify__tag{
+    --tag-hover: var(--tag-bg);
+}

@@ -1,18 +1,17 @@
 package com.ggomsu.app.board.service;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.action.ActionForward;
-	// 작성자 : 이성호(게시판), 김지혜(댓글), 손하늘(신고)
+import com.ggomsu.app.admin.service.AdminArticleReportOk;
+import com.ggomsu.app.admin.service.AdminArticleReportGetOk;
+	// 작성자 : 이성호(게시판), 김지혜(댓글)
 @SuppressWarnings("serial")
 public class BoardFrontController extends HttpServlet {
 
@@ -40,14 +39,12 @@ public class BoardFrontController extends HttpServlet {
 		ActionForward forward = null;
 	
 		if(command.equals("/board/article-get-list-ok")) {
-			// 개별 컨트롤러 호출
 			try {
 				forward = new ArticleGetListOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("게시판 리스트 가져오기 실패!!!" + e);
 			}
 		}else if(command.equals("/board/article-get-best-list-ok")) {
-			// 개별 컨트롤러 호출
 			try {
 				forward = new ArticleGetBestListOk().execute(req, resp);
 			} catch (Exception e) {
@@ -77,19 +74,34 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("게시글 삭제 실패!!!" + e);
 			}
+		}else if(command.equals("/board/get-article-write")) {
+			try {
+				forward = new ActionForward();
+				forward.setForward(true);
+				forward.setPath("/app/board/ArticleWriteTest.jsp");
+			} catch (Exception e) {
+				System.out.println("게시글 페이지 이동실패!!!" + e);
+			}
 		}else if(command.equals("/board/article-write-ok")) {
 			try {
 				forward = new ArticleWriteOk().execute(req, resp);
 			} catch (Exception e) {
 				System.out.println("게시글 작성 실패!!!" + e);
 			}
-		}else if(command.equals("/board/article-write")) {
+		}else if(command.equals("/board/article-like-get-list-ok")) {
 			try {
-				forward = new ArticleWrite().execute(req, resp);
+				forward = new ArticleLikeGetListOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("게시글 작성 후 값 전달 실패!!!" + e);
+				System.out.println("마에피이지 즐겨찾기리스트 가져오기 실패 !!!" + e);
 			}
-		}//comment
+		}else if(command.equals("/board/article-like-check-ok")) {
+			try {
+				forward = new ArticleLikeCheckOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 좋아요(즐겨찾기) 상태확인 실패 !!!" + e);
+			}
+		}
+		//comment
 		else if(command.equals("/board/comment-write-ok")) {
 			try {
 				forward = new CommentWriteOk().execute(req, resp);
@@ -125,13 +137,26 @@ public class BoardFrontController extends HttpServlet {
 				System.out.println("댓글 신고 실패!" + e);
 			}
 		}
-		
-		//index Article
-		else if(command.equals("/board/get-index-article-list-ok")) {
+		//alarm
+		else if(command.equals("/board/comment-alarm-delete-ok")) {
 			try {
-				forward = new IndexGetArticleListOk().execute(req, resp);
+				forward = new CommentAlarmDeleteOk().execute(req, resp);
 			} catch (Exception e) {
-				System.out.println("index 게시판 가져오기 실패" + e);
+				System.out.println("댓글알림 삭제 실패" + e);
+			}
+		}else if(command.equals("/board/ref-comment-alarm-delete-ok")) {
+			try {
+				forward = new RefCommentAlarmDeleteOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("대댓글알림 삭제 실패" + e);
+			}
+		}
+		//index
+		else if(command.equals("/board/get-index-list-ok")) {
+			try {
+				forward = new IndexGetListOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("index 게시판, 알림 가져오기 실패" + e);
 			}
 		}
 		

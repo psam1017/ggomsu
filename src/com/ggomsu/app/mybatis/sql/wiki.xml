@@ -49,4 +49,9 @@
 			(#{contents.subject}, #{contents.rvs}, #{contents.rvsIndex}, #{contents.preRvs}, #{contents.preRvsIndex}, #{contents.content})
 		</foreach>
 	</insert>
+	<select id="checkBlockedIp" parameterType="string" resultType="_int">
+		SELECT COUNT(ip)
+		FROM wikiAbuse
+		WHERE ip = #{ip}
+	</select>
 </mapper>

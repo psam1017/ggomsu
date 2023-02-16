@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -12,9 +11,10 @@
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
     <title>게시글 작성</title>
     <script src="${pageContext.request.contextPath}/assets/js/ArticleWriting.js" defer></script>
-    <script src="${pageContext.request.contextPath}/assets/lib/dist/tagify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ArticleWrite.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/lib/dist/tagify2.css" type="text/css"/>
 </head>
   <body>
     <div class="modal_background"></div>
@@ -41,13 +41,14 @@
         </ul>
       </div>
       <!-- 해시태그 관련 -->
-      <input name="basic" placeholder="관련해시태그를 입력하세요" style="width: 80%" />
+      <input name='tags3' pattern='^[A-Za-z_✲ ]{1,15}$'>
+      <!-- <input name="basic" placeholder="관련해시태그를 입력하세요" style="width: 80%" /> -->
       <ul style="border-top: 1px solid #0000">
         <li>
           <textarea placeholder="내용을 입력하세요." name="content" style="width: 80%; height: 50vh"></textarea>
         </li>
         <li>
-          <input type="submit" name="writing" value="글쓰기" />
+          <input type="button" name="writing" value="글쓰기" />
         </li>
         <li id="modal_btn">
           <input type="button" name="preview" value="미리보기" onclick="inputValue()" />
@@ -78,6 +79,14 @@
     	if(boardValue == null){
     		selectBoardValueFree.setAttribute('selected',true);
 		}
+    	
+    	const btnSubmit = document.querySelector('input[name="writing"]');
+    	const formWrite = document.querySelector('form[name="writeArticle"]');
+    	console.log(btnSubmit);
+    	console.log(formWrite);
+    	btnSubmit.addEventListener("click",function() {
+    		formWrite.submit();
+    	})
      </script>
   </body>
 </html>

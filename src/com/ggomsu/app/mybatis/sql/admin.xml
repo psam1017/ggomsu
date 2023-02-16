@@ -54,4 +54,10 @@
 		WHERE commentIndex = #{commentIndex}
 	</delete>
 
+	<update id="updateMemberStatus" parameterType="hashmap">
+		UPDATE members 
+		SET statusValue = #{memberStatus} 
+		WHERE nickname = #{memberNickname}
+	</update>
+
 </mapper>
