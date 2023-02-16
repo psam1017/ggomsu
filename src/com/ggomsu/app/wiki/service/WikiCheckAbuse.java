@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.wiki.dao.WikiDAO;
+import com.ggomsu.app.wiki.vo.WikiAbuseVO;
 
 // 작성자 : 박성민
 public class WikiCheckAbuse implements Action {
@@ -19,24 +20,33 @@ public class WikiCheckAbuse implements Action {
 		// java 객체 생성
 		ActionForward forward = null;
 		WikiDAO dao = new WikiDAO();
+		WikiAbuseVO abuse = null;
+		boolean isBlockedUser = false;
 		
 		// parameter 저장
 		String ip = req.getRemoteAddr();
-		String email = (String) req.getSession().getAttribute("email");
+		String nickname = (String) req.getSession().getAttribute("nickname");
 		
-		// 차단된 ip인지 확인
 		// 비회원은 아닌지 확인
-		if(email == null) {
-			// ★실제로는 로그인 페이지로 보내야 함. forward로 보내서 로그인하면 다시 이전 페이지로 돌아오도록 하기
-			// ★article view detail ok도 마찬가지
+		if(nickname == null) {
 			forward = new ActionForward();
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/member/member-sign-in");
+			forward.setPath(req.getContextPath() + "/wiki/no-member");
 		}
-		else if(dao.checkBlockedIp(ip)) {
+		else if(nickname.equals("noname")) { // 익명이라면 차단된 ip인지 확인
+			isBlockedUser = dao.checkBlockedIp(ip);
+		}
+		else { // 회원이라면 차단된 닉네임인지 확인
+			isBlockedUser = dao.checkBlockedNickname(nickname);
+		}
+		
+		// 차단된 사용자라면 사용할 수 없다.
+		if(isBlockedUser) {
+			abuse = dao.getAbuseInfo(nickname, ip);
+			req.setAttribute("wikiAbuse", abuse);
 			forward = new ActionForward();
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/wiki/wiki-abuse");
+			forward.setForward(true);
+			forward.setPath("/wiki/wiki-abuse");
 		}
 		else { // 만약 유효한 접근이라면 경로는 front controller에서 설정.
 			forward = new ActionForward();

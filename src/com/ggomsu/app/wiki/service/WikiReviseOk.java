@@ -1,6 +1,8 @@
 package com.ggomsu.app.wiki.service;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,32 +31,31 @@ public class WikiReviseOk implements Action {
 		
 		// parameter 저장
 		String subject = req.getParameter("subject");
-		int rvs = dao.getLastRvs(subject);
-		int preRvs = rvs - 1;
 		String contentText = req.getParameter("contents");
 		
+		// 위키 작성 정보를 저장하면서 rvs를 얻어온다.
+		infoVO.setSubject(subject);
+		infoVO.setNickname((String) req.getSession().getAttribute("nickname"));
+		infoVO.setIp(infoVO.getNickname().equals("noname") ? req.getRemoteAddr() : null);
+		
+		// 프로시저 호출 : 새로운 info를 INSERT하고, 새롭게 개정된 버전의 rvs를 가져온다.
+		int rvs = dao.reviseWikiInfo(infoVO);
+		int preRvs = rvs - 1;
 		// wiki 생성
 		List<WikiContentVO> rvsList = (ArrayList<WikiContentVO>) wiki.paragraphToList(subject, rvs, contentText);
-		List<WikiContentVO> preRvsList = (ArrayList<WikiContentVO>) dao.getContentOne(subject, preRvs);
-		List<WikiContentVO> allPastList = (ArrayList<WikiContentVO>) dao.getContentPast(subject, preRvs);
+		List<WikiContentVO> preRvsList = (LinkedList<WikiContentVO>) dao.getContentOne(subject, preRvs);
+		List<WikiContentVO> allPastList = (LinkedList<WikiContentVO>) dao.getContentPast(subject, preRvs);
 		wiki.setContentFromPast(preRvsList, allPastList);
 		
 		// 위키 콘텐츠 저장
 		wiki.reviseContent(rvsList, preRvsList, allPastList);
 		dao.insertWikiContents(rvsList);
 		
-		// 위키 작성 정보 저장
-		// issue : ip 정보 얻기 -> nickname이 "익명"이라면 ip를 저장하고 그렇지 않으면 ip = null
+		String subjectEncoded = URLEncoder.encode(subject, "UTF-8");
 		
-		// ★member에 있다면 nickname 저장, 아니라면 ip 저장으로 변경
-		infoVO.setSubject(subject);
-		infoVO.setRvs(rvs);
-		infoVO.setNickname((String) req.getSession().getAttribute("nickname"));
-		infoVO.setIp(infoVO.getNickname().equals("noname") ? req.getRemoteAddr() : null);
-		dao.insertWikiInfo(infoVO);
-		
+		// redirect
 		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/wiki/wiki-view-ok?subject=" + subject + "&rvs=" + rvs);
+		forward.setPath(req.getContextPath() + "/wiki/wiki-view-ok?subject=" + subjectEncoded + "&rvs=" + rvs);
 		
 		return forward;
 	}

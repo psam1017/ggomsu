@@ -42,21 +42,22 @@ public class SendMail implements Action {
 		String host = HostInfo.getHost();
 		String hostEmail = HostInfo.getEmail();
 		String password = HostInfo.getPassword();
+		int port = 587; // 465로 할 때와 props 설정이 다름!
 		
 		// 이메일 인증 키 생성. 작성할 제목 및 내용과 함께 저장
-		String emailSubject = "꼼수닷컴 인증번호입니다";
 		String authKey = String.valueOf(new Random().nextInt(888888) + 111111);
+		String emailSubject = "꼼수닷컴 인증번호입니다";
 		String emailContent = "html태그로 이메일 작성" + authKey;
 		HttpSession saveKey = req.getSession();
 		
 		// 이메일 전송를 prpoerty로 저장
 		Properties props = new Properties();
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", 465);
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.ssl.enable", "true");
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.debug", "true");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
+		props.put("mail.smtp.ssl.trust", "true");
+//		props.put("mail.debug", "true");
 		
 		// 이메일 전송 세션 생성
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
@@ -65,7 +66,7 @@ public class SendMail implements Action {
 			}
 		});
 		
-		// 이메일 전송
+		// 이메일 전송 실행
 		MimeMessage msg = new MimeMessage(session);
 		
 		try {

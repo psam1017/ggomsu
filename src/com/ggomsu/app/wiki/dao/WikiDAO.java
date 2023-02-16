@@ -8,8 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.ggomsu.app.mybatis.config.MyBatisConfig;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
-import com.ggomsu.app.wiki.vo.WikiContentVO;
+import com.ggomsu.app.wiki.vo.*;
 
 // 작성자 : 박성민
 public class WikiDAO {
@@ -21,12 +20,15 @@ public class WikiDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public int getLastRvs(String subject) {
-		return sqlSession.selectOne("Wiki.getLastRvs", subject);
+	public List<WikiInfoVO> getRecentSubject(){
+		return sqlSession.selectList("Wiki.getRecentSubject");
 	}
 	
-	public List<String> getRecentSubject(){
-		return sqlSession.selectList("Wiki.getRecentSubject");
+	public WikiInfoVO getWikiInfo(String subject, int rvs) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("subject", subject);
+		map.put("rvs", rvs);
+		return sqlSession.selectOne("Wiki.getWikiInfo", map);
 	}
 
 	public List<WikiContentVO> getContentOne(String subject, int rvs) {
@@ -43,13 +45,6 @@ public class WikiDAO {
 		return sqlSession.selectList("Wiki.getContentPast", map);
 	}
 	
-	public WikiInfoVO getWikiInfo(String subject, int rvs) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("subject", subject);
-		map.put("rvs", rvs);
-		return sqlSession.selectOne("Wiki.getWikiInfo", map);
-	}
-	
 	public void insertWikiInfo(WikiInfoVO info) {
 		sqlSession.insert("Wiki.insertWikiInfo", info);
 	}
@@ -60,5 +55,24 @@ public class WikiDAO {
 	
 	public boolean checkBlockedIp(String ip) {
 		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedIp", ip)) == 1;
+	}
+	
+	public boolean checkBlockedNickname(String nickname) {
+		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedNickname", nickname)) == 1;
+	}
+	
+	public WikiAbuseVO getAbuseInfo(String nickname, String ip) {
+		Map<String, String> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("ip", ip);
+		return sqlSession.selectOne("Wiki.getAbuseInfo", map);
+	}
+	
+	public boolean checkExistBySubject(String subject) {
+		return Integer.parseInt(sqlSession.selectOne("Wiki.checkExistBySubject", subject)) == 1;
+	}
+	
+	public int reviseWikiInfo(WikiInfoVO info) {
+		return sqlSession.selectOne("Wiki.reviseWikiInfo", info);
 	}
 }

@@ -1,21 +1,5 @@
 # 작성자 : 박성민
 
-CREATE TABLE wikiContents
-(
-	subject	VARCHAR(100)	NOT NULL,
-    rvs			INT UNSIGNED	NOT NULL,
-    rvsIndex	INT UNSIGNED	NOT NULL,
-    preRvs		INT UNSIGNED	NOT NULL,
-    preRvsIndex	INT UNSIGNED	NOT NULL,
-    content		VARCHAR(20000)	NULL,
-    CONSTRAINT PRIMARY KEY(subject, rvs, rvsIndex),
-    CONSTRAINT UNIQUE(rvs, rvsIndex),
-    CONSTRAINT FOREIGN KEY(preRvs, preRvsIndex)
-		REFERENCES wikiContents(rvs, rvsIndex)
-		ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
 CREATE TABLE wikiInfo
 (
 	subject	VARCHAR(100)	NOT NULL,
@@ -23,21 +7,69 @@ CREATE TABLE wikiInfo
     nickname	VARCHAR(10)	NOT NULL DEFAULT 'noname',
     ip			VARCHAR(128)	NULL,
     revisedAt	DATETIME		NOT NULL DEFAULT NOW(),
-    latestFlag	BOOLEAN		NOT NULL DEFAULT true,
+    deletedAt	DATETIME		NULL,
     CONSTRAINT PRIMARY KEY(subject, rvs),
-    CONSTRAINT FOREIGN KEY(subject)
-		REFERENCES wikiContents(subject)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY(rvs)
-		REFERENCES wikiContents(rvs)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
 	CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+CREATE TABLE wikiContents
+(
+	subject	VARCHAR(100)	NOT NULL,
+    rvs			INT UNSIGNED	NOT NULL,
+    rvsIndex	INT UNSIGNED	NOT NULL,
+    preRvs		INT UNSIGNED	NOT NULL,
+    preRvsIndex	INT UNSIGNED	NOT NULL,
+    content		VARCHAR(10000)	NULL,
+    CONSTRAINT PRIMARY KEY(subject, rvs, rvsIndex),
+    CONSTRAINT FOREIGN KEY(subject, rvs)
+		REFERENCES wikiInfo(subject, rvs)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY(subject, preRvs, preRvsIndex)
+		REFERENCES wikiContents(subject, rvs, rvsIndex)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE wikiReport
+(
+	subject			VARCHAR(100)	NOT NULL,
+    rvs					INT UNSIGNED	NOT NULL,
+    nickname			VARCHAR(10)	NOT NULL	DEFAULT 'noname',
+    ip					VARCHAR(128)	NULL,
+	wikiReportReason	VARCHAR(50)	NOT NULL,
+    wikiDeleteReason	VARCHAR(50)	NULL,
+    CONSTRAINT PRIMARY KEY(subject, rvs, nickname),
+	CONSTRAINT FOREIGN KEY(subject, rvs)
+		REFERENCES wikiInfo(subject, rvs)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+		ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE wikiAbuse
+(
+	nickname	VARCHAR(20)	NOT NULL DEFAULT 'noname',
+	ip			VARCHAR(128)	NULL,
+    blockedAt	DATETIME		NOT NULL	DEFAULT NOW(),
+    PRIMARY KEY(nickname, ip),
+    CONSTRAINT FOREIGN KEY(nickname)
+		REFERENCES members(nickname)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+INSERT INTO wikiInfo(subject, rvs, nickname, ip)
+VALUES
+('청춘예찬', 1, 'psam-nick', NULL),
+('청춘예찬', 2, 'psam-nick', NULL),
+('청춘예찬', 3, 'psam-nick', NULL);
 
 INSERT INTO wikiContents
 VALUES
@@ -73,24 +105,16 @@ VALUES
 ('청춘예찬', 3, 9, 1, 9, NULL),
 ('청춘예찬', 3, 10, 1, 10, NULL);
 
-INSERT INTO wikiInfo(subject, rvs, nickname, ip, latestFlag)
-VALUES
-('청춘예찬', 1, 'psam-nick', NULL, false),
-('청춘예찬', 2, 'psam-nick', NULL, false),
-('청춘예찬', 3, 'psam-nick', NULL, true);
-
-SELECT * FROM wikiContents
-WHERE (subject, rvs) = ('청춘예찬', 3)
-ORDER BY rvs ASC, rvsIndex ASC;
-
-SELECT *
-FROM wikiContents
-WHERE rvs <= 3
-AND subject = '청춘예찬'
-ORDER BY rvs ASC, rvsIndex ASC;
-
-SELECT * FROM wikiInfo WHERE subject = '청춘예찬' ORDER BY rvs DESC;
-
-SELECT rvs FROM wikiInfo WHERE subject = '청춘예찬' ORDER BY rvs DESC LIMIT 1;
-
-SELECT DISTINCT subject FROM wikiInfo ORDER BY revisedAt DESC LIMIT 5;
+DELIMITER $$
+CREATE DEFINER=`psam1017`@`localhost` PROCEDURE `reviseWikiInfo`(
+	IN inSubject VARCHAR(100), 
+    IN inNickname VARCHAR(10), 
+    IN inIp VARCHAR(128),
+    OUT outRVS INT UNSIGNED)
+BEGIN
+	SET @newRVS = (SELECT MAX(rvs) + 1 FROM wikiInfo WHERE subject = inSubject);
+    INSERT INTO wikiInfo
+    VALUES(inSubject, @newRVS, inNickname, inIp, NOW(), NULL);
+    SELECT @newRVS;
+END $$
+DELIMITER ;

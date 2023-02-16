@@ -10,7 +10,7 @@ $(document).ready(function() {
 	
 	// (1) content 전송 영역은 type에 따라 action과 content name, 콜백함수의 url이 달라진다.
 	// type = [ board-write | board-update | wiki-write | wiki-revise ]
-	decideActionByType(type);
+	changeAttrByType(type);
 	
 	// (2) summernote 내용 불러오기. 반드시 'summernote 초기화 이전에' 'script 안에서' 불러와야 함. 순서에 주의할 것.
 	getOriginalContent();
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	}
 	
 	// action 초기화 함수
-	function decideActionByType(type){
+	function changeAttrByType(type){
 		if(type === "boardWrite"){
 			contentForm.action = contextPath + "/board/article-write-ok";
 			path = "/board";
@@ -90,11 +90,13 @@ $(document).ready(function() {
 		}
 		else if(type === "wikiWrite"){
 			contentForm.action = contextPath + "/wiki/write-ok";
+			contentForm.title.name = "subject";
 			contentForm.content.name = "contents";
 			path = "/wiki";
 		}
 		else if(type === "wikiRevise"){
 			contentForm.action = contextPath + "/wiki/revise-ok";
+			contentForm.title.name = "subject";
 			contentForm.content.name = "contents";
 			path = "/wiki";
 		}
