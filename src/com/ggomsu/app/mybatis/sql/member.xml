@@ -23,12 +23,31 @@
 	<insert id="signUp" parameterType="member">
 		INSERT INTO members
 		(email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name,
-		birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
+		birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt)
 		VALUES
-		(#{email}, #{password}, #{salt}, NOW(), NOW(),
+		(#{email}, #{password}, #{salt}, NOW(), DATE_ADD(NOW(), INTERVAL 3 MONTH),
 		#{nickname}, #{profileImageUrl}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
-		#{zipcode}, #{address}, #{addressDetail}, NOW(), NOW())
+		#{zipcode}, #{address}, #{addressDetail}, NOW())
 	</insert>
+	<!-- 마케팅동의 yes or no -->
+	<update id="updateAgreedMarketingAt" parameterType="member"> 
+	 	UPDATE members 
+	  	SET agreedMarketingAt = NOW()
+	  	WHERE email = #{email}
+	</update>
+	
+	<!-- 필수동의 갱신 -->
+	<update id="updateAgreedTermAt" parameterType="member"> 
+	 	UPDATE members 
+	  	SET agreedTermAt = NOW()
+	  	WHERE email = #{email}
+	</update>
+	<!-- 마케팅동의 취소 -->
+	<delete id="deleteAgreedMarketingAt" parameterType="member">
+		UPDATE members 
+	  	SET agreedMarketingAt = null
+	  	WHERE email = #{nickname} 
+	</delete>
 	
 	<!-- 로그인 : 비밀번호, 솔트, 유저상태, 휴면계정 여부 등등을 모두 비교해야 함 -->
 	<select id="getMemberInfo" parameterType="string" resultType="member">
@@ -36,6 +55,71 @@
 		FROM	members
 		WHERE	email = #{email}
 	</select>
+	
+	<!-- 로그인 접속일자 수정 -->
+	<update id="signAt" parameterType="member"> 
+	  UPDATE members 
+	  SET signAt = NOW() 
+	  WHERE email = #{email} 
+	</update>
+	
+	<!-- 휴면계정 일반회원으로 업데이트 -->
+	<update id="updateWakeUp" parameterType="member"> 
+	  UPDATE members 
+	  SET statusValue = "MEM"
+	  WHERE email = #{email}
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="string" resultType="member">
+		SELECT 
+		email
+		FROM members
+		WHERE
+		name = #{name} 
+		AND sex = #{sex} 
+		AND birthDate = #{birthDate} 
+		AND telecomValue = #{telecomValue}
+		AND contact = #{contact}
+	</select>
+	
+	<!-- 마이페이지 -->
+	<!-- 프로필이미지, 닉네임 수정 -->
+	<update id="updateMemberMyProfile" parameterType="member">
+		UPDATE members
+		SET 
+		profileImageUrl = #{profileImageUrl}
+		WHERE 
+		email = #{email}
+	</update>
+		<update id="updateMemberMyNickname" parameterType="member">
+		UPDATE members
+		SET 
+		nickname = #{nickname}
+		WHERE 
+		email = #{email}
+	</update>
+	<!-- 회원정보 수정(비밀번호변경) -->
+	<update id="updateMemberPassword" parameterType="member">
+		UPDATE members 
+		SET 
+		password = #{password},
+		salt = #{salt}
+		WHERE 
+		email = #{email}
+	</update>
+	<!-- 개인정보 수정 -->
+	<update id="updataMemberMyPrivacy" parameterType="member">
+		UPDATE members 
+		SET 
+		telecomValue = #{telecomValue},
+		contact = #{contact},
+		zipcode = #{zipcode},
+		address = #{address},
+		addressDetail = #{addressDetail}
+		WHERE 
+		email = #{email}
+	</update>
 	
 	<!-- 회원탈퇴 : 탈퇴 후 바로 사용자DB 정보를 삭제하는 것 이 아니라 일정기간 이후 삭제 하기 때문 사용자상태 정보만 변경 하여 회원 탈퇴 구분 -->
 	<update id="withdrawal" parameterType="member">
@@ -46,18 +130,36 @@
 	</update>
 	
 	<!-- 차단유저 -->
-	<select id="blockView" parameterType="string" resultType="string">
+	<select id="viewBlock" parameterType="string" resultType="member">
 		SELECT blockedMember
 		FROM memberBlock
 		WHERE nickname = #{nickname}
 	</select>
-	
-	<insert id="blockOk" parameterType="member">
+	<insert id="updateBlock" parameterType="member">
 		INSERT INTO memberBlock
 		(nickname, blockedMember)
 		VALUES
 		(#{nickname}, #{blockedMember})
 	</insert>
+	<delete id="deleteBlock" parameterType="member">
+		DELETE FROM memberBlock
+		WHERE 
+		nickname = #{nickname} 
+		and 
+		blockedMember = #{blockedMember}
+<!-- 		IN ( -->
+<!--         <foreach collection="blockedMember" item="blockedMember" separator=","> -->
+<!--         #{blockedMember} -->
+<!--         </foreach> -->
+<!--         ) -->
+	</delete>
+	
+	<!-- 약관동의일자 수정 -->
+	<update id="updateTerm" parameterType="member"> 
+	  UPDATE members 
+      SET agreedMarketingAt = #{agreedMarketingAt}
+	  WHERE email = #{email} 
+	</update>
 	
 	<!-- 신고횟수 증가  -->
 	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">

@@ -1,3 +1,4 @@
+<%@page import="com.ggomsu.app.member.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -10,13 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="손하늘">
     <meta name="description" content="이 세상의 모든 꼼수를 다루는 꼼수닷컴입니다.">
-    <title>회원가입 : 꼼수닷컴</title>
+    <title>아이디 확인</title>
 </head>
 <body>
-   <form action="${pageContext.request.contextPath}/member/member-view-my-info-ok" id="signUpForm" name="signUpForm" method="post">
-     	 이메일<input type="text" name="email">
-     	<br>
-        <input type="submit" value="회원탈퇴" name="withdrawal">
-    </form>
+    <b><c:out value="${message}"/></b>
 </body>
 </html>

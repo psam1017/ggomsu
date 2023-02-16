@@ -261,9 +261,20 @@
 		ORDER BY viewCount DESC LIMIT 1
 	</select>
 	
+
+	<!-- 충돌 있었던 부분. 최근활동 member로 이동 손하늘 -->
+	<select id="selectMyHistoryarticle" parameterType="string" resultType="article">
+		SELECT 
+		*
+		FROM articles
+		WHERE
+		nickname = #{nickname} 
+	</select>
+  
 	<insert id="insertTag" parameterType="hashmap">
 		INSERT INTO tags(articleIndex, tagValue)
 		VALUES (#{articleIndex}, #{tagValue})
 	</insert>
+
 	
 </mapper>

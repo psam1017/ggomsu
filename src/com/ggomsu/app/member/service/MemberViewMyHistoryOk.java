@@ -6,31 +6,27 @@ import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
-import com.ggomsu.app.member.dao.MemberDAO;
-import com.ggomsu.app.member.vo.MemberVO;
+import com.ggomsu.app.board.vo.ArticleVO;
+import com.ggomsu.app.member.dao.HistoryDAO;
 
 //작성자 : 손하늘
 
-public class MemberGetBlockOk implements Action{
+public class MemberViewMyHistoryOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
 		
-		MemberVO vo = new MemberVO();
-		MemberDAO dao = new MemberDAO();
-		ActionForward forward = new ActionForward();
+		ArticleVO aVo = new ArticleVO();
+		HistoryDAO dao = new HistoryDAO();
+		ActionForward forward = new ActionForward(); 
 		HttpSession session = req.getSession();
 		
 		String nickname = (String)session.getAttribute("nickname");
-		
-    // 메인과 충돌했었던 부분
-		req.setAttribute("blockList", dao.viewBlock(nickname));
+		req.setAttribute("articleHistory", dao.selectMyHistoryarticle(nickname));
+		req.setAttribute("commentHistory", dao.selectMyHistorycomment(nickname));
 		
 		forward.setForward(true);
-		forward.setPath("/app/member/MemberBlock.jsp");
-		
+		forward.setPath("/app/member/MemberViewMyHistoryOk.jsp");
 		return forward;
 	}
 }

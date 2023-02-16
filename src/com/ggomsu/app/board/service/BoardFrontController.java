@@ -120,6 +120,22 @@ public class BoardFrontController extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("댓글 삭제 실패!" + e);
 			}
+		}else if(command.equals("/board/article-report")) {
+				forward = new ActionForward();
+				forward.setForward(true);
+				forward.setPath("/app/board/Articlereport.jsp");
+		}else if(command.equals("/board/article-report-Ok")) {
+			try {
+				forward = new ArticleReportOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("게시글 신고 실패!" + e);
+			}
+		}else if(command.equals("/board/comment-report-ok")) {
+			try {
+				forward = new CommentReportOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("댓글 신고 실패!" + e);
+			}
 		}
 		//alarm
 		else if(command.equals("/board/comment-alarm-delete-ok")) {

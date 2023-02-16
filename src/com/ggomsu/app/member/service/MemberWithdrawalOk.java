@@ -2,6 +2,7 @@ package com.ggomsu.app.member.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.action.Action;
 import com.ggomsu.app.action.ActionForward;
@@ -19,16 +20,22 @@ public class MemberWithdrawalOk implements Action{
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
+		HttpSession session = req.getSession();
 		
-		// getParameter의 안에 String 값은 jsp에서 만든 name의 값과 같아야 한다!
-		vo.setEmail(req.getParameter("email"));
-		vo.setStatusValue(req.getParameter("statusValue"));
-		
-		dao.withdrawal(vo);
-		
-		forward.setForward(false);
-		System.out.println(req.getContextPath());
-		forward.setPath(req.getContextPath() + "/app/index.jsp");
+		String email = (String)session.getAttribute("email");
+		//세션이메일과 입력받은 이메일이 같을 때 회원탈퇴
+		if(email.equals(req.getParameter("email"))) {
+			vo.setEmail(req.getParameter("email"));
+			dao.withdrawal(vo);
+			session.invalidate();
+			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/app/index.jsp");
+		}
+		else {
+			System.out.println("아이디가일치하지않습니다");
+			forward.setPath(req.getContextPath() + "/member/member-withdrawal?email=emailFail");
+		}
 		
 		return forward;
 		

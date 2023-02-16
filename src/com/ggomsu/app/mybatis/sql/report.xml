@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- 작성자 : 손하늘 -->
+<mapper namespace="Report">
+
+	<!-- 게시글 신고 -->
+	<insert id="insertArticleReport" parameterType="report">
+		INSERT INTO articlereport
+		(nickname, articleIndex, articleReportReason)
+		VALUES
+		(#{nickname}, #{articleIndex}, #{articleReportReason})
+	</insert>
+	<!-- 댓글 신고 -->
+	<insert id="insertCommentReport" parameterType="report">
+		INSERT INTO commentreport
+		(nickname, commentIndex, commentReportReason)
+		VALUES
+		(#{nickname}, #{commentIndex}, #{commentReportReason})
+	</insert>
+</mapper>

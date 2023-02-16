@@ -13,9 +13,7 @@
     <title>${article.getTitle()}</title>
 </head>
 <body>
-
 	<c:set var="article" value="${article}"/>
-
     <main id="main">
         <!-- 게시글 작성자와 조회수 등 -->
         <section id="articleHeader">

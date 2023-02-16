@@ -11,7 +11,7 @@ import com.ggomsu.app.member.vo.MemberVO;
 
 //작성자 : 손하늘
 
-public class MemberGetBlockOk implements Action{
+public class MemberUpdateBlockOk implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -24,12 +24,22 @@ public class MemberGetBlockOk implements Action{
 		HttpSession session = req.getSession();
 		
 		String nickname = (String)session.getAttribute("nickname");
+		String blockedMember = req.getParameter("blockedMember");
 		
-    // 메인과 충돌했었던 부분
-		req.setAttribute("blockList", dao.viewBlock(nickname));
+		vo.setNickname(nickname);
+		vo.setBlockedMember(blockedMember);
 		
-		forward.setForward(true);
-		forward.setPath("/app/member/MemberBlock.jsp");
+		//회원차단 insert
+		if(nickname.equals(blockedMember)) {
+			System.out.println("사용자는 차단할수 없습니다!");
+			forward.setPath(req.getContextPath() + "/member/member-get-block?code=userNickname");
+		}
+		else {
+			dao.updateBlock(vo); 
+		}
+		
+		forward.setForward(false);
+		forward.setPath(req.getContextPath() + "/member/member-get-block-ok");
 		
 		return forward;
 	}

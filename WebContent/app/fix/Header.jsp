@@ -26,7 +26,7 @@ pageEncoding="UTF-8"%>
 				</c:if>
 				<c:if test='${sessionScope.email != null}'>
 					<li class="nav-item ms-1">
-						<a href="#" id="myPage" class="nav-link btn btn-light">마이페이지</a>
+						<a href="${pageContext.request.contextPath}/member/member-view-my-info-ok" id="myPage" class="nav-link btn btn-light">마이페이지</a>
 					</li>
 					<li class="nav-item ms-1">
 						<button id="myAlarm" class="nav-link btn btn-dark text-light">알림: ${alarmCount}</button>

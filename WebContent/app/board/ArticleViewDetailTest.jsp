@@ -68,6 +68,10 @@
                 </a>
             </c:otherwise>
         </c:choose>
+        
+        <!--게시글신고 -->
+        <div><a href="${pageContext.request.contextPath}/board/article-report?articleIndex=${article.getArticleIndex()}&articleNickname=${article.getNickname()}">게시글 신고</a></div>
+        
         </section>
         <form name="articleLikeForm" method="post">
         	<input type="submit" class="articleLike" value="따봉">
@@ -142,6 +146,8 @@
 	                        </c:if>
 	                    </c:otherwise>
 	                </c:choose>
+	                <!-- 댓글신고 -->
+	                 <div><a href="${pageContext.request.contextPath}/board/comment-report-ok?articleIndex=${article.getArticleIndex()}&commentIndex=${comment.getCommentIndex()}&commentNickname=${comment.getNickname()}&commentReportReason=댓글은신고사유받지않음">댓글신고</a></div>
                 </c:forEach>
             </ul>
             <!-- 대댓글 달기 및 대댓글 보기 -->
