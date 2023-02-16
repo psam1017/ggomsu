@@ -3,16 +3,18 @@
 
 <!-- 작성자 : 박성민 -->
 <mapper namespace="Wiki">
-	<select id="getLastRvs" parameterType="string" resultType="_int">
-		SELECT rvs
+	<select id="getAllRvsBySubject" parameterType="string" resultType="wikiInfo">
+		SELECT *
 		FROM wikiInfo
 		WHERE subject = #{subject}
+		AND deletedAt IS NULL
 		ORDER BY rvs DESC
-		LIMIT 1
 	</select>
-	<select id="getRecentSubject" resultType="string">
-		SELECT DISTINCT subject
+	<select id="getRecentSubject" resultType="wikiInfo">
+		SELECT subject, MAX(rvs), revisedAt
 		FROM wikiInfo
+		WHERE deletedAt IS NULL
+		GROUP BY subject
 		ORDER BY revisedAt DESC
 		LIMIT 10
 	</select>
@@ -42,7 +44,7 @@
 		INSERT INTO wikiInfo(subject, rvs, nickname, ip)
 		VALUES (#{subject}, #{rvs}, #{nickname}, #{ip})
 	</insert>
-	<insert id="insertWikiContents" parameterType="list">
+	<insert id="insertWikiContents" parameterType="wikiContent">
 		INSERT INTO wikiContents
 		VALUES 
 		<foreach item="contents" collection="list" separator=",">
@@ -53,5 +55,31 @@
 		SELECT COUNT(ip)
 		FROM wikiAbuse
 		WHERE ip = #{ip}
+	</select>
+	<select id="checkBlockedNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM wikiAbuse
+		WHERE nickname = #{nickname}
+	</select>
+	<select id="checkExistBySubject" parameterType="string" resultType="_int">
+		SELECT COUNT(subject)
+		FROM wikiInfo
+		WHERE subject = #{subject}
+		AND rvs = 1
+	</select>
+	<select id="getAbuseInfo" parameterType="map" resultType="wikiAbuse">
+		SELECT * FROM wikiAbuse
+		WHERE 
+		<choose>
+			<when test='nickname.equals("noname")'>
+				ip = #{ip}
+			</when>
+			<otherwise>
+				nickname = #{nickname}
+			</otherwise>
+		</choose>
+	</select>
+	<select id="reviseWikiInfo" statementType="CALLABLE" parameterType="wikiInfo" resultType="_int">
+		CALL reviseWikiInfo(#{subject}, #{nickname}, #{ip}, #{rvs})
 	</select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.ggomsu.app.wiki.service;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,22 +34,30 @@ public class WikiWriteOk implements Action {
 		String contentText = req.getParameter("contents");
 		String nickname = (String) req.getSession().getAttribute("nickname");
 		
-		// 위키 콘텐츠 저장
-		List<WikiContentVO> contents = (ArrayList<WikiContentVO>)wiki.paragraphToList(subject, rvs, contentText);
-		dao.insertWikiContents(contents);
-		
 		// 위키 작성 정보 저장
-		// issue : ip 정보 얻기 -> nickname이 "익명"이라면 ip를 저장하고 그렇지 않으면 ip = null
-		
+		// issue 1 : 작성 중간에 이미 누가 같은 제목의 주제를 생성했는가? -> 실패 안내
+		// issue 2 : ip 정보 얻기 -> nickname이 "익명"이라면 ip를 저장하고 그렇지 않으면 ip = null
 		// ★member에 있다면 nickname 저장, 아니라면 ip 저장으로 변경
-		infoVO.setSubject(subject);
-		infoVO.setRvs(rvs);
-		infoVO.setNickname(nickname);
-		infoVO.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
-		dao.insertWikiInfo(infoVO);
-		
-		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/wiki/wiki-view-ok?subject=" + subject + "&rvs=" + rvs);
+		if(dao.checkExistBySubject(subject)) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/wiki/wiki-duplicate");
+		}
+		else {
+			infoVO.setSubject(subject);
+			infoVO.setRvs(rvs);
+			infoVO.setNickname(nickname);
+			infoVO.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
+			dao.insertWikiInfo(infoVO);
+			
+			// 위키 콘텐츠 저장
+			List<WikiContentVO> contents = (ArrayList<WikiContentVO>)wiki.paragraphToList(subject, rvs, contentText);
+			dao.insertWikiContents(contents);
+			
+			String subjectEncoded = URLEncoder.encode(subject, "UTF-8");
+			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/wiki/wiki-view-ok?subject=" + subjectEncoded + "&rvs=" + rvs);
+		}
 		
 		return forward;
 	}

@@ -35,7 +35,14 @@ public class WikiFrontController extends HttpServlet {
 		
 		// 아래의 경로는 src 패키지 경로와는 무관하다. controller를 생략할 수 있다.
 		// Ok는 "연산 또는 완료"의 의미를 가진다. 단순 이동이라면 Ok를 붙이지 않는다.
-		if(command.equals("/wiki/wiki-view-ok")) {
+		if(command.equals("/wiki") || command.equals("/wiki/home")) {
+			try {
+				forward = new WikiHomeOk().execute(req, resp);
+			} catch (Exception e) {
+				System.out.println("위키 홈 오류!" + e);
+			}
+		}
+		else if(command.equals("/wiki/wiki-view-ok")) {
 			try {
 				forward = new WikiViewOk().execute(req, resp);
 			} catch (Exception e) {
@@ -81,7 +88,11 @@ public class WikiFrontController extends HttpServlet {
 			forward.setForward(true);
 			forward.setPath("/app/wiki/WikiAbuse.jsp");
 		}
-		
+		else if(command.equals("/wiki/wiki-duplicate")) {
+			forward = new ActionForward();
+			forward.setForward(true);
+			forward.setPath("/app/wiki/WikiDuplicate.jsp");
+		}
 
 		if(forward != null) {
 			if(forward.isForward()) {

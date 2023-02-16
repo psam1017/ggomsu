@@ -3,6 +3,7 @@ package com.ggomsu.app.wiki.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import com.ggomsu.app.wiki.vo.WikiContentVO;
@@ -11,20 +12,20 @@ import com.ggomsu.app.wiki.vo.WikiContentVO;
 public class SimpleWiki {
 	
 	// 현재 작성한 위키의 content를 '일단' 저장해주기
-	// ★ info의 필드가 contents를 참조하므로 contents를 먼저 저장해야 함.
-	// issue1 : contents와 rvs 저장하기 -> split()에 regex를 개행문자로 전달
+	// issue1 : wiki는 외래키 참조 무결성을 지키기 위해 content보다 info를 먼저 저장해야 한다.
+	// issue2 : contents와 rvs 저장하기 -> split()에 regex를 개행문자로 전달
 	// 		방법1 : URLEncoder와 URLDecoder 객체 사용하고 아스키코드(%0D%0A)로 개행문자 식별하기
 	//		방법2(채택) : System.getProperty("line.separator")로 개행문자 식별하기
 	// 		방법3 : 정규표현식("(\r\n|\r|\n|\n\r)")으로 개행문자 식별하기
-	// issue2 : contentArray만큼 INSERT하기 -> 동적 쿼리 사용
-	// ★ content가 null이 아닌 항목은 모두 R == PR, RI == PRI이다.
+	// issue3 : contentArray만큼 INSERT하기 -> 동적 쿼리 사용
+	// 참고로 : content가 null이 아닌 항목은 모두 R == PR, RI == PRI이다.
 	public List<WikiContentVO> paragraphToList(String subject, int rvs, String contentText){
 		
 		List<WikiContentVO> contents = new ArrayList<>();
 		String[] contentArray = contentText.split(System.getProperty("line.separator"), -1); 
-		WikiContentVO contentVO = new WikiContentVO();
 		
 		for(int i = 1; i <= contentArray.length; i++) {
+			WikiContentVO contentVO = new WikiContentVO();
 			contentVO.setSubject(subject);
 			contentVO.setRvs(rvs);
 			contentVO.setRvsIndex(i);
@@ -54,25 +55,29 @@ public class SimpleWiki {
 	// 2. 이전의 모든 버전과 비교하여 content가 같으면 content는 지우고 PR, PRI를 가져오기
 	//     issue : 어떻게 탐색할 것인가
 	//         선형 탐색(remove X) : 이중 반복문 -> 확실하게 O(n^2)
-	//         선형 탐색(remove O) : O(n log n) + O(n), 최악의 경우 O(n^2)
-	//         퀵 정렬 + 이진 탐색 : O(n log n) + O(log n)
+	//         선형 탐색(remove O) : O(n log n) + O(n), 최악의 경우(탐색을 모두 실패) O(n^2)
+	//      -> 퀵 정렬 + 이진 탐색 : O(n log n) + O(log n)
 	//             퀵 정렬은 최악의 경우 O(n^2)이지만 list가 이미 정렬되어 있을 가능성이 현저하게 낮음.
-	// 3. 비교하여 같은 content가 없다면 content를 저장 -> paragraphToList()로 이미 저장되어 있음.
+	// 3. 비교하여 같은 content가 없다면 content를 저장 -> R, RI는 paragraphToList()로 이미 저장되어 있음.
 	public void reviseContent(List<WikiContentVO> currentList, List<WikiContentVO> preList, List<WikiContentVO> pastList) {
 		setPRVSFromPre(currentList, preList);
 		sortByContent(pastList);
 		setPRVSFromPast(currentList, pastList);
 	}
 	
+	// Iterator로 반복하지 않으면 remove 과정에서 ConcurrentModificationException 발생
 	private void setPRVSFromPre(List<WikiContentVO> currentList, List<WikiContentVO> preList) {
 		
 		for(WikiContentVO currentContent : currentList) {
-			for(WikiContentVO preContent : preList) {
+			Iterator<WikiContentVO> iter = preList.iterator();
+			while(iter.hasNext()) {
+				WikiContentVO preContent = iter.next();
 				if(currentContent.getContent().equals(preContent.getContent())) {
 					currentContent.setPreRvs(preContent.getPreRvs());
 					currentContent.setPreRvsIndex(preContent.getPreRvsIndex());
 					currentContent.setContent(null);
 					preList.remove(preContent);
+					break;
 				}
 			}
 		}
@@ -101,7 +106,6 @@ public class SimpleWiki {
 		
 		// 현재 버전의 PR과 이전 버전의 R이 같은가?
 		//     -> 같다면, 현재 버전의 PRI와 이전 버전의 RI가 같은가?
-		
 		@Override
 		public int compare(WikiContentVO past, WikiContentVO current) {
 			

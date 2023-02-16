@@ -29,6 +29,8 @@ public class WikiViewOk implements Action {
 		String subject = req.getParameter("subject");
 		int rvs = Integer.parseInt(req.getParameter("rvs"));
 		
+		// 주제가 있는지 먼저 검색 COUNT(1) -> 없으면 no-subject, 있으면 계속 진행
+		
 		// 작성정보 가져오기
 		infoVO = dao.getWikiInfo(subject, rvs);
 		
@@ -42,15 +44,15 @@ public class WikiViewOk implements Action {
 			// 콘텐츠 가져오기
 			List<WikiContentVO> pastList = new LinkedList<>();
 			pastList.addAll(dao.getContentPast(subject, rvs));
-			List<WikiContentVO> currentList = dao.getContentOne(subject, rvs);
+			List<WikiContentVO> currentList = (LinkedList<WikiContentVO>)dao.getContentOne(subject, rvs);
 			wiki.setContentFromPast(currentList, pastList);
 			
-			// ★최근 변경 목록 가져오기 -> wiki home에서 필요로 하는 기능 -> ajax로 써야 할 듯
+			// ★최근 변경 목록 가져오기 -> wiki home에서 필요로 하는 기능
 			// List<String> recentSubjects = dao.getRecentSubject();
+			// req.setAttribute("recentSubjects", recentSubjects);
 			
 			req.setAttribute("wikiInfo", infoVO);
 			req.setAttribute("wikiContents", currentList);
-			// req.setAttribute("recentSubjects", recentSubjects);
 			
 			forward.setForward(true);
 			forward.setPath("/app/wiki/WikiViewOk.jsp");
