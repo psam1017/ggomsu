@@ -24,7 +24,7 @@ public class WikiController extends HttpServlet {
 		
 		if(command.equals("/wiki") || command.equals("/wiki/home")) { forward = new Home().execute(req, resp); }
 		else if(command.equals("/wiki/view")) { forward = new View().execute(req, resp); }
-		else if(command.equals("/wiki/view/list")) { forward = new ViewList().execute(req, resp); }
+		else if(command.equals("/wiki/list")) { forward = new WikiList().execute(req, resp); }
 		else if(command.equals("/wiki/write")) { forward = new Write().execute(req, resp); }
 		else if(command.equals("/wiki/write/confirm")) { forward = new WriteConfirm().execute(req, resp); }
 		else if(command.equals("/wiki/revise")) { forward = new Revise().execute(req, resp); }
@@ -33,6 +33,10 @@ public class WikiController extends HttpServlet {
 		else if(command.equals("/wiki/duplicate")) { forward = new Duplicate().execute(req, resp); }
 		else if(command.equals("/wiki/no-member")) { forward = new NoMember().execute(req, resp); }
 		else if(command.equals("/wiki/no-subject")) { forward = new NoSubject().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

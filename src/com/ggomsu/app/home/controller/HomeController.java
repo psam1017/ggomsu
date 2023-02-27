@@ -24,11 +24,12 @@ public class HomeController extends HttpServlet {
 		
 		ActionForward forward = null;
 		
-		if(command.equals("/")) { forward = new Index().execute(req, resp); }
+		if(command.equals("/main")) { forward = new Index().execute(req, resp); }
 		else if(command.equals("/dark-mode")) { forward = new DarkMode().execute(req, resp); }
 		else if(command.equals("/farewell")) { forward = new Farewell().execute(req, resp); }
 		else if(command.equals("/error/sql")) { forward = new ErrorSQL().execute(req, resp); }
-		else if(command.contains("error")) { forward = new Error().execute(req, resp); }
+		else if(command.equals("/error/404")) { forward = new Error404().execute(req, resp); }
+		else { forward = new Error().execute(req, resp); }
 		
 		return forward;
 	}

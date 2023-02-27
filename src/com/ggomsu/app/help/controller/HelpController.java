@@ -38,6 +38,10 @@ public class HelpController extends HttpServlet {
 		else if(command.equals("/help/dormant/awaken")) { forward = new RestoreInvalid().execute(req, resp); }
 		else if(command.equals("/help/withdraw/auth")) { forward = new SendMail().execute(req, resp); }
 		else if(command.equals("/help/withdraw/cancel")) { forward = new RestoreInvalid().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

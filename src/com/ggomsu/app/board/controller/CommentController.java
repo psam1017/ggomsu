@@ -24,6 +24,10 @@ public class CommentController extends HttpServlet {
 		
 		if(command.equals("/comment/write")) { forward = new CommentWrite().execute(req, resp); }
 		else if(command.equals("/comment/delete")) { forward = new CommentDelete().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

@@ -10,7 +10,7 @@ import com.ggomsu.app.wiki.vo.WikiInfoVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 
-public class ViewList implements Action {
+public class WikiList implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -23,7 +23,7 @@ public class ViewList implements Action {
 		req.setAttribute("infoList", infoList);
 		
 		forward.setForward(true);
-		forward.setPath("/views/wiki/ViewList.jsp");
+		forward.setPath("/views/wiki/List.jsp");
 		
 		return forward;
 	}
