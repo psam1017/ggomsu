@@ -6,10 +6,10 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.admin.vo.ArticleReportVO;
-import com.ggomsu.app.board.vo.ArticleVO;
-import com.ggomsu.app.board.vo.CommentVO;
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
+import com.ggomsu.app.board.vo.ArticleDTO;
+import com.ggomsu.app.board.vo.CommentDTO;
+import com.ggomsu.app.report.vo.ArticleReportVO;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 	// 작성자 : 이성호
 public class ArticleDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
@@ -27,7 +27,7 @@ public class ArticleDAO {
 		return sqlSession.selectOne("Article.getTotal",hash);
 	}
 	
-	public List<ArticleVO> getList(int page, String boardValue, String blockedList){
+	public List<ArticleDTO> getList(int page, String boardValue, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
@@ -35,7 +35,7 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getArticleList", hash);
 	}
 	
-	public List<ArticleVO> getBestList(int page, String boardValue, String blockedList){
+	public List<ArticleDTO> getBestList(int page, String boardValue, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
@@ -75,7 +75,7 @@ public class ArticleDAO {
 		return sqlSession.selectOne("Article.getSearchTagCount", hash);
 	}
 	
-	public List<ArticleVO> getSearchTotalList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleDTO> getSearchTotalList(String search, int page, String searchPeriod, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
@@ -84,7 +84,7 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getSearchTotalArticleList", hash);
 	}
 	
-	public List<ArticleVO> getSearchWriterList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleDTO> getSearchWriterList(String search, int page, String searchPeriod, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
@@ -93,7 +93,7 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getSearchWriterArticleList", hash);
 	}
 	
-	public List<ArticleVO> getSearchTitleContentList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleDTO> getSearchTitleContentList(String search, int page, String searchPeriod, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
@@ -102,7 +102,7 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getSearchTitleContentArticleList", hash);
 	}
 	
-	public List<ArticleVO> getSearchTagList(String search, int page, String searchPeriod, String blockedList){
+	public List<ArticleDTO> getSearchTagList(String search, int page, String searchPeriod, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("search", search);
 		hash.put("page", page);
@@ -111,7 +111,7 @@ public class ArticleDAO {
 		return sqlSession.selectList("Article.getSearchTagArticleList", hash);
 	}
 	
-	public ArticleVO getArticle(int articleIndex) {
+	public ArticleDTO getArticle(int articleIndex) {
 		return sqlSession.selectOne("Article.getArticle", articleIndex);
 	}
 	
@@ -119,7 +119,7 @@ public class ArticleDAO {
 		sqlSession.update("Article.updateArticleViewCount",articleIndex);
 	}
 	
-	public List<ArticleVO> getViewedOrderList(int page, String boardValue, String blockedList){
+	public List<ArticleDTO> getViewedOrderList(int page, String boardValue, String blockedList){
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("page", page);
 		hash.put("boardValue", boardValue);
@@ -131,37 +131,12 @@ public class ArticleDAO {
 		sqlSession.update("Article.deleteArticle", articleIndex);
 	}
 	
-	public void insertArticle(ArticleVO articleVo) {
+	public void insertArticle(ArticleDTO articleVo) {
 		sqlSession.update("Article.insertArticle", articleVo);
 	}
 	
 	public int getMaxIndex() {
 		return sqlSession.selectOne("Article.getMaxIndex");
-	}
-	
-	//index 게시판리스트
-	public List<ArticleVO> getBestLikeList() {
-		return sqlSession.selectList("Article.getBestLikeList");
-	}
-	
-	public List<ArticleVO> getBestViewList() {
-		return sqlSession.selectList("Article.getBestViewList");
-	}
-	
-	public ArticleVO getBestLikeOne(String boardValue) {
-		return sqlSession.selectOne("Article.getBestLikeOne", boardValue);
-	}
-	
-	public ArticleVO getBestViewOne(String boardValue) {
-		return sqlSession.selectOne("Article.getBestViewOne", boardValue);
-	}
-	
-	public ArticleVO getBestLikeBoard() {
-		return sqlSession.selectOne("Article.getBestLikeBoard");
-	}
-	
-	public ArticleVO getBestViewBoard() {
-		return sqlSession.selectOne("Article.getBestViewBoard");
 	}
 	
 	public boolean checkGood(String nickname, int articleIndex){
@@ -185,21 +160,6 @@ public class ArticleDAO {
 		sqlSession.update("Article.deleteArticleLike",hash);
 	}
 
-	public int getLikeTotal(String nickname, String blockedList) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("blockedList", blockedList);
-		return sqlSession.selectOne("Article.getLikeTotal",hash);
-	}
-
-	public List<ArticleVO> getLikeList(String nickname, String blockedList, int page) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("blockedList", blockedList);
-		hash.put("page", page);
-		return sqlSession.selectList("Article.getLikeList",hash);
-	}
-
 	public void processReportArticle(int articleIndex, String articleDeleteReason) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("articleIndex", articleIndex);
@@ -207,23 +167,23 @@ public class ArticleDAO {
 		sqlSession.update("Article.processReportArticle", hash);
 	}
 
-	public CommentVO getComment(int commentIndex) {
-		return sqlSession.selectOne("Article.getComment", commentIndex);
+	// 마이 페이지 게시글 좋아요 목록
+	public int findArticleLikeTotalByNickname(String nickname) {
+		return sqlSession.selectOne("Article.findArticleLikeTotalByNickname", nickname);
 	}
 
-	public void processReportComment(int commentIndex, String commentDeleteReason) {
+	public List<ArticleDTO> getArticleLikeList(String nickname, int page) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("commentIndex", commentIndex);
-		hash.put("commentDeleteReason", commentDeleteReason);
-		sqlSession.update("Article.processReportComment", hash);
-	}
-
-	public void insertTag(int articleIndex, String tagValue) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleIndex", articleIndex);
-		hash.put("tagValue", tagValue);
-		sqlSession.update("Article.insertTag", hash);
-		
+		hash.put("nickname", nickname);
+		hash.put("page", page);
+		return sqlSession.selectList("Article.getLikeList", hash);
 	}
 	
+	// index 좋아요, 조회수 베스트
+	public List<ArticleDTO> findWeeklyMostLikedList(String boardValue) {
+		return sqlSession.selectList("Article.findWeeklyMostLikedList", boardValue);
+	}
+	public List<ArticleDTO> findWeeklyMostViewedList(String boardValue) {
+		return sqlSession.selectList("Article.findWeeklyMostViewedList", boardValue);
+	}
 }

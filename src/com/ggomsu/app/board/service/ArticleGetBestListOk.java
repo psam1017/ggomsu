@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
 	// 작성자 : 이성호
 public class ArticleGetBestListOk implements Action{
 
@@ -55,7 +55,7 @@ public class ArticleGetBestListOk implements Action{
 		req.setAttribute("realEndPage", realEndPage);
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
-		req.setAttribute("nowPage", page);
+		req.setAttribute("page", page);
 		req.setAttribute("articleList", dao.getBestList((page-1)*10, "%" + boardValue, blockedString));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);

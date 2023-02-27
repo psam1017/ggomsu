@@ -8,9 +8,6 @@ public class MemberVO {
 	private String email;
 	private String password;
 	private String salt;
-	private String naverKey;
-	private String kakaoKey;
-	private String googleKey;
 	private String signAt;
 	private String passwordAlertAt;
 	
@@ -37,8 +34,9 @@ public class MemberVO {
 	private String statusValue;
 	private int abuseCount;
 	
-	// 차단유저
-	private String blockedMember;
+	// 서비스 이용 설정
+	private boolean alarmFlag;
+	private boolean darkModeFlag;
 	
 	public MemberVO() { ; }
 
@@ -64,30 +62,6 @@ public class MemberVO {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
-	}
-
-	public String getNaverKey() {
-		return naverKey;
-	}
-
-	public void setNaverKey(String naverKey) {
-		this.naverKey = naverKey;
-	}
-
-	public String getKakaoKey() {
-		return kakaoKey;
-	}
-
-	public void setKakaoKey(String kakaoKey) {
-		this.kakaoKey = kakaoKey;
-	}
-
-	public String getGoogleKey() {
-		return googleKey;
-	}
-
-	public void setGoogleKey(String googleKey) {
-		this.googleKey = googleKey;
 	}
 
 	public String getSignAt() {
@@ -225,12 +199,20 @@ public class MemberVO {
 	public void setAbuseCount(int abuseCount) {
 		this.abuseCount = abuseCount;
 	}
-
-	public String getBlockedMember() {
-		return blockedMember;
+	
+	public boolean isAlarmFlag() {
+		return alarmFlag;
+	}
+	
+	public void setAlarmFlag(boolean alarmFlag) {
+		this.alarmFlag = alarmFlag;
 	}
 
-	public void setBlockedMember(String blockedMember) {
-		this.blockedMember = blockedMember;
+	public boolean isDarkModeFlag() {
+		return darkModeFlag;
+	}
+
+	public void setDarkModeFlag(boolean darkModeFlag) {
+		this.darkModeFlag = darkModeFlag;
 	}
 }

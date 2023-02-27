@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- 작성자 : 김지혜, 박성민 -->
+<mapper namespace="Alarm">
+	<select id="findArticleByIndex" parameterType="_int" resultType="article">
+		SELECT * FROM articles WHERE articleIndex = #{articleIndex}
+	</select>
+	<select id="findCommentByIndex" parameterType="_int" resultType="comment">
+		SELECT * FROM comments WHERE commentIndex = #{refIndex}
+	</select>
+	<insert id ="replaceArticleAlarm" parameterType="articleAlarm">
+		REPLACE INTO articleAlarm(articleIndex, commentIndex, nickname)
+		VALUES(#{articleIndex}, #{commentIndex}, #{nickname})
+	</insert>
+	<insert id ="replaceCommentAlarm" parameterType="commentAlarm">
+		REPLACE INTO commentAlarm(refIndex, commentIndex, nickname)
+		VALUES(#{refIndex}, #{commentIndex}, #{nickname})
+	</insert>
+	<select id="findArticleAlarmIndexListByNickname" parameterType="string" resultType="_int">
+		SELECT articleIndex
+		FROM articleAlarm
+		WHERE nickname = #{nickname}
+	</select>
+	<select id="findCommentAlarmIndexListByNickname" parameterType="string" resultType="_int">
+		SELECT commentIndex
+		FROM commentAlarm
+		WHERE nickname = #{nickname}
+	</select>
+	<delete id="deleteArticleAlarm" parameterType="_int">
+		DELETE FROM articleAlarm
+		WHERE articleIndex = #{index}
+	</delete>
+	<delete id="deleteCommentAlarm" parameterType="_int">
+		DELETE FROM commentAlarm
+		WHERE refIndex = #{index}
+	</delete>
+	<select id="findAlarmListByNickname" parameterType="string" resultType="alarmMessage">
+		SELECT A.title as original, C.nickname, C.content, C.writtenAt
+		FROM articles A, comments C
+		WHERE A.articleIndex = C.articleIndex
+		AND (A.articleIndex, C.commentIndex) IN (SELECT articleIndex, commentIndex FROM articleAlarm WHERE nickname = #{nickname})
+		UNION
+		SELECT RC.content, OC.nickname, OC.content, OC.writtenAt
+		FROM comments RC, comments OC
+		WHERE RC.commentIndex = OC.refIndex
+		AND (RC.commentIndex, OC.commentIndex) IN (SELECT refIndex, commentIndex FROM commentAlarm WHERE nickname = #{nickname})
+		ORDER BY writtenAt DESC;
+	</select>
+	<delete id="deleteAlarmListByNickname" parameterType="string">
+		CALL deleteAlarmListByNickname(#{nickname})
+	</delete>
+</mapper>

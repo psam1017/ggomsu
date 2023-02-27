@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
-import com.ggomsu.app.board.vo.ArticleVO;
+import com.ggomsu.app.board.vo.ArticleDTO;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
 	// 작성자 : 이성호	
 public class ArticleGetSearchListOk implements Action{
 
@@ -46,7 +46,7 @@ public class ArticleGetSearchListOk implements Action{
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
 		int totalCount = aDao.getSearchTotalCount("%" + search + "%", searchPeriod, blockedString);
-		List<ArticleVO> articleList = null;
+		List<ArticleDTO> articleList = null;
 		
 		if(searchCategory.equals("Total")) {
 			totalCount = aDao.getSearchTotalCount("%" + search + "%", searchPeriod, blockedString);
@@ -76,7 +76,7 @@ public class ArticleGetSearchListOk implements Action{
 		req.setAttribute("realEndPage", realEndPage);
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
-		req.setAttribute("nowPage", page);
+		req.setAttribute("page", page);
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
 		req.setAttribute("sortBy","-search");

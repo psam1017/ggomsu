@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Comment">
+	<!-- 작성자: 김지혜, 박성민 -->
+	<select id ="getCommentList" parameterType="hashmap" resultType="comment">
+		SELECT C.*, COUNT(CL.commentIndex), M.profileImageUrl
+		FROM comments as C
+		LEFT OUTER JOIN commentLike as CL
+		ON C.commentIndex = CL.commentIndex
+		LEFT OUTER JOIN members as M
+		ON C.nickname = M.nickname
+		WHERE articleIndex = #{articleIndex} 
+		<if test="blindList != null">
+			AND nickname NOT IN 
+			<foreach item="blindMember" collection="blindList" separator="," open="(" close=")">
+				#{blindMember}
+			</foreach>
+		</if>
+		AND deletedAt IS NULL
+		GROUP BY commentIndex
+		ORDER BY refIndex ASC, commentIndex ASC
+	</select>
+	<select id ="doInsertCommentProcedure" statementType="CALLABLE" parameterType="comment" resultType="comment">
+		CALL insertComment(#{articleIndex}, #{nickname}, #{content})
+	</select>
+	<select id ="doInsertRefCommentProcedure" statementType="CALLABLE" parameterType="comment" resultType="comment">
+		CALL insertRefComment(#{refIndex}, #{articleIndex}, #{nickname}, #{content})
+	</select>
+	<delete id="deleteCommentByCommentIndex" parameterType="_int">
+		UPDATE comments
+		SET deletedAt = NOW(), commentDeleteReason = '작성자에 의한 삭제'
+		WHERE commentIndex=#{commentIndex}
+	</delete>
+	
+	<!-- 이성호 : admin에서 사용 -->
+	<select id="getCommentOne" parameterType="_int" resultType="comment">
+		SELECT C.*, CL.commentLikeCount 
+		FROM comments AS C
+		LEFT OUTER JOIN (SELECT COUNT(1) AS commentLikeCount, commentIndex FROM commentLike GROUP BY commentIndex) AS CL
+		ON C.`commentIndex` = CL.commentIndex
+		WHERE C.`commentIndex` = #{commentIndex}
+	</select>
+	<update id="processReportComment" parameterType="hashmap">
+		UPDATE comments SET deletedAt = now(), commentDeleteReason = #{commentDeleteReason} 
+		WHERE `commentIndex` = #{commentIndex}
+	</update>
+	
+	<!-- 박성민 : my page like comment list에서 사용 -->
+	<select id="findCommentLikeTotalByNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(1) FROM commentLike WHERE nickname = #{nickname};
+	</select>
+	<select id="getCommentLikeList" parameterType="hashmap" resultType="comment">
+		SELECT C.*, COUNT(CL.commentIndex) AS commentLikeCount, M.profileImageUrl
+		FROM comments AS C
+		LEFT OUTER JOIN commentLike AS CL
+		ON C.commentIndex = CL.commentIndex
+		LEFT OUTER JOIN members AS M
+		ON C.nickname = M.nickname
+		WHERE C.commentIndex IN (SELECT commentIndex FROM commentLike WHERE nickname = #{nickname})
+		GROUP BY commentIndex
+		ORDER BY commentIndex DESC
+		LIMIT 10 OFFSET ${page}
+	</select>
+</mapper>

@@ -3,7 +3,7 @@ package com.ggomsu.app.board.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
 	// 작성자 : 이성호
 public class BoardDAO {

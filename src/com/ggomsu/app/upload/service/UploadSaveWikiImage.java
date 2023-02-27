@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
-import com.ggomsu.app.upload.policy.UUIDFileRenamePolicy;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.upload.UUIDFileRenamePolicy;
 import com.oreilly.servlet.MultipartRequest;
 
 // 작성자 : 박성민
@@ -29,8 +29,8 @@ public class UploadSaveWikiImage implements Action {
 		// multipart config
 		// 필요 시 category만 변경
 		String category = "wiki";
-		String contextRoot = req.getSession().getServletContext().getRealPath("/");
-		String fileRoot = contextRoot + "upload\\" + category + "\\";
+		String contextRoot = req.getServletContext().getRealPath("/");
+		String fileRoot = contextRoot + "\\uploads\\" + category + "\\";
 		int fileSize = 1024 * 1024 * 5;
 		String encoding = "UTF-8";
 		
@@ -40,7 +40,7 @@ public class UploadSaveWikiImage implements Action {
 			file.mkdirs();
 		}
 		
-		// 파일 저장. 파일 이름 정책은 com.ggomsu.app.upload.policy 참고
+		// 파일 저장
 		MultipartRequest multi = new MultipartRequest(req, fileRoot, fileSize, encoding, new UUIDFileRenamePolicy());
 		
 		Enumeration<String> upload = multi.getFileNames();
@@ -56,7 +56,7 @@ public class UploadSaveWikiImage implements Action {
 			// 저장한 파일의 경로는 content 영역에 img 태그로 저장되므로 DB 저장이 필요 없음.
 			// 대신 content의 img 태그에 src에 정확하게 이름을 적어줘야 함.
 			if(systemName != null) {
-				json.put("url", "/ggomsu/upload/" + category + "/" + systemName);
+				json.put("url", "/uploads/" + category + "/" + systemName);
 				json.put("responseCode", "success");
 			}
 			else {
@@ -69,6 +69,7 @@ public class UploadSaveWikiImage implements Action {
 		
 		PrintWriter out = resp.getWriter();
 		out.print(json.toJSONString());
+		System.out.println(json.toJSONString());
 		out.close();
 		
 		return null;

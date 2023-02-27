@@ -1,6 +1,5 @@
 package com.ggomsu.app.board.service;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -12,13 +11,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.AttachmentDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
-import com.ggomsu.app.board.vo.ArticleVO;
-import com.ggomsu.app.member.dao.MemberDAO;
+import com.ggomsu.app.board.dao.TagDAO;
+import com.ggomsu.app.board.vo.ArticleDTO;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
@@ -28,10 +27,10 @@ public class ArticleWriteOk implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 	
+		TagDAO tagDAO = new TagDAO();
 		ArticleDAO aDao = new ArticleDAO();
 		AttachmentDAO atDao = new AttachmentDAO();
-		ArticleVO aVo = new ArticleVO();
-		BoardDAO bDao = new BoardDAO();
+		ArticleDTO aVo = new ArticleDTO();
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 
@@ -76,7 +75,7 @@ public class ArticleWriteOk implements Action {
 		
 		for(Object tags : jsonArr) {
 			JSONObject tag = (JSONObject) tags;
-			aDao.insertTag(aDao.getMaxIndex(), (String)tag.get("value"));
+			tagDAO.insertTag(aDao.getMaxIndex(), (String)tag.get("value"));
 		}
 		
 		String temp = req.getParameter("page");

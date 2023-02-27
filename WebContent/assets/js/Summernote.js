@@ -89,13 +89,13 @@ $(document).ready(function() {
 			path = "/board";
 		}
 		else if(type === "wikiWrite"){
-			contentForm.action = contextPath + "/wiki/write-ok";
+			contentForm.action = contextPath + "/wiki/write/confirm";
 			contentForm.title.name = "subject";
 			contentForm.content.name = "contents";
 			path = "/wiki";
 		}
 		else if(type === "wikiRevise"){
-			contentForm.action = contextPath + "/wiki/revise-ok";
+			contentForm.action = contextPath + "/wiki/revise/confirm";
 			contentForm.title.name = "subject";
 			contentForm.content.name = "contents";
 			path = "/wiki";

@@ -2,15 +2,16 @@ package com.ggomsu.app.member.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.ggomsu.app.member.vo.MemberSnsVO;
 import com.ggomsu.app.member.vo.MemberVO;
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
-// 작성자 : 박성민, 손하늘
+// 작성자 : 박성민, 손하늘, 이성호
 
 public class MemberDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
@@ -21,6 +22,7 @@ public class MemberDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
+	// 회원가입
 	public boolean checkEmail(String email) {
 		return (Integer)(sqlSession.selectOne("Member.checkEmail", email)) == 1;
 	}
@@ -37,82 +39,104 @@ public class MemberDAO {
 		sqlSession.insert("Member.signUp", vo);
 	}
 	
-	public void updateAgreedTermAt(String email) {
-		sqlSession.update("Member.updateAgreedTermAt", email);
+	public void insertAuthFailedEmail(String email) {
+		sqlSession.insert("Member.insertAuthFailedEmail", email);
 	}
 	
-	public void updateAgreedMarketingAt(String email) {
-		sqlSession.update("Member.updateAgreedMarketingAt", email);
-	}
-	
-	public void deleteAgreedMarketingAt(String email) {
-		sqlSession.delete("Member.deleteAgreedMarketingAt", email);
-	}
-	
+	// 회원 정보 조회
 	public MemberVO getMemberInfo(String email) {
 		return sqlSession.selectOne("Member.getMemberInfo", email);
 	}
 	
-	public int signAt(String email) {
-		return sqlSession.update("Member.signAt", email);
+	// 로그인
+	public int updateSignAt(String email) {
+		return sqlSession.update("Member.updateSignAt", email);
 	}
 	
-	public int updateWakeUp(String email) {
-		return sqlSession.update("Member.updateWakeUp", email);
+	public boolean checkPasswordRenew(String email) {
+		return (Integer.parseInt(sqlSession.selectOne("Member.checkPasswordRenew", email)) > 0);
 	}
 	
-	public MemberVO findId(MemberVO vo) {
-		return sqlSession.selectOne("Member.findId", vo);
+	public boolean checkTermExpired(String email) {
+		return (Integer.parseInt(sqlSession.selectOne("Member.checkTermExpired", email)) > 0);
 	}
 	
-	public void updateMemberPassword(MemberVO vo) {
-		sqlSession.update("Member.updateMemberPassword", vo);
-	} 
-	
-	public void updateMemberMyProfile(MemberVO vo) {
-		sqlSession.update("Member.updateMemberMyProfile", vo);
-	} 
-	
-	public void updateMemberMyNickname(MemberVO vo) {
-		sqlSession.update("Member.updateMemberMyNickname", vo);
-	} 
-	
-	public void updataMemberMyPrivacy(MemberVO vo) {
-		sqlSession.update("Member.updataMemberMyPrivacy", vo);
-	} 
-	
-	public void updateTerm(String email) {
-		sqlSession.update("Member.updateTerm", email);
-	} 
-	
-	public boolean withdrawal(MemberVO statusValue) {
-		return (sqlSession.update("Member.withdrawal", statusValue)) == 1;
+	public void updatePasswordAlertAtByEmail(String email) {
+		sqlSession.update("Member.updatePasswordAlertAtByEmail", email);
 	}
 	
-	public void updateBlock(MemberVO vo) {
-		sqlSession.insert("Member.updateBlock", vo);
+	public void updateAgreedTermAtByEmail(String email) {
+		sqlSession.update("Member.updateAgreedTermAtByEmail", email);
 	}
 	
-	public void deleteBlock(MemberVO vo) {
-		sqlSession.delete("Member.deleteBlock", vo);
+	// 로그인 불가능 관련 -> HelpController 참고.
+	public void restoreInvalid(String email) {
+		sqlSession.update("Member.restoreInvalid", email);
+	}
+	
+	public String findLostEmail(MemberVO vo) {
+		return sqlSession.selectOne("Member.findLostEmail", vo);
+	}
+	
+	// 마이페이지 관련
+	public void updateProfile(MemberVO vo) {
+		sqlSession.update("Member.updateProfile", vo);
+	} 
+
+	public void updatePersonal(MemberVO vo) {
+		sqlSession.update("Member.updatePersonal", vo);
+	} 
+	
+	public void updatePassword(MemberVO vo) {
+		sqlSession.update("Member.updatePassword", vo);
+	} 
+	
+	public void updateTerm(MemberVO vo) {
+		sqlSession.update("Member.updateTerm", vo);
+	} 
+	
+	public List<String> getBlindList(String nickname) {
+		return sqlSession.selectList("Member.getBlindList", nickname);
+	}
+	
+	public void insertBlindMember(String nickname, String blindMember) {
+		Map<String, String> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("blindMember", blindMember);
+		sqlSession.insert("Member.insertBlindMember", map);
+	}
+	
+	public void deleteBlindMember(String nickname, List<String> deleteList) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("deleteList", deleteList);
+		sqlSession.delete("Member.deleteBlindMember", map);
 	}
 
-// 메인과 충돌했었던 부분
-  public List<MemberVO> viewBlock(String nickname) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		return sqlSession.selectList("Member.viewBlock", hash);
+	public void updateConfig(MemberVO vo) {
+		sqlSession.update("Member.updateConfig", vo);
+	}
+	
+	public void withdraw(String email) {
+		sqlSession.update("Member.withdraw", email);
+	}
+	
+	public void updateDarkMode(String email, boolean darkModeFlag) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("darkModeFlag", darkModeFlag);
+		sqlSession.update("Member.updateDarkMode", map);
+	}
+	
+	// 이성호 : admin, sns 관련
+	public List<MemberVO> getAllMember() {
+		return sqlSession.selectList("Member.getAllMember");
 	}
 	
 	public void updateAbuseCount(String nickname) {
 		sqlSession.update("Member.updateAbuseCount", nickname);
 	}
 	
-	public List<MemberVO> getAllMember() {
-		return sqlSession.selectList("Member.getAllMember");
-	}
-	
-	// 네이버
 	public void snsSignUp(MemberSnsVO vo) {
 		sqlSession.insert("Member.snsSignUp", vo);
 	}
