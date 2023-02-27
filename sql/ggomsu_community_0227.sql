@@ -4,7 +4,8 @@
 DROP SCHEMA IF EXISTS psam1017;
 CREATE SCHEMA psam1017;
 USE psam1017;
-ALTER SCHEMA psam1017 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+ALTER SCHEMA psam1017 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci; # 인코딩
+SET GLOBAL LOG_BIN_TRUST_FUNCTION_CREATORS = 1; # 프로시저 권한 부여
 
 CREATE TABLE memberSex
 (	
@@ -64,7 +65,7 @@ CREATE TABLE members
 	salt				VARCHAR(128)	NULL,
 	signAt				DATETIME 		NOT NULL	DEFAULT NOW(),
     passwordAlertAt		DATETIME 		NULL,
-    nickname			VARCHAR(10) 	NOT NULL 	UNIQUE,
+    nickname			VARCHAR(10) 	NULL	 	UNIQUE,
 	profileImageUrl		VARCHAR(128) 	NULL		UNIQUE,
 	name				VARCHAR(5) 	NULL,
     birthDate			DATE 			NULL,
@@ -77,10 +78,9 @@ CREATE TABLE members
     agreedTermAt		DATETIME 		NOT NULL	DEFAULT NOW(),
     agreedMarketingAt	DATETIME 		NULL,
     createdAt			DATETIME 		NOT NULL 	DEFAULT NOW(),
-    statusValue			VARCHAR(3) 	NOT NULL	DEFAULT "MEM",
+    statusValue			VARCHAR(3) 	NOT NULL	DEFAULT 'MEM',
     abuseCount			TINYINT		NOT NULL	DEFAULT 0,
-    articleAlarmFlag	BOOLEAN		NOT NULL	DEFAULT 1,
-    commentAlarmFlag	BOOLEAN		NOT NULL	DEFAULT 1,
+    alarmFlag			BOOLEAN		NOT NULL	DEFAULT 1,
     darkModeFlag		BOOLEAN		NOT NULL	DEFAULT 0,
 	CONSTRAINT FOREIGN KEY(sex)
 		REFERENCES memberSex(value)
@@ -96,27 +96,27 @@ CREATE TABLE members
         ON UPDATE CASCADE
 );
 
-CREATE TABLE memberSNS
+CREATE TABLE memberSns
 (
-	email	VARCHAR(50) NOT NULL,
-    snsKey	VARCHAR(128) NOT NULL,
-    CONSTRAINT PRIMARY KEY(email, snsKey),
+	email		VARCHAR(50) NOT NULL,
+    accessToken	VARCHAR(128) NOT NULL,
+    CONSTRAINT PRIMARY KEY(email, accessToken),
     CONSTRAINT FOREIGN KEY(email)
 		REFERENCES members(email)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE memberBlock
+CREATE TABLE memberBlind
 (
-	nickname			VARCHAR(10) NOT NULL,
-	blockedMember		VARCHAR(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY(nickname, blockedMember),
+	nickname		VARCHAR(10) NOT NULL,
+	blindMember		VARCHAR(10) NOT NULL,
+    CONSTRAINT PRIMARY KEY(nickname, blindMember),
     CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY(blockedMember)
+	CONSTRAINT FOREIGN KEY(blindMember)
 		REFERENCES members(nickname)
 		ON DELETE CASCADE
         ON UPDATE CASCADE
@@ -183,7 +183,7 @@ CREATE TABLE attachment
 
 CREATE TABLE comments
 (
-    commentIndex		INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    commentIndex		INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     refIndex			INT UNSIGNED NULL,
     articleIndex		INT UNSIGNED NOT NULL,
     nickname			VARCHAR(10) NOT NULL,
@@ -237,11 +237,12 @@ CREATE TABLE commentLike
 
 CREATE TABLE articleReport
 (
+	articleReportIndex	INT UNSIGNED	NOT NULL	PRIMARY KEY	AUTO_INCREMENT,
 	nickname			VARCHAR(10)	NOT NULL,
     articleIndex		INT UNSIGNED	NOT NULL,
     articleReportReason	VARCHAR(50)	NOT NULL,
     articleDeleteReason	VARCHAR(50)	NULL,
-	CONSTRAINT PRIMARY KEY(nickname, articleIndex),
+	CONSTRAINT UNIQUE(nickname, articleIndex),
     CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
 		ON DELETE CASCADE
@@ -254,11 +255,11 @@ CREATE TABLE articleReport
 
 CREATE TABLE commentReport
 (
+	commentReportIndex	INT UNSIGNED	NOT NULL	PRIMARY KEY	AUTO_INCREMENT,
 	nickname			VARCHAR(10)	NOT NULL,
     commentIndex		INT UNSIGNED	NOT NULL,
-    commentReportReason	VARCHAR(50)	NOT NULL,
 	commentDeleteReason	VARCHAR(50)	NULL,
-	CONSTRAINT PRIMARY KEY(nickname, commentIndex),
+	CONSTRAINT UNIQUE(nickname, commentIndex),
     CONSTRAINT FOREIGN KEY(nickname)
 		REFERENCES members(nickname)
 		ON DELETE CASCADE
@@ -274,6 +275,7 @@ CREATE TABLE articleAlarm
     articleIndex	INT UNSIGNED	NOT NULL PRIMARY KEY,
     commentIndex	INT UNSIGNED	NOT NULL,
     nickname		VARCHAR(10)	NOT NULL,
+    articleAlarmAt	DATETIME		NOT NULL DEFAULT NOW(),
 	CONSTRAINT FOREIGN KEY(articleIndex)
 		REFERENCES articles(articleIndex)
 		ON DELETE CASCADE
@@ -293,6 +295,7 @@ CREATE TABLE commentAlarm
     refIndex		INT UNSIGNED	NOT NULL PRIMARY KEY,
     commentIndex	INT UNSIGNED	NOT NULL,
     nickname		VARCHAR(10)	NOT NULL,
+    commentAlarmAt	DATETIME		NOT NULL DEFAULT NOW(),
 	CONSTRAINT FOREIGN KEY(commentIndex)
 		REFERENCES comments(commentIndex)
 		ON DELETE CASCADE
@@ -358,9 +361,24 @@ VALUES
 (1, 255, 'psam-nick', '새로운 기념비적인 게시글입니다.'),
 (2, 255, 'test-nick', '과연 프로젝트 잘 될 수 있을까?'),
 (3, 255, 'admin-nick', '오늘 저녁은 돈까스입니다.'),
-(1, 255, 'test-nick', '말투 되게 아저씨같네.'),
+(1, 255, 'test-nick', '말투 되게 아저씨같네.');
+INSERT INTO comments(refIndex, articleIndex, nickname, content)
+VALUES
 (1, 255, 'psam-nick', '왜 시비임?'),
-(2, 255, 'admin-nick', '과연이 아니라 어떻게 하면이라고 해주세요.');
+(2, 255, 'admin-nick', '과연이 아니라 어떻게 하면이라고 해주세요.'),
+(7, 253, 'test-nick', '댓글253');
+INSERT INTO comments(refIndex, articleIndex, nickname, content)
+VALUES
+(8, 252, 'admin-nick', '댓글252'),
+(9, 250, 'psam-nick', '댓글250'),
+(9, 250, 'psam-nick', '내 댓글에 단 대댓글'),
+(9, 250, 'test-nick', '내 댓글에 달린 남 대댓글');
+
+INSERT INTO articleAlarm(articleIndex, commentIndex, nickname)
+VALUES(255, 3, 'psam-nick'), (253, 7, 'psam-nick'), (252, 8, 'psam-nick');
+
+INSERT INTO commentAlarm(refIndex, commentIndex, nickname)
+VALUES(1, 4, 'psam-nick'), (2, 6, 'test-nick'), (9, 11, 'psam-nick');
 
 INSERT INTO articleLike
 VALUES
@@ -377,20 +395,3 @@ VALUES
 (6, 'admin-nick'),
 (6, 'psam-nick'),
 (2, 'test-nick');
-
-/*
--- 프로시저
-CREATE DEFINER=`psam1017`@`localhost` PROCEDURE `dummyArticles`()
-BEGIN
-	DECLARE i INT DEFAULT 1;    
-   		WHILE i <= 124 DO
-		INSERT INTO articles(boardValue, nickname, title, content, viewCount)
-			VALUES('coding', 'psam-nick', CONCAT('제목',i), CONCAT('내용',i), (150 - i));
-		SET i = i + 1;
-	END WHILE;
-END
-
-SHOW GLOBAL VARIABLES LIKE 'LOG_BIN_TRUST_FUNCTION_CREATORS'; # 프로시저 확인
-SET GLOBAL LOG_BIN_TRUST_FUNCTION_CREATORS = 1; # 프로시저 권한 부여
-CALL dummyArticles(); # 프로시저 실행
-*/
