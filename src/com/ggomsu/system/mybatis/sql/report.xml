@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- 작성자 : 손하늘, 박성민, 이성호 -->
+<mapper namespace="Report">
+
+	<insert id="replaceArticleReport" parameterType="articleReport">
+		REPLACE INTO articleReport
+		(nickname, articleIndex, articleReportReason)
+		VALUES
+		(#{nickname}, #{articleIndex}, #{articleReportReason})
+	</insert>
+	<insert id="replaceCommentReport" parameterType="commentReport">
+		REPLACE INTO commentReport
+		(nickname, commentIndex)
+		VALUES
+		(#{nickname}, #{commentIndex})
+	</insert>
+	<insert id="replaceWikiReport" parameterType="wikiReport">
+		REPLACE INTO wikiReport
+		(subject, rvs, nickname, ip, wikiReportReason)
+		VALUES
+		(#{subject}, #{rvs}, #{nickname}, #{ip}, #{wikiReportReason})
+	</insert>
+</mapper>

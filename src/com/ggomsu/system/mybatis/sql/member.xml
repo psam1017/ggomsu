@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 작성자 : 박성민, 손하늘 -->
+<mapper namespace="Member">
+	<!-- 회원가입 -->
+	<select id="checkEmail" parameterType="string" resultType="_int">
+		SELECT COUNT(email)
+		FROM members
+		WHERE email = #{email}
+	</select>
+	<select id="checkNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM members
+		WHERE nickname = #{nickname}
+	</select>
+	<select id="checkContact" parameterType="string" resultType="_int">
+		SELECT COUNT(contact)
+		FROM members
+		WHERE contact = #{contact}
+	</select>
+	<insert id="signUp" parameterType="member">
+		INSERT INTO members
+		(email, password, salt, passwordAlertAt, 
+		nickname, name, birthDate, sex, telecomValue, contact, 
+		zipcode, address, addressDetail, agreedMarketingAt)
+		VALUES
+		(#{email}, #{password}, #{salt}, DATE_ADD(NOW(), INTERVAL 3 MONTH),
+		#{nickname}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
+		#{zipcode}, #{address}, #{addressDetail}, 
+		<choose>
+			<when test='agreedMarketingAt.equals("agree")'>
+				NOW()
+			</when>
+			<otherwise>
+				NULL
+			</otherwise>
+		</choose>
+		)
+	</insert>
+	<insert id="insertAuthFailedEmail" parameterType="string">
+		INSERT INTO members (email, statusValue)
+		VALUES (#{email}, 'SUS')
+	</insert>
+
+	<!-- 로그인 : 비밀번호, 솔트, 유저상태, 휴면계정 여부 등등을 모두 비교해야 함 -->
+	<select id="getMemberInfo" parameterType="string" resultType="member">
+		SELECT	*
+		FROM	members
+		WHERE	email = #{email}
+	</select>
+	<update id="updateSignAt" parameterType="string"> 
+	  UPDATE members 
+	  SET signAt = NOW() 
+	  WHERE email = #{email} 
+	</update>
+	<select id="checkPasswordRenew" statementType="CALLABLE" parameterType="string" resultType="_int">
+		CALL checkPasswordRenew(#{email})
+	</select>
+	<update id="updatePasswordAlertAtByEmail" parameterType="string">
+		UPDATE members
+		SET passwordAlertAt = NOW() + INTERVAL 3 MONTH
+		WHERE email = #{email}
+	</update>
+	<select id="checkTermExpired" statementType="CALLABLE" parameterType="string" resultType="_int">
+		CALL checkTermExpired(#{email})
+	</select>
+	<update id="updateAgreedTermAtByEmail" parameterType="string">
+		UPDATE members
+		SET agreedTermAt = NOW()
+		WHERE email = #{email}
+	</update>
+	
+	<!-- help : 로그인 불가능 상태 관련 -->
+	<update id="restoreInvalid" parameterType="string"> 
+	  UPDATE members 
+	  SET statusValue = 'MEM'
+	  WHERE email = #{email}
+	</update>
+	<select id="findLostEmail" parameterType="member" resultType="string">
+		SELECT email
+		FROM members
+		WHERE name = #{name} 
+		AND sex = #{sex} 
+		AND birthDate = #{birthDate} 
+		AND telecomValue = #{telecomValue}
+		AND contact = #{contact}
+		LIMIT 1;
+	</select>
+	
+	<!-- 마이페이지 공통 : 프로필,  개인정보, 비밀번호, 설정 -->
+	<update id="updateProfile" parameterType="member">
+		UPDATE members
+		SET profileImageUrl = #{profileImageUrl}, nickname = #{nickname}
+		WHERE email = #{email}
+	</update>
+	<update id="updatePersonal" parameterType="member">
+		UPDATE members 
+		SET 
+		telecomValue = #{telecomValue},
+		contact = #{contact},
+		zipcode = #{zipcode},
+		address = #{address},
+		addressDetail = #{addressDetail}
+		WHERE 
+		email = #{email}
+	</update>
+	<update id="updatePassword" parameterType="member">
+		UPDATE members 
+		SET 
+		password = #{password},
+		salt = #{salt}
+		WHERE email = #{email}
+	</update>
+	<update id="updateConfig" parameterType="member"> 
+	 	UPDATE members 
+	  	SET alarmFlag = ${alarmFlag}, darkModeFlag = ${darkModeFlag}
+	  	WHERE email = #{email}
+	</update>
+	
+	<!-- 마이페이지 회원 : 약관, 블라인드, 탈퇴 -->
+	<update id="updateTerm" parameterType="member">
+		UPDATE members
+		<choose>
+			<when test='agreedTermAt.equals("renew") and agreedMarketingAt.equals("agree")'>
+			SET agreedTermAt = NOW(), agreedMarketingAt = NOW()
+			</when>
+			<when test='agreedTermAt.equals("renew")'>
+			SET agreedTermAt = NOW(), agreedMarketingAt = NULL
+			</when>
+			<when test='agreedMarketingAt.equals("agree")'>
+			SET agreedMarketingAt = NOW()
+			</when>
+			<otherwise>
+			SET agreedMarketingAt = NULL
+			</otherwise>
+		</choose>
+		WHERE email = #{email}
+	</update>
+	<select id="getBlindList" parameterType="string" resultType="string">
+		SELECT blindMember
+		FROM memberBlind
+		WHERE nickname = #{nickname}
+	</select>
+	<insert id="insertBlindMember" parameterType="map">
+		INSERT INTO memberBlind (nickname, blindMember)
+		VALUES (#{nickname}, #{blindMember})
+	</insert>
+	<delete id="deleteBlindMember" parameterType="map">
+		DELETE FROM memberBlind
+		WHERE nickname = #{nickname} 
+		AND blindMember IN
+		<foreach collection="deleteList" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<update id="updateDarkMode" parameterType="map">
+		UPDATE members
+		SET darkModeFlag = ${darkModeFlag}
+		WHERE email = #{email}
+	</update>
+	<update id="withdraw" parameterType="string">
+		UPDATE members 
+		SET statusValue = 'DEL'
+		WHERE email = #{email}
+	</update>
+	
+	<!-- 이성호 : admin, sns에서 사용  -->
+	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">
+		{ CALL updateBlockMember(#{nickname}) }
+	</update>
+	<select id="getAllMember" resultType="member">
+		SELECT nickname, name, statusValue, abuseCount 
+		FROM members
+		WHERE statusValue = 'MEM'
+		ORDER BY statusValue
+	</select>
+	<insert id="snsSignUp" parameterType="memberSns">
+		INSERT INTO memberSNS
+		(email, accessToken)
+		VALUES
+		(#{email}, #{accessToken}) 
+	</insert>
+</mapper>

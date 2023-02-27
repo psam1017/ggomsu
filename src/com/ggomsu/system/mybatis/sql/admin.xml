@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Admin">
+	<!-- article -->
+	<select id="getArticleReportList" resultType="articleReport">
+		SELECT AR.*, B.nickname as writerNickname
+		FROM articleReport AR 
+		LEFT OUTER JOIN (SELECT articleIndex, nickname FROM articles) AS B
+		ON AR.articleIndex = B.articleIndex
+	</select>
+	<select id="getArticleReport" parameterType="hashmap" resultType="articleReport">
+		SELECT * FROM articleReport
+		WHERE nickname = #{nickname}
+		AND articleIndex = #{articleIndex}
+	</select>
+	<update id="updateArticleReport" parameterType="hashmap">
+		UPDATE articleReport
+		SET articleDeleteReason = #{articleDeleteReason}
+		WHERE articleIndex = #{articleIndex}
+	</update>
+	<delete id="deleteArticleReport" parameterType="_int">
+		DELETE FROM articleReport
+		WHERE articleIndex = #{articleIndex}
+	</delete>
+	
+	<!-- comment -->
+	<select id="getCommentReportList" resultType="commentReport">
+		SELECT CR.*, B.nickname as writerNickname
+		FROM commentReport CR 
+		LEFT OUTER JOIN (SELECT commentIndex, nickname FROM comments) AS B
+		ON CR.commentIndex = B.commentIndex
+	</select>
+	<select id="getCommentReport" parameterType="hashmap" resultType="commentReport">
+		SELECT * FROM commentReport
+		WHERE nickname = #{nickname}
+		AND commentIndex = #{commentIndex}
+	</select>
+	<update id="updateCommentReport" parameterType="hashmap">
+		UPDATE commentReport
+		SET commentDeleteReason = #{commentDeleteReason}
+		WHERE commentIndex = #{commentIndex}
+	</update>
+	<delete id="deleteCommentReport" parameterType="_int">
+		DELETE FROM commentReport
+		WHERE commentIndex = #{commentIndex}
+	</delete>
+	
+	<!-- wiki -->
+	<select id="findWikiReportList" resultType="wikiReport">
+		SELECT * FROM wikiReport
+		ORDER BY wikiReportIndex
+	</select>
+	<update id="updateWikiReport" parameterType="hashmap">
+		UPDATE wikiReport
+		SET wikiDeleteReason = #{wikiDeleteReason}
+		WHERE (subject, rvs) = (#{subject}, #{rvs})
+	</update>
+	<delete id="deleteWikiReport" parameterType="_int">
+		DELETE FROM wikiReport
+		WHERE (subject, rvs) = (#{subject}, #{rvs})
+	</delete>
+	
+	<!-- members -->
+	<update id="updateMemberStatus" parameterType="hashmap">
+		UPDATE members 
+		SET statusValue = #{memberStatus} 
+		WHERE nickname = #{memberNickname}
+	</update>
+	<insert id="addNewAdmin" parameterType="member">
+		INSERT INTO members
+		(email, password, salt, passwordAlertAt, 
+		nickname, name, birthDate, sex, telecomValue, contact, 
+		zipcode, address, addressDetail, statusValue)
+		VALUES
+		(#{email}, #{password}, #{salt}, DATE_ADD(NOW(), INTERVAL 3 MONTH),
+		#{nickname}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact},
+		#{zipcode}, #{address}, #{addressDetail}, 'ADM')
+	</insert>
+</mapper>

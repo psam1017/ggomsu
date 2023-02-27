@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
 
 public class ArticleLikeCheckOk implements Action {
 

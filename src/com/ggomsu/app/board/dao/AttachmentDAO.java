@@ -6,7 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.ggomsu.app.board.vo.AttachmentVO;
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
 public class AttachmentDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();

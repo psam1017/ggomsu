@@ -6,40 +6,59 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.board.vo.CommentVO;
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
+import com.ggomsu.app.board.vo.ArticleDTO;
+import com.ggomsu.app.board.vo.CommentDTO;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
 // 작성자 : 김지혜
 public class CommentDAO {
 	SqlSessionFactory sessionFactory = MyBatisConfig.getSqlSession_f();
 	SqlSession sqlSession;
 	
-	// openSession(true) : 오토 커밋을 true로 설정.
 	public CommentDAO() {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<CommentVO> getCommentList(int articleIndex, String nickname){
+	public List<CommentDTO> getCommentList(int articleIndex, List<String> blindList){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("articleIndex", articleIndex);
+		map.put("blindList", blindList);
+		return sqlSession.selectList("Comment.getCommentList", map);
+	}
+	
+	public CommentDTO doInsertCommentProcedure(CommentDTO commentVO) {
+		return sqlSession.selectOne("Comment.doInsertCommentProcedure", commentVO);
+	}
+	
+	public CommentDTO doInsertRefCommentProcedure(CommentDTO commentVO) {
+		return sqlSession.selectOne("Comment.doInsertRefCommentProcedure", commentVO);
+	}
+	
+	public void deleteCommentByCommentIndex(int commentIndex) {
+		sqlSession.delete("Comment.deleteCommentByCommentIndex", commentIndex);
+	}
+
+	// 관리자 신고 처리
+	public CommentDTO getCommentOne(int commentIndex) {
+		return sqlSession.selectOne("Comment.getCommentOne", commentIndex);
+	}
+
+	public void processReportComment(int commentIndex, String commentDeleteReason) {
 		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleIndex", articleIndex);
+		hash.put("commentIndex", commentIndex);
+		hash.put("commentDeleteReason", commentDeleteReason);
+		sqlSession.update("Comment.processReportComment", hash);
+	}
+	
+	// 마이 페이지
+	public int findCommentLikeTotalByNickname(String nickname) {
+		return sqlSession.selectOne("Comment.findCommentLikeTotalByNickname", nickname);
+	}
+
+	public List<ArticleDTO> getCommentLikeList(String nickname, int page) {
+		HashMap<String, Object> hash = new HashMap<String, Object>();
 		hash.put("nickname", nickname);
-		return sqlSession.selectList("Comment.getCommentList", hash);
+		hash.put("page", page);
+		return sqlSession.selectList("Comment.getCommentLikeList", hash);
 	}
-	
-	public void insertComment(CommentVO commentVo) {
-		sqlSession.insert("Comment.insertComment", commentVo);
-	}
-	
-	public void insertRefComment(CommentVO commentVo) {
-		sqlSession.insert("Comment.insertRefComment", commentVo);
-	}
-	
-	public void deleteComment(CommentVO commentVo) {
-		sqlSession.update("Comment.deleteComment", commentVo);
-	}
-	
-	public int getCommentIndex() {
-		return sqlSession.selectOne("Comment.getCommentIndex");
-	}
-	
 }

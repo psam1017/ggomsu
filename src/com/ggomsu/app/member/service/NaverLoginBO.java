@@ -45,7 +45,7 @@ public class NaverLoginBO {
                 .apiSecret(CLIENT_SECRET)
                 .callback(REDIRECT_URI)
                 .state(state) //앞서 생성한 난수값을 인증 URL생성시 사용함
-                .build(NaverLoginApi.instance());
+                .build(NaverLoginAPI.instance());
 
         return oauthService.getAuthorizationUrl();
     }
@@ -61,7 +61,7 @@ public class NaverLoginBO {
                     .apiSecret(CLIENT_SECRET)
                     .callback(REDIRECT_URI)
                     .state(state)
-                    .build(NaverLoginApi.instance());
+                    .build(NaverLoginAPI.instance());
 
             /* Scribe에서 제공하는 AccessToken 획득 기능으로 네아로 Access Token을 획득 */
             OAuth2AccessToken accessToken = oauthService.getAccessToken(code);
@@ -105,7 +105,7 @@ public class NaverLoginBO {
         OAuth20Service oauthService =new ServiceBuilder()
                 .apiKey(CLIENT_ID)
                 .apiSecret(CLIENT_SECRET)
-                .callback(REDIRECT_URI).build(NaverLoginApi.instance());
+                .callback(REDIRECT_URI).build(NaverLoginAPI.instance());
 
             OAuthRequest request = new OAuthRequest(Verb.GET, PROFILE_API_URL, oauthService);
         oauthService.signRequest(oauthToken, request);

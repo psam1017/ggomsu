@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ggomsu.app.action.Action;
-import com.ggomsu.app.action.ActionForward;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.dao.BoardDAO;
+import com.ggomsu.system.action.Action;
+import com.ggomsu.system.action.ActionForward;
 
 // 작성자 : 이성호
 public class ArticleDeleteOk implements Action{

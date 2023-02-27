@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.mybatis.config.MyBatisConfig;
 import com.ggomsu.app.wiki.vo.*;
+import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
 // 작성자 : 박성민
 public class WikiDAO {
@@ -18,6 +18,10 @@ public class WikiDAO {
 	// openSession(true) : 오토 커밋을 true로 설정.
 	public WikiDAO() {
 		sqlSession = sessionFactory.openSession(true);
+	}
+	
+	public List<WikiInfoVO> getAllRvsBySubject(String subject){
+		return sqlSession.selectList("Wiki.getAllRvsBySubject", subject);
 	}
 	
 	public List<WikiInfoVO> getRecentSubject(){
