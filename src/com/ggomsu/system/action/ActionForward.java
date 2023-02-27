@@ -35,4 +35,9 @@ public class ActionForward {
 		this.setForward(false);
 		this.setPath(contextPath + "/error/error");
 	}
+	
+	public void setAction404(String contextPath) {
+		this.setForward(false);
+		this.setPath(contextPath + "/error/404");
+	}
 }

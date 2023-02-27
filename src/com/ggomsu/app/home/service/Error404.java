@@ -7,13 +7,13 @@ import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 
 //작성자 : 박성민
-public class Error implements Action{
+public class Error404 implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
-		forward.setPath("/views/errors/Error.jsp");
+		forward.setPath("/views/errors/404.jsp");
 		return forward;
 	}
 }

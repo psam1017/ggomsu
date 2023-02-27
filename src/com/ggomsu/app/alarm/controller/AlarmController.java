@@ -18,9 +18,16 @@ import com.ggomsu.system.action.ActionForward;
 public class AlarmController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private ActionForward doControl(String command, ActionForward forward, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+	private ActionForward doControl(String command, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		
+		ActionForward forward;
+		
 		if(command.equals("/alarm/list/view")) { forward = new ListView().execute(req, resp); }
 		else if(command.equals("/alarm/list/delete")) { forward = new ListDelete().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}
@@ -36,7 +43,7 @@ public class AlarmController extends HttpServlet {
 	
 		// command 해석 및 예외처리
 		try {
-			forward = doControl(command, forward, req, resp);
+			forward = doControl(command, req, resp);
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());

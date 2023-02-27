@@ -44,6 +44,10 @@ public class MemberController extends HttpServlet {
 		else if(command.equals("/member/term/expired")) { forward = new TermExpired().execute(req, resp); }
 		else if(command.equals("/member/term/confirm")) { forward = new TermConfirm().execute(req, resp); }
 		else if(command.equals("/member/term/cancel")) { forward = new TermCancel().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

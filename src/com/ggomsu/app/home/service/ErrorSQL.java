@@ -13,7 +13,7 @@ public class ErrorSQL implements Action{
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
-		forward.setPath("/views/error/SQL.jsp");
+		forward.setPath("/views/errors/SQL.jsp");
 		return forward;
 	}
 }

@@ -63,6 +63,10 @@ public class AdminController extends HttpServlet{
 		// add ADM
 		else if(command.equals("/admin/add")) { forward = new Add().execute(req, resp); }
 		else if(command.equals("/admin/add/confirm")) { forward = new AddConfirm().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

@@ -55,6 +55,10 @@ public class MyController extends HttpServlet {
 		// 회원탈퇴
 		else if(command.equals("/my/withdraw")) { forward = new Withdraw().execute(req, resp); }
 		else if(command.equals("/my/withdraw/confirm")) { forward = new WithdrawConfirm().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}

@@ -37,6 +37,10 @@ public class ReportController extends HttpServlet {
 		else if(command.equals("/report/wiki/reason")) { forward = new WikiReason().execute(req, resp); }
 		else if(command.equals("/report/wiki/confirm")) { forward = new WikiConfirm().execute(req, resp); }
 		else if(command.equals("/report/wiki/success")) { forward = new WikiSuccess().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
 		
 		return forward;
 	}
