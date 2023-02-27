@@ -36,13 +36,14 @@ CREATE TABLE wikiContents
 
 CREATE TABLE wikiReport
 (
+	wikiReportIndex		INT UNSIGNED	NOT NULL	PRIMARY KEY	AUTO_INCREMENT,
 	subject			VARCHAR(100)	NOT NULL,
     rvs					INT UNSIGNED	NOT NULL,
     nickname			VARCHAR(10)	NOT NULL	DEFAULT 'noname',
     ip					VARCHAR(128)	NULL,
 	wikiReportReason	VARCHAR(50)	NOT NULL,
     wikiDeleteReason	VARCHAR(50)	NULL,
-    CONSTRAINT PRIMARY KEY(subject, rvs, nickname),
+    CONSTRAINT UNIQUE(subject, rvs, nickname),
 	CONSTRAINT FOREIGN KEY(subject, rvs)
 		REFERENCES wikiInfo(subject, rvs)
 		ON DELETE CASCADE
@@ -55,7 +56,7 @@ CREATE TABLE wikiReport
 
 CREATE TABLE wikiAbuse
 (
-	nickname	VARCHAR(20)	NOT NULL DEFAULT 'noname',
+	nickname	VARCHAR(20)	NOT NULL	DEFAULT 'noname',
 	ip			VARCHAR(128)	NULL,
     blockedAt	DATETIME		NOT NULL	DEFAULT NOW(),
     PRIMARY KEY(nickname, ip),
@@ -104,17 +105,3 @@ VALUES
 ('청춘예찬', 3, 8, 1, 3, NULL),
 ('청춘예찬', 3, 9, 1, 9, NULL),
 ('청춘예찬', 3, 10, 1, 10, NULL);
-
-DELIMITER $$
-CREATE DEFINER=`psam1017`@`localhost` PROCEDURE `reviseWikiInfo`(
-	IN inSubject VARCHAR(100), 
-    IN inNickname VARCHAR(10), 
-    IN inIp VARCHAR(128),
-    OUT outRVS INT UNSIGNED)
-BEGIN
-	SET @newRVS = (SELECT MAX(rvs) + 1 FROM wikiInfo WHERE subject = inSubject);
-    INSERT INTO wikiInfo
-    VALUES(inSubject, @newRVS, inNickname, inIp, NOW(), NULL);
-    SELECT @newRVS;
-END $$
-DELIMITER ;
