@@ -13,7 +13,7 @@ import com.ggomsu.app.wiki.vo.WikiContentVO;
 import com.ggomsu.app.wiki.vo.WikiInfoVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.wiki.SimpleWiki;
+import com.ggomsu.system.wiki.WikiHelper;
 
 // 작성자 : 박성민
 public class ReviseConfirm implements Action {
@@ -22,7 +22,7 @@ public class ReviseConfirm implements Action {
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		SimpleWiki wiki = new SimpleWiki();
+		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
 		WikiInfoVO infoVO = new WikiInfoVO();
 		ActionForward forward = new ActionForward();
@@ -41,13 +41,13 @@ public class ReviseConfirm implements Action {
 		int preRvs = rvs - 1;
 		
 		// wiki 생성
-		List<WikiContentVO> rvsList = (ArrayList<WikiContentVO>) wiki.paragraphToList(subject, rvs, contentText);
+		List<WikiContentVO> rvsList = (ArrayList<WikiContentVO>) wikiHelper.paragraphToList(subject, rvs, contentText);
 		List<WikiContentVO> preRvsList = (LinkedList<WikiContentVO>) dao.getContentOne(subject, preRvs);
 		List<WikiContentVO> allPastList = (LinkedList<WikiContentVO>) dao.getContentPast(subject, preRvs);
-		wiki.setContentFromPast(preRvsList, allPastList);
+		wikiHelper.setContentFromPast(preRvsList, allPastList);
 		
 		// 위키 콘텐츠 저장
-		wiki.reviseContent(rvsList, preRvsList, allPastList);
+		wikiHelper.reviseContent(rvsList, preRvsList, allPastList);
 		dao.insertWikiContents(rvsList);
 		
 		String subjectEncoded = URLEncoder.encode(subject, "UTF-8");

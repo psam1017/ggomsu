@@ -8,7 +8,7 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.encrypt.SimpleEncryptor;
+import com.ggomsu.system.encrypt.EncryptionHelper;
 
 // 작성자 : 박성민
 public class PasswordAuth implements Action {
@@ -27,7 +27,7 @@ public class PasswordAuth implements Action {
 		// java 객체
 		MemberVO vo;
 		MemberDAO dao = new MemberDAO();
-		SimpleEncryptor encryptor = new SimpleEncryptor();
+		EncryptionHelper encryptionHelper = new EncryptionHelper();
 		HttpSession session = req.getSession();
 		
 		// 변수명
@@ -43,7 +43,7 @@ public class PasswordAuth implements Action {
 		salt = vo.getSalt();
 		
 		// 비밀번호 일치 검사
-		if(encryptor.compare(inserted, password, salt)) {
+		if(encryptionHelper.compare(inserted, password, salt)) {
 			session.setAttribute("myPasswordAuth", "success");
 			forward.setForward(false);
 			if(statusValue.equals("MEM")) {

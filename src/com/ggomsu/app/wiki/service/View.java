@@ -12,7 +12,7 @@ import com.ggomsu.app.wiki.vo.WikiContentVO;
 import com.ggomsu.app.wiki.vo.WikiInfoVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.wiki.SimpleWiki;
+import com.ggomsu.system.wiki.WikiHelper;
 
 // 작성자 : 박성민
 public class View implements Action {
@@ -21,7 +21,7 @@ public class View implements Action {
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		SimpleWiki wiki = new SimpleWiki();
+		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
 		WikiInfoVO infoVO = null;
 		ActionForward forward = new ActionForward();
@@ -48,7 +48,7 @@ public class View implements Action {
 			List<WikiContentVO> pastList = new LinkedList<>();
 			pastList.addAll(dao.getContentPast(subject, rvs));
 			List<WikiContentVO> currentList = (LinkedList<WikiContentVO>)dao.getContentOne(subject, rvs);
-			wiki.setContentFromPast(currentList, pastList);
+			wikiHelper.setContentFromPast(currentList, pastList);
 			
 			req.setAttribute("wikiInfo", infoVO);
 			req.setAttribute("wikiContents", currentList);

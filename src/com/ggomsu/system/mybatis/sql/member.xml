@@ -29,7 +29,7 @@
 		#{nickname}, #{name}, #{birthDate}, #{sex}, #{telecomValue}, #{contact}, 
 		#{zipcode}, #{address}, #{addressDetail}, 
 		<choose>
-			<when test='agreedMarketingAt.equals("agree")'>
+			<when test='"agree".equals(agreedMarketingAt)'>
 				NOW()
 			</when>
 			<otherwise>
@@ -122,13 +122,13 @@
 	<update id="updateTerm" parameterType="member">
 		UPDATE members
 		<choose>
-			<when test='agreedTermAt.equals("renew") and agreedMarketingAt.equals("agree")'>
+			<when test='"renew".equals(agreedTermAt) and "agree".equals(agreedMarketingAt)'>
 			SET agreedTermAt = NOW(), agreedMarketingAt = NOW()
 			</when>
-			<when test='agreedTermAt.equals("renew")'>
+			<when test='"renew".equals(agreedTermAt)'>
 			SET agreedTermAt = NOW(), agreedMarketingAt = NULL
 			</when>
-			<when test='agreedMarketingAt.equals("agree")'>
+			<when test='"agree".equals("agreedMarketingAt")'>
 			SET agreedMarketingAt = NOW()
 			</when>
 			<otherwise>

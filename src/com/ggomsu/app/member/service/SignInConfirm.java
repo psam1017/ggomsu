@@ -8,7 +8,7 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.encrypt.SimpleEncryptor;
+import com.ggomsu.system.encrypt.EncryptionHelper;
 
 // 작성자 : 박성민, 손하늘
 public class SignInConfirm implements Action {
@@ -19,7 +19,7 @@ public class SignInConfirm implements Action {
 		ActionForward forward = new ActionForward();
 		MemberVO vo;
 		MemberDAO dao = new MemberDAO();
-		SimpleEncryptor encryptor = new SimpleEncryptor();
+		EncryptionHelper encryptionHelper = new EncryptionHelper();
 		HttpSession session = req.getSession();
 		
 		String email = req.getParameter("email");
@@ -31,16 +31,18 @@ public class SignInConfirm implements Action {
 		String nickname = vo.getEmail();
 		String statusValue = vo.getStatusValue();
 		
-		isSignInOk = encryptor.compare(password, vo.getPassword(), vo.getSalt());
+		isSignInOk = encryptionHelper.compare(password, vo.getPassword(), vo.getSalt());
 		
 		if(!isSignInOk) { // 로그인 실패
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=fail");
 			return forward;
 		}
 		else {
+			// 게시판 정보를 저장 및 세션에서 삭제
 			String articleIndex = (String)session.getAttribute("articleIndex");
 			String boardValue = (String)session.getAttribute("boardValue");
 			String page = (String)session.getAttribute("page");
+			
 			session.setAttribute("blindList", dao.getBlindList(nickname));
 			session.setAttribute("statusValue", statusValue);
 			session.setAttribute("dakrModeFlag", vo.isDarkModeFlag());
@@ -65,15 +67,13 @@ public class SignInConfirm implements Action {
 				}
 				// 비밀번호를 변경해야 하는가? -> 3개월
 				else if(dao.checkPasswordRenew(email)) {
-					forward.setPath(req.getContextPath() + "/member/renew");
+					forward.setPath(req.getContextPath() + "/member/password/renew");
 				}
 				// 이전에 보던 페이지가 있는가?
-				else if(articleIndex != null) {
-					forward.setPath(req.getContextPath() + "/article/view?articleIndex=" + articleIndex);
+				else if(articleIndex != null || (boardValue != null && page != null)) {
+					forward.setPath(req.getContextPath() + "/member/sign-in/board");
 				}
-				else if(boardValue != null && page != null){
-					forward.setPath(req.getContextPath() + "/article/list?boardValue=" + boardValue + "&page=" + page);
-				}
+				// TODO else index로 돌아가기
 			}
 			// 로그인할 수 없는 계정 상태
 			else if(statusValue.equals("DEL") || statusValue.equals("SUS") || statusValue.equals("DOR")) {

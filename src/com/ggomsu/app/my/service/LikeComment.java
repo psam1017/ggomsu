@@ -21,29 +21,29 @@ public class LikeComment implements Action{
 		
 		// 파라미터 저장
 		String nickname = (String)session.getAttribute("nickname");
-		String temp = (String)session.getAttribute("page");
+//		String temp = (String)session.getAttribute("page");
+		String temp = (String)req.getAttribute("page");
 		
 		// 변수 및 초기화
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
 		int pageSize = 10;
-		int totalCount = commentDAO.findCommentLikeTotalByNickname(nickname);
+		int totalCount = commentDAO.findMyCommentLikeTotal(nickname);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
 		int realEndPage = (int)Math.ceil((double)totalCount / pageSize);
-		
-		endPage = (endPage > realEndPage) ? realEndPage : endPage;
 		int prevPage = (int)((page - 10) / 10) * 10 + 1;
 		int nextPage = (int)((page + 9) / 10) * 10 + 1;
 		
+		endPage = (endPage > realEndPage) ? realEndPage : endPage;
+		
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("startPage", startPage);
-		req.setAttribute("page", endPage);
-		req.setAttribute("realEndPage", realEndPage);
-		req.setAttribute("nowPage", page);
+		req.setAttribute("endPage", endPage);
+		req.setAttribute("page", page);
 		req.setAttribute("commentLikeList", commentDAO.getCommentLikeList(nickname, (page - 1) * 10));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
-		session.setAttribute("page", page);
+//		session.setAttribute("page", page);
 		
 		forward.setForward(true);
 		forward.setPath("/views/my/LikeComment.jsp");

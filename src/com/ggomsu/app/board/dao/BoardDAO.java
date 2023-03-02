@@ -15,7 +15,7 @@ public class BoardDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public String getBoardText(String boardValue) {
-		return sqlSession.selectOne("Board.getBoardText",boardValue);
+	public String findBoardText(String boardValue) {
+		return sqlSession.selectOne("Board.findBoardText",boardValue);
 	}
 }

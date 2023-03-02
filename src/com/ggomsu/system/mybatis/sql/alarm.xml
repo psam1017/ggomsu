@@ -46,7 +46,7 @@
 		AND (RC.commentIndex, OC.commentIndex) IN (SELECT refIndex, commentIndex FROM commentAlarm WHERE nickname = #{nickname})
 		ORDER BY writtenAt DESC;
 	</select>
-	<delete id="deleteAlarmListByNickname" parameterType="string">
+	<delete id="deleteAlarmListByNickname" statementType="CALLABLE" parameterType="string">
 		CALL deleteAlarmListByNickname(#{nickname})
 	</delete>
 </mapper>

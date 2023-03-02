@@ -24,7 +24,7 @@ public class HomeController extends HttpServlet {
 		
 		ActionForward forward = null;
 		
-		if(command.equals("/main")) { forward = new Index().execute(req, resp); }
+		if(command.equals("/main")) { forward = new Main().execute(req, resp); }
 		else if(command.equals("/dark-mode")) { forward = new DarkMode().execute(req, resp); }
 		else if(command.equals("/farewell")) { forward = new Farewell().execute(req, resp); }
 		else if(command.equals("/error/sql")) { forward = new ErrorSQL().execute(req, resp); }

@@ -71,7 +71,7 @@
 		SELECT * FROM wikiAbuse
 		WHERE 
 		<choose>
-			<when test='nickname.equals("noname")'>
+			<when test='"noname".equals(nickname)'>
 				ip = #{ip}
 			</when>
 			<otherwise>
