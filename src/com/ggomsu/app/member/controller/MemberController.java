@@ -15,7 +15,6 @@ import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.mail.SendMail;
 
 // 작성자 : 박성민, 이성호
-
 @WebServlet("/MemberController")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -79,6 +78,10 @@ public class MemberController extends HttpServlet {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
 		}
+		
+		System.out.println("member controlller 들어옴");
+		System.out.println(forward.getPath());
+		System.out.println(forward.isForward());
 		
 		if(forward != null) {
 			if(forward.isForward()) {

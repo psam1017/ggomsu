@@ -67,12 +67,13 @@ public class SignInConfirm implements Action {
 				}
 				// 비밀번호를 변경해야 하는가? -> 3개월
 				else if(dao.checkPasswordRenew(email)) {
-					forward.setPath(req.getContextPath() + "/member/renew");
+					forward.setPath(req.getContextPath() + "/member/password/renew");
 				}
 				// 이전에 보던 페이지가 있는가?
 				else if(articleIndex != null || (boardValue != null && page != null)) {
 					forward.setPath(req.getContextPath() + "/member/sign-in/board");
 				}
+				// TODO else index로 돌아가기
 			}
 			// 로그인할 수 없는 계정 상태
 			else if(statusValue.equals("DEL") || statusValue.equals("SUS") || statusValue.equals("DOR")) {

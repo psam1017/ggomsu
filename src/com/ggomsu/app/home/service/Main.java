@@ -13,7 +13,7 @@ import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 
 //작성자 : 박성민
-public class Index implements Action{
+public class Main implements Action{
 	
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -49,7 +49,7 @@ public class Index implements Action{
 		req.setAttribute("mostLikedArticle", mostLikedArticle);
 		
 		forward.setForward(true);
-		forward.setPath("/views/Index.jsp");
+		forward.setPath("/views/Main.jsp");
 		return forward;
 	}
 }
