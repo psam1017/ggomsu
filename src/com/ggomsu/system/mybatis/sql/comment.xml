@@ -2,8 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Comment">
 	<!-- 작성자: 김지혜, 박성민 -->
-	<select id ="getCommentList" parameterType="hashmap" resultType="comment">
-		SELECT C.*, COUNT(CL.commentIndex), M.profileImageUrl
+	<select id ="getCommentList" parameterType="map" resultType="comment">
+		SELECT C.*, COUNT(CL.commentIndex), M.profileImageUrl,
+			(SELECT COUNT(nickname) 
+		     FROM commentLike 
+    		 WHERE (commentIndex, nickname) = (C.commentIndex, #{nickname})) AS isLiked
 		FROM comments as C
 		LEFT OUTER JOIN commentLike as CL
 		ON C.commentIndex = CL.commentIndex
@@ -46,7 +49,7 @@
 	</update>
 	
 	<!-- 박성민 : my page like comment list에서 사용 -->
-	<select id="findCommentLikeTotalByNickname" parameterType="string" resultType="_int">
+	<select id="findMyCommentLikeTotal" parameterType="string" resultType="_int">
 		SELECT COUNT(1) FROM commentLike WHERE nickname = #{nickname};
 	</select>
 	<select id="getCommentLikeList" parameterType="hashmap" resultType="comment">
@@ -61,4 +64,19 @@
 		ORDER BY commentIndex DESC
 		LIMIT 10 OFFSET ${page}
 	</select>
+	
+	<!-- 박성민 : 좋아요 체크 -->
+	<select id="checkLiked" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(nickname)
+		FROM commentLike
+		WHERE (commentIndex, nickname) = (#{commentIndex}, #{nickname})
+	</select>
+	<insert id="doLike" parameterType="hashmap">
+		INSERT INTO commentLike(commentIndex, nickname)
+		VALUES (#{commentIndex}, #{nickname})
+	</insert>
+	<delete id="cancelLike" parameterType="hashmap">
+		DELETE FROM commentLike
+		WHERE (commentIndex, nickname) = (#{commentIndex}, #{nickname})
+	</delete>
 </mapper>

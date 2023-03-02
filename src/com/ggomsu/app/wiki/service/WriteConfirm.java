@@ -12,7 +12,7 @@ import com.ggomsu.app.wiki.vo.WikiContentVO;
 import com.ggomsu.app.wiki.vo.WikiInfoVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.wiki.SimpleWiki;
+import com.ggomsu.system.wiki.WikiHelper;
 
 // 작성자 : 박성민
 public class WriteConfirm implements Action {
@@ -21,7 +21,7 @@ public class WriteConfirm implements Action {
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		SimpleWiki wiki = new SimpleWiki();
+		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
 		WikiInfoVO infoVO = new WikiInfoVO();
 		ActionForward forward = new ActionForward();
@@ -48,7 +48,7 @@ public class WriteConfirm implements Action {
 			dao.insertWikiInfo(infoVO);
 			
 			// 위키 콘텐츠 저장
-			List<WikiContentVO> contents = (ArrayList<WikiContentVO>)wiki.paragraphToList(subject, rvs, contentText);
+			List<WikiContentVO> contents = (ArrayList<WikiContentVO>)wikiHelper.paragraphToList(subject, rvs, contentText);
 			dao.insertWikiContents(contents);
 			
 			String subjectEncoded = URLEncoder.encode(subject, "UTF-8");

@@ -15,6 +15,8 @@ public class ArticleDTO {
 	private String articleDeleteReason;
 	private int articleLikeCount;
 	private String profileImageUrl;
+	private String tagString;
+	private String[] tagArray;
 
 	public ArticleDTO() { ; }
 
@@ -104,5 +106,21 @@ public class ArticleDTO {
 
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
+	}
+	
+	public String getTagString() {
+		return tagString;
+	}
+
+	public void setTagString(String tagString) {
+		this.tagString = tagString;
+	}
+	
+	public String[] getTagArray() {
+		return tagArray;
+	}
+
+	public void setTagArray(String[] tagArray) {
+		this.tagArray = tagArray;
 	}
 }

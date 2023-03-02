@@ -1,24 +1,29 @@
 package com.ggomsu.app.board.service;
 
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ggomsu.app.alarm.service.AlarmService;
+import org.json.simple.JSONObject;
+
 import com.ggomsu.app.board.dao.CommentDAO;
 import com.ggomsu.app.board.vo.CommentDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.alarm.AlarmHelper;
 //작성자: 김지혜, 박성민
-public class CommentWrite implements Action {
+public class CommentWriteConfirm implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		ActionForward forward = new ActionForward();
+		JSONObject json = new JSONObject();
+		PrintWriter out = resp.getWriter();
 		CommentDAO commentDAO = new CommentDAO();
 		CommentDTO myComment = new CommentDTO();
-		AlarmService alarmService = new AlarmService();
+		AlarmHelper alarmHelper = new AlarmHelper();
 		HttpSession session = req.getSession();
 		
 		// parameter 저장
@@ -40,10 +45,8 @@ public class CommentWrite implements Action {
 		}
 		
 		// alarm 저장
-		alarmService.replaceAlarmWithMyComment(myComment);
+		alarmHelper.replaceAlarmWithMyComment(myComment);
 		
-		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/article/view?articleIndex=" + articleIndex);
-		return forward;
+		return null;
   }
 }

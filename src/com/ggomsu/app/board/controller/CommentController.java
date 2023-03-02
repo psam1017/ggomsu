@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggomsu.app.board.service.CommentDelete;
-import com.ggomsu.app.board.service.CommentWrite;
+import com.ggomsu.app.board.service.*;
 import com.ggomsu.system.action.ActionForward;
 
 // 작성자 : 김지혜, 박성민
@@ -22,8 +21,9 @@ public class CommentController extends HttpServlet {
 	private ActionForward doControl(String command, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ActionForward forward = null;
 		
-		if(command.equals("/comment/write")) { forward = new CommentWrite().execute(req, resp); }
-		else if(command.equals("/comment/delete")) { forward = new CommentDelete().execute(req, resp); }
+		if(command.equals("/comment/write/confirm")) { forward = new CommentWriteConfirm().execute(req, resp); }
+		else if(command.equals("/comment/delete/confirm")) { forward = new CommentDeleteConfirm().execute(req, resp); }
+		else if(command.equals("/comment/like")) { forward = new CommentLike().execute(req, resp); }
 		else { 
 			forward = new ActionForward();
 			forward.setAction404(req.getContextPath());

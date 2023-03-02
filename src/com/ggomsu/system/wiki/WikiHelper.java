@@ -9,7 +9,7 @@ import java.util.List;
 import com.ggomsu.app.wiki.vo.WikiContentVO;
 
 // 작성자 : 박성민
-public class SimpleWiki {
+public class WikiHelper {
 	
 	// 현재 작성한 위키의 content를 '일단' 저장해주기
 	// issue1 : wiki는 외래키 참조 무결성을 지키기 위해 content보다 info를 먼저 저장해야 한다.

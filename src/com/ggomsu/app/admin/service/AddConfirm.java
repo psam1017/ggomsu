@@ -9,7 +9,7 @@ import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.encrypt.EncryptionInfo;
-import com.ggomsu.system.encrypt.SimpleEncryptor;
+import com.ggomsu.system.encrypt.EncryptionHelper;
 
 //작성자 : 박성민
 public class AddConfirm implements Action{
@@ -21,14 +21,14 @@ public class AddConfirm implements Action{
 		MemberDAO memberDAO = new MemberDAO();
 		AdminDAO adminDAO = new AdminDAO();
 		ActionForward forward = new ActionForward();
-		SimpleEncryptor encryptor = new SimpleEncryptor();
+		EncryptionHelper encryptionHelper = new EncryptionHelper();
 		EncryptionInfo info = new EncryptionInfo();
 		
 		String email = req.getParameter("email");
 		String nickname = req.getParameter("nickname");
 		String contact = req.getParameter("contact");
 		String inserted = req.getParameter("password");
-		info = encryptor.encrypt(inserted);
+		info = encryptionHelper.encrypt(inserted);
 		
 		// 중복되는 값들은 한 번 더 검사. js의 취약성을 한 번 더 보완
 		if(memberDAO.checkEmail(email) || memberDAO.checkNickname(nickname) || memberDAO.checkContact(contact)) {

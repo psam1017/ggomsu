@@ -1,6 +1,7 @@
 package com.ggomsu.app.board.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,22 +10,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggomsu.app.board.service.ArticleDeleteOk;
-import com.ggomsu.app.board.service.ArticleGetBestListOk;
-import com.ggomsu.app.board.service.ArticleGetListOk;
-import com.ggomsu.app.board.service.ArticleGetOrderListOk;
-import com.ggomsu.app.board.service.ArticleGetSearchListOk;
-import com.ggomsu.app.board.service.ArticleLikeCheckOk;
-import com.ggomsu.app.board.service.ArticleViewDetailOk;
-import com.ggomsu.app.board.service.ArticleWriteOk;
-import com.ggomsu.app.my.service.LikeArticle;
+import com.ggomsu.app.board.service.*;
 import com.ggomsu.system.action.ActionForward;
 
-// 작성자 : 이성호
+// 작성자 : 박성민, 이성호
 @WebServlet("/ArticleController")
 public class ArticleController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private ActionForward doControl(String command, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		ActionForward forward = null;
+		
+		// 게시글 리스트 조회 -> 검색, 페이징, 기간, 정렬 통합
+		if(command.equals("/article/list")) { forward = new ArticleList().execute(req, resp); }
+		// 게시글 내용 CRUD
+		else if(command.equals("/article/view")) { forward = new ArticleView().execute(req, resp); }
+		else if(command.equals("/article/deleted")) { forward = new ArticleDeleted().execute(req, resp); }
+		else if(command.equals("/article/delete/confirm")) { forward = new ArticleDeleteConfirm().execute(req, resp); }
+		else if(command.equals("/article/delete/success")) { forward = new ArticleDeleteSuccess().execute(req, resp); }
+		else if(command.equals("/article/write")) { forward = new ArticleWrite().execute(req, resp); }
+		else if(command.equals("/article/write/confirm")) { forward = new ArticleWriteConfirm().execute(req, resp); }
+		else if(command.equals("/article/write/success")) { forward = new ArticleWriteSuccess().execute(req, resp); }
+		else if(command.equals("/article/update")) { forward = new ArticleUpdate().execute(req, resp); }
+		else if(command.equals("/article/update/confirm")) { forward = new ArticleUpdateConfirm().execute(req, resp); }
+		else if(command.equals("/article/update/success")) { forward = new ArticleUpdateSuccess().execute(req, resp); }
+		// 좋아요 체크
+		else if(command.equals("/article/like")) { forward = new ArticleLike().execute(req, resp); }
+		else { 
+			forward = new ActionForward();
+			forward.setAction404(req.getContextPath());
+		}
+		
+		return forward;
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
@@ -39,70 +58,16 @@ public class ArticleController extends HttpServlet {
 		String command = requestURI.substring(contextPath.length());
 		
 		ActionForward forward = null;
-	
-		if(command.equals("/board/article-get-list-ok")) {
-			try {
-				forward = new ArticleGetListOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("게시판 리스트 가져오기 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-get-best-list-ok")) {
-			try {
-				forward = new ArticleGetBestListOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("베스트 게시판 리스트 가져오기 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-get-search-list-ok")) {
-			try {
-				forward = new ArticleGetSearchListOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("검색 게시판 리스트 가져오기 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-view-detail-ok")) {
-			try {
-				forward = new ArticleViewDetailOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("게시글 상세보기 게시글 가져오기 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-get-viewed-order-list-ok")) {
-			try {
-				forward = new ArticleGetOrderListOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("조회순 게시판 리스트 가져오기 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-delete-ok")) {
-			try {
-				forward = new ArticleDeleteOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("게시글 삭제 실패!!!" + e);
-			}
-		}else if(command.equals("/board/get-article-write")) {
-			try {
-				req.setAttribute("type", "boardWrite");
-				forward = new ActionForward();
-				forward.setForward(true);
-				forward.setPath("/app/board/ArticleWriteTest.jsp");
-			} catch (Exception e) {
-				System.out.println("게시글 페이지 이동실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-write-ok")) {
-			try {
-				forward = new ArticleWriteOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("게시글 작성 실패!!!" + e);
-			}
-		}else if(command.equals("/board/article-like-get-list-ok")) {
-			try {
-				forward = new LikeArticle().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("마에피이지 즐겨찾기리스트 가져오기 실패 !!!" + e);
-			}
-		}else if(command.equals("/board/article-like-check-ok")) {
-			try {
-				forward = new ArticleLikeCheckOk().execute(req, resp);
-			} catch (Exception e) {
-				System.out.println("게시글 좋아요(즐겨찾기) 상태확인 실패 !!!" + e);
-			}
+		
+		// command 해석 및 예외처리
+		try {
+			forward = doControl(command, req, resp);
+		} catch (SQLException e) {
+			forward = new ActionForward();
+			forward.setActionBySQLException(req.getContextPath());
+		} catch (Exception e) {
+			forward = new ActionForward();
+			forward.setActionByException(req.getContextPath());
 		}
 		
 		if(forward != null) {

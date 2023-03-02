@@ -1,6 +1,7 @@
 package com.ggomsu.app.board.dao;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,9 +18,13 @@ public class TagDAO {
 	}
 
 	public void insertTag(int articleIndex, String tagValue) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleIndex", articleIndex);
-		hash.put("tagValue", tagValue);
-		sqlSession.update("Article.insertTag", hash);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("articleIndex", articleIndex);
+		map.put("tagValue", tagValue);
+		sqlSession.update("Tag.insertTag", map);
+	}
+	
+	public void deleteTags(int articleIndex) {
+		sqlSession.delete("Tag.deleteTags", articleIndex);
 	}
 }

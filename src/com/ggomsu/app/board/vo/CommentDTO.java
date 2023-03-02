@@ -13,6 +13,7 @@ public class CommentDTO {
 	private String commentDeleteReason;
 	private int commentLikeCount;
 	private String profileImageUrl;
+	private boolean isLiked;
 	
 	public CommentDTO() { ; }
 
@@ -76,12 +77,16 @@ public class CommentDTO {
 	public void setCommentLikeCount(int commentLikeCount) {
 		this.commentLikeCount = commentLikeCount;
 	}
-
 	public String getProfileImageUrl() {
 		return profileImageUrl;
 	}
-
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
+	}
+	public boolean isLiked() {
+		return isLiked;
+	}
+	public void setLiked(boolean isLiked) {
+		this.isLiked = isLiked;
 	}
 }

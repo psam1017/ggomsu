@@ -39,6 +39,7 @@ public class MemberController extends HttpServlet {
 		// 로그인, 로그아웃
 		else if(command.equals("/member/sign-in")) { forward = new SignIn().execute(req, resp); }
 		else if(command.equals("/member/sign-in/confirm")) { forward = new SignInConfirm().execute(req, resp); }
+		else if(command.equals("/member/sign-in/board")) { forward = new SignInBoard().execute(req, resp); }
 		else if(command.equals("/member/sign-out")) { forward = new SignOut().execute(req, resp); }
 		else if(command.equals("/member/password/renew")) { forward = new PasswordRenew().execute(req, resp); }
 		else if(command.equals("/member/term/expired")) { forward = new TermExpired().execute(req, resp); }

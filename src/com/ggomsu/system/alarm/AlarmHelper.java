@@ -1,4 +1,4 @@
-package com.ggomsu.app.alarm.service;
+package com.ggomsu.system.alarm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import com.ggomsu.app.alarm.vo.CommentAlarmVO;
 import com.ggomsu.app.board.vo.ArticleDTO;
 import com.ggomsu.app.board.vo.CommentDTO;
 
-public class AlarmService {
+public class AlarmHelper {
 
 	public void replaceAlarmWithMyComment(CommentDTO myComment) {
 		

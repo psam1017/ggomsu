@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	<!-- 작성자 : 이성호 -->
 <mapper namespace="Board">
-	<select id="getBoardText" parameterType="string" resultType="string">
+	<select id="findBoardText" parameterType="string" resultType="string">
 		SELECT `text` 
-		FROM psam1017.boards 
-		WHERE `boardValue` = #{boardValue}
+		FROM boards 
+		WHERE boardValue = #{boardValue}
 	</select>
 </mapper>

@@ -35,17 +35,12 @@ public class ArticleConfirm implements Action {
 			// 게시글 삭제
 			articleDAO.processReportArticle(articleIndex, articleDeleteReason);
 			
-			System.out.println(articleDeleteReason);
-			// reportedNickname에게 신고알림이 가도록	
-			
 		} else if (isDelete.contentEquals("off")) {
 			// 신고 리포트 보존
 			adminDAO.deleteArticleReport(articleIndex);	
 		}
-		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/admin/article/success");
 		return forward;
 	}
-
 }

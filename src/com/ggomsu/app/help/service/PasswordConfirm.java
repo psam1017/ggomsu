@@ -9,7 +9,7 @@ import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.encrypt.EncryptionInfo;
-import com.ggomsu.system.encrypt.SimpleEncryptor;
+import com.ggomsu.system.encrypt.EncryptionHelper;
 
 	//작성자 : 손하늘
 public class PasswordConfirm implements Action{
@@ -28,13 +28,13 @@ public class PasswordConfirm implements Action{
 		
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
-		SimpleEncryptor encryptor = new SimpleEncryptor();
+		EncryptionHelper encryptionHelper = new EncryptionHelper();
 		EncryptionInfo info = new EncryptionInfo();
 		
     	vo.setEmail((String)req.getSession().getAttribute("tempEmail"));
 		String inserted = req.getParameter("password");
 		
-		info = encryptor.encrypt(inserted);
+		info = encryptionHelper.encrypt(inserted);
 		
 		vo.setPassword(info.getPassword());
 		vo.setSalt(info.getSalt());

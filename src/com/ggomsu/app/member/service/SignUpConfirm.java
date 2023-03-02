@@ -8,7 +8,7 @@ import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.encrypt.EncryptionInfo;
-import com.ggomsu.system.encrypt.SimpleEncryptor;
+import com.ggomsu.system.encrypt.EncryptionHelper;
 
 //작성자 : 박성민
 public class SignUpConfirm implements Action{
@@ -19,11 +19,11 @@ public class SignUpConfirm implements Action{
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
-		SimpleEncryptor encryptor = new SimpleEncryptor();
+		EncryptionHelper encryptionHelper = new EncryptionHelper();
 		EncryptionInfo info = new EncryptionInfo();
 		
 		String inserted = req.getParameter("password");
-		info = encryptor.encrypt(inserted);
+		info = encryptionHelper.encrypt(inserted);
 		
 		String email = req.getParameter("email");
 		String nickname = req.getParameter("nickname");

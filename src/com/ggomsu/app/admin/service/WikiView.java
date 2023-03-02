@@ -47,7 +47,7 @@ public class WikiView implements Action{
 		int articleIndex = Integer.parseInt((String)jsonObject.get("articleIndex"));
 
 		ArticleReportVO articleReport = adminDAO.getArticleReport(nickname, articleIndex);
-		ArticleDTO article = articleDAO.getArticle(articleIndex);
+		ArticleDTO article = articleDAO.findArticle(articleIndex);
 		
 		if(articleReport != null) {
 			json.put("reportStatus", "ok");

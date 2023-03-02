@@ -8,7 +8,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 // 작성자 : 박성민
 
-public class SimpleEncryptor{
+public class EncryptionHelper{
 	
 	// 반환된 info는 호출한 쪽에서 값을 담아서 DB에 저장.
 	// 예외처리가 필요함.

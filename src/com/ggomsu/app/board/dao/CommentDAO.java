@@ -1,6 +1,7 @@
 package com.ggomsu.app.board.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,10 +20,11 @@ public class CommentDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<CommentDTO> getCommentList(int articleIndex, List<String> blindList){
-		HashMap<String, Object> map = new HashMap<String, Object>();
+	public List<CommentDTO> getCommentList(int articleIndex, List<String> blindList, String nickname){
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("articleIndex", articleIndex);
 		map.put("blindList", blindList);
+		map.put("nickname", nickname);
 		return sqlSession.selectList("Comment.getCommentList", map);
 	}
 	
@@ -51,8 +53,8 @@ public class CommentDAO {
 	}
 	
 	// 마이 페이지
-	public int findCommentLikeTotalByNickname(String nickname) {
-		return sqlSession.selectOne("Comment.findCommentLikeTotalByNickname", nickname);
+	public int findMyCommentLikeTotal(String nickname) {
+		return sqlSession.selectOne("Comment.findMyCommentLikeTotal", nickname);
 	}
 
 	public List<ArticleDTO> getCommentLikeList(String nickname, int page) {
@@ -60,5 +62,26 @@ public class CommentDAO {
 		hash.put("nickname", nickname);
 		hash.put("page", page);
 		return sqlSession.selectList("Comment.getCommentLikeList", hash);
+	}
+	
+	public boolean checkLiked(String nickname, int commentIndex){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", nickname);
+		map.put("commentIndex", commentIndex);
+		return (Integer)(sqlSession.selectOne("Comment.checkLiked", map)) == 1;
+	}
+
+	public void doLike(String nickname, int commentIndex){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", nickname);
+		map.put("commentIndex", commentIndex);
+		sqlSession.update("Comment.doLike", map);
+	}
+
+	public void cancelLike(String nickname, int commentIndex){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", nickname);
+		map.put("commentIndex", commentIndex);
+		sqlSession.update("Comment.cancelLike", map);
 	}
 }
