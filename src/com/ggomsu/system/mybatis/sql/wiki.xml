@@ -4,18 +4,20 @@
 <!-- 작성자 : 박성민 -->
 <mapper namespace="Wiki">
 	<select id="getAllRvsBySubject" parameterType="string" resultType="wikiInfo">
-		SELECT *
-		FROM wikiInfo
-		WHERE subject = #{subject}
-		AND deletedAt IS NULL
-		ORDER BY rvs DESC
+		SELECT WI.*, M.profileImageUrl
+		FROM wikiInfo AS WI, members AS M
+		WHERE WI.nickname = M.nickname
+		AND WI.subject = #{subject}
+		AND WI.deletedAt IS NULL
+		ORDER BY WI.rvs DESC
 	</select>
 	<select id="getRecentSubject" resultType="wikiInfo">
-		SELECT subject, MAX(rvs), revisedAt
-		FROM wikiInfo
-		WHERE deletedAt IS NULL
-		GROUP BY subject
-		ORDER BY revisedAt DESC
+		SELECT WI.subject, MAX(WI.rvs) AS rvs, WI.revisedAt, M.profileImageUrl
+		FROM wikiInfo AS WI, members AS M
+		WHERE WI.nickname = M.nickname
+		AND WI.deletedAt IS NULL
+		GROUP BY WI.subject
+		ORDER BY WI.revisedAt DESC
 		LIMIT 10
 	</select>
 	<select id="getContentOne" parameterType="map" resultType="wikiContent">
@@ -34,10 +36,11 @@
 		ORDER BY rvs ASC, rvsIndex ASC
 		]]>
 	</select>
-	<select id="getWikiInfo" parameterType="map" resultType="wikiInfo">
-		SELECT *
-		FROM wikiInfo
-		WHERE (subject, rvs) = (#{subject}, #{rvs})
+	<select id="findWikiInfo" parameterType="map" resultType="wikiInfo">
+		SELECT WI.*, M.profileImageUrl
+		FROM wikiInfo AS WI, members AS M
+		WHERE WI.nickname = M.nickname
+		AND (subject, rvs) = (#{subject}, #{rvs})
 		LIMIT 1
 	</select>
 	<insert id="insertWikiInfo" parameterType="wikiInfo">
@@ -67,6 +70,18 @@
 		WHERE subject = #{subject}
 		AND rvs = 1
 	</select>
+	<insert id="confirmWikiAbuse" parameterType="map">
+		<choose>
+			<when test='"noname".equals(nickname)'>
+				INSERT INTO wikiAbuse(ip)
+				VALUES (#{ip})
+			</when>
+			<otherwise>
+				INSERT INTO wikiAbuse(nickname)
+				VALUES (#{nickname})
+			</otherwise>
+		</choose>
+	</insert>
 	<select id="getAbuseInfo" parameterType="map" resultType="wikiAbuse">
 		SELECT * FROM wikiAbuse
 		WHERE 
@@ -79,6 +94,11 @@
 			</otherwise>
 		</choose>
 	</select>
+	<update id="confirmWikiDelete" parameterType="map">
+		UPDATE wikiInfo
+		SET deletedAt = NOW()
+		WHERE (subject, rvs) = (#{subject}, #{rvs})
+	</update>
 	<select id="reviseWikiInfo" statementType="CALLABLE" parameterType="wikiInfo" resultType="_int">
 		CALL reviseWikiInfo(#{subject}, #{nickname}, #{ip})
 	</select>

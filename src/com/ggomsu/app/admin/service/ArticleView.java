@@ -1,63 +1,49 @@
 package com.ggomsu.app.admin.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import com.ggomsu.app.admin.dao.AdminDAO;
 import com.ggomsu.app.board.dao.ArticleDAO;
 import com.ggomsu.app.board.vo.ArticleDTO;
-import com.ggomsu.app.report.vo.ArticleReportVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.board.BoardHelper;
 
-// 작성자 : 이성호
+// 작성자 : 이성호, 박성민
 public class ArticleView implements Action{
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
-		ArticleDAO articleDAO = new ArticleDAO();
-		AdminDAO adminDAO = new AdminDAO();
 		JSONObject json = new JSONObject();
+		ArticleDAO articleDAO = new ArticleDAO();
+		BoardHelper boardHelper = new BoardHelper();
 		PrintWriter out = resp.getWriter();
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(req.getInputStream()));
-        StringBuilder builder = new StringBuilder();
-        String buffer;
-        while ((buffer = input.readLine()) != null) {
-            if (builder.length() > 0) {
-                builder.append("\n");
-            }
-            builder.append(buffer);
-        }
-        
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(builder.toString());
-        
-		String nickname = (String) jsonObject.get("nickname");
-		int articleIndex = Integer.parseInt((String)jsonObject.get("articleIndex"));
-
-		ArticleReportVO articleReport = adminDAO.getArticleReport(nickname, articleIndex);
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		ArticleDTO article = articleDAO.findArticle(articleIndex);
+		String[] tagArray = boardHelper.setTagListForOne(article);
 		
-		if(articleReport != null) {
-			json.put("reportStatus", "ok");
-			json.put("articleIndex", articleIndex );
-			json.put("reportContent", articleReport.getArticleReportReason() );
-			json.put("reportMember", nickname);
-			json.put("articleContent", article.getContent() );
-			json.put("reportedMember", article.getNickname());
+		if(article.getDeletedAt() == null) {
+			json.put("status", "ok");
+			json.put("articleIndex", articleIndex);
+			json.put("boardValue", article.getBoardValue());
+			json.put("nickname", article.getNickname());
+			json.put("profileImageUrl", article.getProfileImageUrl());
+			json.put("title", article.getTitle());
+			json.put("content", article.getContent());
+			json.put("viewCount", article.getViewCount());
+			json.put("writtenAt", article.getWrittenAt());
+			json.put("articleLikeCount", article.getArticleLikeCount());
+			json.put("tagArray", tagArray);
 		}
 		else {
-			json.put("reportStatus", "not-ok");
+			json.put("status", "not-ok");
 		}
 		out.print(json.toJSONString());
 		out.close();

@@ -11,6 +11,9 @@ public class WikiReason implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		req.setAttribute("subject", req.getParameter("subject"));
+		req.setAttribute("rvs", req.getParameter("rvs"));
+		
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
 		forward.setPath("/views/report/WikiReason.jsp");

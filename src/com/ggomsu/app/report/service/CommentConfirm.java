@@ -16,7 +16,6 @@ public class CommentConfirm implements Action{
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		ActionForward forward = new ActionForward();
 		ReportDAO dao = new ReportDAO();
 		CommentReportVO vo = new CommentReportVO();
 		HttpSession session = req.getSession();
@@ -30,10 +29,7 @@ public class CommentConfirm implements Action{
 		vo.setCommentIndex(commentIndex);
 		dao.replaceCommentReport(vo);
 		
-		forward.setForward(false);
-		forward.setPath(req.getSession() + "/report/comment/success");
-		
-		return forward;
+		return null;
 	}
 
 }

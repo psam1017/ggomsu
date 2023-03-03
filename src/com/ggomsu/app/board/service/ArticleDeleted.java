@@ -16,29 +16,22 @@ public class ArticleDeleted implements Action {
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		if((boolean) session.getAttribute("ArticleDeleted")) {
-			req.setAttribute("page", session.getAttribute("page"));
-			req.setAttribute("boardValue", session.getAttribute("boardValue"));
-			req.setAttribute("criteria", session.getAttribute("criteria"));
-			req.setAttribute("category", session.getAttribute("category"));
-			req.setAttribute("period", session.getAttribute("period"));
-			req.setAttribute("search", session.getAttribute("search"));
-			
-			session.removeAttribute("ArticleDeleted");
-			session.removeAttribute("page");
-			session.removeAttribute("boardValue");
-			session.removeAttribute("criteria");
-			session.removeAttribute("category");
-			session.removeAttribute("period");
-			session.removeAttribute("search");
-			
-			forward.setForward(true);
-			forward.setPath("/views/board/ArticleDeleted.jsp");
-		}
-		else {
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
-		}
+		req.setAttribute("page", session.getAttribute("page"));
+		req.setAttribute("boardValue", session.getAttribute("boardValue"));
+		req.setAttribute("criteria", session.getAttribute("criteria"));
+		req.setAttribute("category", session.getAttribute("category"));
+		req.setAttribute("period", session.getAttribute("period"));
+		req.setAttribute("search", session.getAttribute("search"));
+		
+		session.removeAttribute("page");
+		session.removeAttribute("boardValue");
+		session.removeAttribute("criteria");
+		session.removeAttribute("category");
+		session.removeAttribute("period");
+		session.removeAttribute("search");
+		
+		forward.setForward(true);
+		forward.setPath("/views/board/ArticleDeleted.jsp");
 		
 		return forward;
 	}

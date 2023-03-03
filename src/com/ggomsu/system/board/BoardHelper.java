@@ -61,7 +61,7 @@ public class BoardHelper {
 		return isFirst;
 	}
 	
-	public void setTagList(List<ArticleDTO> articleList) {
+	public void setTagListForList(List<ArticleDTO> articleList) {
 		
 		// article에 tag가 있다면 배열로 저장
 		for(ArticleDTO article : articleList) {
@@ -70,6 +70,24 @@ public class BoardHelper {
 				article.setTagArray(tagString.split(","));
 			}
 		}
+	}
+	
+	public String[] setTagListForOne(ArticleDTO article){
+		
+		String[] tagList = article.getTagString().split(",");
+		article.setTagArray(tagList);
+		
+		return tagList;
+	}
+	
+	public void setArticleSessionFromAttr(HttpServletRequest req, HttpSession session) {
+		session.setAttribute("articleIndex", req.getAttribute("articleIndex"));
+		session.setAttribute("boardValue", req.getAttribute("boardValue"));
+		session.setAttribute("page", req.getAttribute("page"));
+		session.setAttribute("criteria", req.getAttribute("criteria"));
+		session.setAttribute("category", req.getAttribute("category"));
+		session.setAttribute("period", req.getAttribute("period"));
+		session.setAttribute("search", req.getAttribute("search"));
 	}
 	
 	public void setArticleAttrFromSession(HttpServletRequest req, HttpSession session) {

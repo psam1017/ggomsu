@@ -21,7 +21,8 @@ public class CommentController extends HttpServlet {
 	private ActionForward doControl(String command, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ActionForward forward = null;
 		
-		if(command.equals("/comment/write/confirm")) { forward = new CommentWriteConfirm().execute(req, resp); }
+		if(command.equals("/comment/list")) { forward = new CommentList().execute(req, resp); }
+		else if(command.equals("/comment/write/confirm")) { forward = new CommentWriteConfirm().execute(req, resp); }
 		else if(command.equals("/comment/delete/confirm")) { forward = new CommentDeleteConfirm().execute(req, resp); }
 		else if(command.equals("/comment/like")) { forward = new CommentLike().execute(req, resp); }
 		else { 

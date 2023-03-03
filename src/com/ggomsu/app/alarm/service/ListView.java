@@ -24,7 +24,7 @@ public class ListView implements Action{
 		// java 객체 생성
 		AlarmDAO dao = new AlarmDAO();
 		JSONObject json = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
+		JSONArray array = new JSONArray();
 		PrintWriter out = resp.getWriter();
 		
 		// parameter 저장
@@ -39,11 +39,11 @@ public class ListView implements Action{
 			temp.put("nickname", message.getNickname());
 			temp.put("content", message.getContent());
 			temp.put("writtenAt", message.getWrittenAt());
-			jsonArray.add(temp);
+			array.add(temp);
 		}
 		
 		json.put("size", messageList.size());
-		json.put("list", jsonArray);
+		json.put("list", array);
 		out.print(json.toJSONString());
 		out.close();
 		

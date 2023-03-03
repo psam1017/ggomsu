@@ -1,7 +1,7 @@
 package com.ggomsu.app.wiki.vo;
 
 // 작성자 : 박성민
-public class WikiInfoVO {
+public class WikiInfoDTO {
 
 	private String subject;
 	private int rvs;
@@ -9,8 +9,9 @@ public class WikiInfoVO {
 	private String ip;
 	private String revisedAt;
 	private String deletedAt;
+	private String profileImageUrl;
 
-	public WikiInfoVO() { ; }
+	public WikiInfoDTO() { ; }
 
 	public String getSubject() {
 		return subject;
@@ -47,5 +48,11 @@ public class WikiInfoVO {
 	}
 	public void setDeletedAt(String deletedAt) {
 		this.deletedAt = deletedAt;
+	}
+	public String getProfileImageUrl() {
+		return profileImageUrl;
+	}
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }

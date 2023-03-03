@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.wiki.dao.WikiDAO;
 import com.ggomsu.app.wiki.vo.WikiContentVO;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.wiki.vo.WikiInfoDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.wiki.WikiHelper;
@@ -23,9 +23,8 @@ public class View implements Action {
 		// java 객체 생성
 		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
-		WikiInfoVO infoVO = null;
+		WikiInfoDTO info = null;
 		ActionForward forward = new ActionForward();
-		HttpSession session = req.getSession();
 		
 		// parameter 저장
 		String subject = req.getParameter("subject");
@@ -35,10 +34,10 @@ public class View implements Action {
 		// /wiki/no-subject
 		
 		// 작성정보 가져오기
-		infoVO = dao.getWikiInfo(subject, rvs);
+		info = dao.findWikiInfo(subject, rvs);
 		
 		// 오용으로 인해 삭제된 버전일 때
-		if(infoVO.getDeletedAt() != null) {
+		if(info.getDeletedAt() != null) {
 			forward.setForward(true);
 			forward.setPath("/views/wiki/Deleted.jsp");
 		}
@@ -50,11 +49,11 @@ public class View implements Action {
 			List<WikiContentVO> currentList = (LinkedList<WikiContentVO>)dao.getContentOne(subject, rvs);
 			wikiHelper.setContentFromPast(currentList, pastList);
 			
-			req.setAttribute("wikiInfo", infoVO);
+			req.setAttribute("wikiInfo", info);
 			req.setAttribute("wikiContents", currentList);
 			
-			session.setAttribute("subject", subject);
-			session.setAttribute("rvs", rvs);
+			req.setAttribute("subject", subject);
+			req.setAttribute("rvs", rvs);
 			
 			forward.setForward(true);
 			forward.setPath("/views/wiki/View.jsp");

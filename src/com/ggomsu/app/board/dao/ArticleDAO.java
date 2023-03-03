@@ -85,12 +85,12 @@ public class ArticleDAO {
 		sqlSession.delete("Article.deleteArticle", articleIndex);
 	}
 	
-	// 게시글 신고...?
-	public void processReportArticle(int articleIndex, String articleDeleteReason) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleIndex", articleIndex);
-		hash.put("articleDeleteReason", articleDeleteReason);
-		sqlSession.update("Article.processReportArticle", hash);
+	// 신고 받은 게시글을 삭제 처리하고 사유를 명시
+	public void confirmArticleDelete(int articleIndex, String articleDeleteReason) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("articleIndex", articleIndex);
+		map.put("articleDeleteReason", articleDeleteReason);
+		sqlSession.update("Article.confirmArticleDelete", map);
 	}
 
 	// 마이 페이지 게시글 좋아요 목록

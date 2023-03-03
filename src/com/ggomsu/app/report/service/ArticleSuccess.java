@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.board.BoardHelper;
 
 public class ArticleSuccess implements Action {
 
@@ -14,6 +15,7 @@ public class ArticleSuccess implements Action {
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
 		forward.setPath("/views/report/ArticleSuccess.jsp");
+		new BoardHelper().setArticleAttrFromSession(req, req.getSession());
 		
 		return forward;
 	}

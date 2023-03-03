@@ -45,17 +45,14 @@ public class AdminController extends HttpServlet{
 		// article process
 		else if(command.equals("/admin/article/report")) { forward = new ArticleReport().execute(req, resp); }
 		else if(command.equals("/admin/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
-		else if(command.equals("/admin/article/success")) { forward = new ArticleSuccess().execute(req, resp); }
 		else if(command.equals("/admin/article/view")) { forward = new ArticleView().execute(req, resp); }
 		// comment porcess
 		else if(command.equals("/admin/comment/report")) { forward = new CommentReport().execute(req, resp); }
 		else if(command.equals("/admin/comment/confirm")) { forward = new CommentConfirm().execute(req, resp); }
-		else if(command.equals("/admin/comment/success")) { forward = new CommentSuccess().execute(req, resp); }
 		else if(command.equals("/admin/comment/view")) { forward = new CommentView().execute(req, resp); }
 		// wiki process
 		else if(command.equals("/admin/wiki/report")) { forward = new WikiReport().execute(req, resp); }
 		else if(command.equals("/admin/wiki/confirm")) { forward = new WikiConfirm().execute(req, resp); }
-		else if(command.equals("/admin/wiki/success")) { forward = new WikiSuccess().execute(req, resp); }
 		else if(command.equals("/admin/wiki/view")) { forward = new WikiView().execute(req, resp); }
 		// members process
 		else if(command.equals("/admin/members")) { forward = new Members().execute(req, resp); }

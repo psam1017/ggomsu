@@ -20,19 +20,19 @@ public class WikiDAO {
 		sqlSession = sessionFactory.openSession(true);
 	}
 	
-	public List<WikiInfoVO> getAllRvsBySubject(String subject){
+	public List<WikiInfoDTO> getAllRvsBySubject(String subject){
 		return sqlSession.selectList("Wiki.getAllRvsBySubject", subject);
 	}
 	
-	public List<WikiInfoVO> getRecentSubject(){
+	public List<WikiInfoDTO> getRecentSubject(){
 		return sqlSession.selectList("Wiki.getRecentSubject");
 	}
 	
-	public WikiInfoVO getWikiInfo(String subject, int rvs) {
+	public WikiInfoDTO findWikiInfo(String subject, int rvs) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("subject", subject);
 		map.put("rvs", rvs);
-		return sqlSession.selectOne("Wiki.getWikiInfo", map);
+		return sqlSession.selectOne("Wiki.findWikiInfo", map);
 	}
 
 	public List<WikiContentVO> getContentOne(String subject, int rvs) {
@@ -49,7 +49,7 @@ public class WikiDAO {
 		return sqlSession.selectList("Wiki.getContentPast", map);
 	}
 	
-	public void insertWikiInfo(WikiInfoVO info) {
+	public void insertWikiInfo(WikiInfoDTO info) {
 		sqlSession.insert("Wiki.insertWikiInfo", info);
 	}
 	
@@ -65,6 +65,13 @@ public class WikiDAO {
 		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedNickname", nickname)) == 1;
 	}
 	
+	public void confirmWikiAbuse(String nickname, String ip) {
+		Map<String, String> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("ip", ip);
+		sqlSession.insert("Wiki.confirmWikiAbuse", map);
+	}
+	
 	public WikiAbuseVO getAbuseInfo(String nickname, String ip) {
 		Map<String, String> map = new HashMap<>();
 		map.put("nickname", nickname);
@@ -72,11 +79,18 @@ public class WikiDAO {
 		return sqlSession.selectOne("Wiki.getAbuseInfo", map);
 	}
 	
+	public void confirmWikiDelete(String subject, int rvs) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("subject", subject);
+		map.put("rvs", rvs);
+		sqlSession.update("Wiki.confirmWikiDelete", map);
+	}
+	
 	public boolean checkExistBySubject(String subject) {
 		return Integer.parseInt(sqlSession.selectOne("Wiki.checkExistBySubject", subject)) == 1;
 	}
 	
-	public int reviseWikiInfo(WikiInfoVO info) {
+	public int reviseWikiInfo(WikiInfoDTO info) {
 		return sqlSession.selectOne("Wiki.reviseWikiInfo", info);
 	}
 }

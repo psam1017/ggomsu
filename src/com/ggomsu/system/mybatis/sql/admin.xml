@@ -4,17 +4,12 @@
 <mapper namespace="Admin">
 	<!-- article -->
 	<select id="getArticleReportList" resultType="articleReport">
-		SELECT AR.*, B.nickname as writerNickname
-		FROM articleReport AR 
-		LEFT OUTER JOIN (SELECT articleIndex, nickname FROM articles) AS B
-		ON AR.articleIndex = B.articleIndex
-	</select>
-	<select id="getArticleReport" parameterType="hashmap" resultType="articleReport">
 		SELECT * FROM articleReport
-		WHERE nickname = #{nickname}
-		AND articleIndex = #{articleIndex}
+		WHERE articleDeleteReason IS NOT NULL
+		ORDER BY articleReportIndex DESC
+		LIMIT 100
 	</select>
-	<update id="updateArticleReport" parameterType="hashmap">
+	<update id="confirmReportedArticle" parameterType="map">
 		UPDATE articleReport
 		SET articleDeleteReason = #{articleDeleteReason}
 		WHERE articleIndex = #{articleIndex}
@@ -26,19 +21,14 @@
 	
 	<!-- comment -->
 	<select id="getCommentReportList" resultType="commentReport">
-		SELECT CR.*, B.nickname as writerNickname
-		FROM commentReport CR 
-		LEFT OUTER JOIN (SELECT commentIndex, nickname FROM comments) AS B
-		ON CR.commentIndex = B.commentIndex
-	</select>
-	<select id="getCommentReport" parameterType="hashmap" resultType="commentReport">
 		SELECT * FROM commentReport
-		WHERE nickname = #{nickname}
-		AND commentIndex = #{commentIndex}
+		WHERE commentDeleteReason IS NOT NULL
+		ORDER BY commentReportIndex DESC
+		LIMIT 100
 	</select>
-	<update id="updateCommentReport" parameterType="hashmap">
-		UPDATE commentReport
-		SET commentDeleteReason = #{commentDeleteReason}
+	<update id="confirmReportedComment" parameterType="map">
+		UPDATE commentReport 
+		SET commentDeleteReason = #{commentDeleteReason} 
 		WHERE commentIndex = #{commentIndex}
 	</update>
 	<delete id="deleteCommentReport" parameterType="_int">
@@ -49,9 +39,11 @@
 	<!-- wiki -->
 	<select id="findWikiReportList" resultType="wikiReport">
 		SELECT * FROM wikiReport
-		ORDER BY wikiReportIndex
+		WHERE wikiDeleteReason IS NOT NULL
+		ORDER BY wikiReportIndex DESC
+		LIMIT 100
 	</select>
-	<update id="updateWikiReport" parameterType="hashmap">
+	<update id="confirmReportedWiki" parameterType="map">
 		UPDATE wikiReport
 		SET wikiDeleteReason = #{wikiDeleteReason}
 		WHERE (subject, rvs) = (#{subject}, #{rvs})
@@ -62,7 +54,7 @@
 	</delete>
 	
 	<!-- members -->
-	<update id="updateMemberStatus" parameterType="hashmap">
+	<update id="updateMemberStatus" parameterType="map">
 		UPDATE members 
 		SET statusValue = #{memberStatus} 
 		WHERE nickname = #{memberNickname}

@@ -165,8 +165,10 @@
 	</delete>
 	
 	<!-- admin에서 사용 -->
-	<update id="processReportArticle" parameterType="hashmap">
-		UPDATE articles SET deletedAt = now(), articleDeleteReason = #{articleDeleteReason} WHERE `articleIndex` = #{articleIndex}
+	<update id="confirmArticleDelete" parameterType="hashmap">
+		UPDATE articles 
+		SET deletedAt = now(), articleDeleteReason = #{articleDeleteReason} 
+		WHERE articleIndex = #{articleIndex}
 	</update>
 	
 	<!-- 박성민 : 마이 페이지에서 좋아요 목록 보기 -->

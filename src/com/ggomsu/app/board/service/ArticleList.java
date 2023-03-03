@@ -2,6 +2,7 @@ package com.ggomsu.app.board.service;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,15 +28,30 @@ public class ArticleList implements Action{
 		BoardHelper boardHelper = new BoardHelper();
 		List<ArticleDTO> articleList;
 		HttpSession session = req.getSession();
+		Cookie[] cookies = req.getCookies();
 		
 		// session, request 저장
 		List<String> blindList = (List<String>)session.getAttribute("blindList");
-		String boardValue = req.getParameter("boardValue") != null ? req.getParameter("boardValue") : "free";
 		String temp = req.getParameter("page");
 		String criteria = req.getParameter("criteria");
 		String category = req.getParameter("category");
 		String period = req.getParameter("period");
 		String search = req.getParameter("search");
+		String boardValue = null;
+		
+		if(req.getParameter("boardValue") != null) {
+			boardValue = req.getParameter("boardValue");
+		}
+		else if(cookies != null && cookies.length > 0) {
+			for(Cookie c : cookies) {
+				if(c.getName().equals("boardValue")) {
+					boardValue = c.getValue();
+				}
+			}
+		}
+		if(boardValue == null) {
+			boardValue = "free";
+		}
 		
 		// 페이징 처리 시작
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
@@ -51,7 +67,7 @@ public class ArticleList implements Action{
 		articleList = articleDAO.findList(boardValue, blindList, search, category, period, criteria, (page - 1) * 10);
 		
 		// tag 배열화
-		boardHelper.setTagList(articleList);
+		boardHelper.setTagListForList(articleList);
 		
 		// 페이징을 위한 속성
 		req.setAttribute("totalCount", totalCount);

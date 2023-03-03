@@ -40,16 +40,16 @@ public class CommentDAO {
 		sqlSession.delete("Comment.deleteCommentByCommentIndex", commentIndex);
 	}
 
-	// 관리자 신고 처리
 	public CommentDTO getCommentOne(int commentIndex) {
 		return sqlSession.selectOne("Comment.getCommentOne", commentIndex);
 	}
 
-	public void processReportComment(int commentIndex, String commentDeleteReason) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("commentIndex", commentIndex);
-		hash.put("commentDeleteReason", commentDeleteReason);
-		sqlSession.update("Comment.processReportComment", hash);
+	// 관리자 신고 처리
+	public void confirmCommentDelete(int commentIndex, String commentDeleteReason) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentIndex", commentIndex);
+		map.put("commentDeleteReason", commentDeleteReason);
+		sqlSession.update("Comment.confirmCommentDelete", map);
 	}
 	
 	// 마이 페이지
@@ -58,10 +58,10 @@ public class CommentDAO {
 	}
 
 	public List<ArticleDTO> getCommentLikeList(String nickname, int page) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("page", page);
-		return sqlSession.selectList("Comment.getCommentLikeList", hash);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", nickname);
+		map.put("page", page);
+		return sqlSession.selectList("Comment.getCommentLikeList", map);
 	}
 	
 	public boolean checkLiked(String nickname, int commentIndex){

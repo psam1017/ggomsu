@@ -24,68 +24,55 @@ public class AdminDAO {
 	
 	// member status
 	public void updateMemberStatus(String memberNickname, String memberStatus) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("memberNickname", memberNickname);
-		hash.put("memberStatus", memberStatus);
-		sqlSession.update("Admin.updateMemberStatus", hash);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberNickname", memberNickname);
+		map.put("memberStatus", memberStatus);
+		sqlSession.update("Admin.updateMemberStatus", map);
 	}
 	
 	// article
 	public List<ArticleReportVO> getArticleReportList(){
 		return sqlSession.selectList("Admin.getArticleReportList");
 	}
-	
-	public ArticleReportVO getArticleReport(String nickname, int articleIndex) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("articleIndex", articleIndex);
-		return sqlSession.selectOne("Admin.getArticleReport", hash);
-	}
-	
-	public void updateArticleReport(String articleDeleteReason, int articleIndex) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("articleDeleteReason", articleDeleteReason);
-		hash.put("articleIndex", articleIndex);
-		sqlSession.update("Admin.updateArticleReport", hash);
+
+	public void confirmReportedArticle(int articleIndex, String articleDeleteReason) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("articleIndex", articleIndex);
+		map.put("articleDeleteReason", articleDeleteReason);
+		sqlSession.update("Admin.confirmReportedArticle", map);
 	}
 	
 	public void deleteArticleReport(int articleIndex) {
-		sqlSession.delete("Admin.updateArticleReport", articleIndex);
+		sqlSession.delete("Admin.deleteArticleReport", articleIndex);
 	}
 	
 	// comment
 	public List<CommentReportVO> getCommentReportList(){
 		return sqlSession.selectList("Admin.getCommentReportList");
 	}
-	
-	public CommentReportVO getCommentReport(String nickname, int commentIndex) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("nickname", nickname);
-		hash.put("commentIndex", commentIndex);
-		return sqlSession.selectOne("Admin.getCommentReport", hash);
-	}
-	
-	public void updateCommentReport(String commentDeleteReason, int commentIndex) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
-		hash.put("commentDeleteReason", commentDeleteReason);
-		hash.put("commentIndex", commentIndex);
-		sqlSession.update("Admin.updateCommentReport", hash);
+
+	public void confirmReportedComment(int commentIndex, String commentDeleteReason) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentIndex", commentIndex);
+		map.put("commentDeleteReason", commentDeleteReason);
+		sqlSession.update("Admin.confirmReportedComment", map);
 	}
 	
 	public void deleteCommentReport(int commentIndex) {
 		sqlSession.delete("Admin.deleteCommentReport", commentIndex);
 	}
 	
-	// 박성민 추가 : wiki, add admin
+	// 박성민 추가 : wiki, add
 	public List<WikiReportVO> findWikiReportList(){
 		return sqlSession.selectList("Admin.findWikiReportList");
 	}
 	
-	public void updateWikiReport(String subject, int rvs) {
+	public void confirmReportedWiki(String subject, int rvs, String wikiDeleteReason) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("subject", subject);
 		map.put("rvs", rvs);
-		sqlSession.update("Admin.updateWikiReport", map);
+		map.put("wikiDeleteReason", wikiDeleteReason);
+		sqlSession.update("Admin.confirmReportedWiki", map);
 	}
 	
 	public void deleteWikiReport(String subject, int rvs) {

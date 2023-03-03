@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.wiki.dao.WikiDAO;
 import com.ggomsu.app.wiki.vo.WikiContentVO;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.wiki.vo.WikiInfoDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.wiki.WikiHelper;
@@ -24,7 +24,7 @@ public class ReviseConfirm implements Action {
 		// java 객체 생성
 		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
-		WikiInfoVO infoVO = new WikiInfoVO();
+		WikiInfoDTO info = new WikiInfoDTO();
 		ActionForward forward = new ActionForward();
 		
 		// parameter 저장
@@ -32,12 +32,12 @@ public class ReviseConfirm implements Action {
 		String contentText = req.getParameter("contents");
 		
 		// 위키 작성 정보를 저장하면서 rvs를 얻어온다.
-		infoVO.setSubject(subject);
-		infoVO.setNickname((String) req.getSession().getAttribute("nickname"));
-		infoVO.setIp(infoVO.getNickname().equals("noname") ? req.getRemoteAddr() : null);
+		info.setSubject(subject);
+		info.setNickname((String) req.getSession().getAttribute("nickname"));
+		info.setIp(info.getNickname().equals("noname") ? req.getRemoteAddr() : null);
 		
 		// 프로시저 호출 : 새로운 info를 INSERT하고, 새롭게 개정된 버전의 rvs를 가져온다.
-		int rvs = dao.reviseWikiInfo(infoVO);
+		int rvs = dao.reviseWikiInfo(info);
 		int preRvs = rvs - 1;
 		
 		// wiki 생성

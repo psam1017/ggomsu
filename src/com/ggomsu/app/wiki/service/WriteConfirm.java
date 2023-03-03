@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.wiki.dao.WikiDAO;
 import com.ggomsu.app.wiki.vo.WikiContentVO;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.wiki.vo.WikiInfoDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.wiki.WikiHelper;
@@ -23,7 +23,7 @@ public class WriteConfirm implements Action {
 		// java 객체 생성
 		WikiHelper wikiHelper = new WikiHelper();
 		WikiDAO dao = new WikiDAO();
-		WikiInfoVO infoVO = new WikiInfoVO();
+		WikiInfoDTO info = new WikiInfoDTO();
 		ActionForward forward = new ActionForward();
 		
 		// parameter 저장
@@ -41,11 +41,11 @@ public class WriteConfirm implements Action {
 			forward.setPath(req.getContextPath() + "/wiki/wiki-duplicate");
 		}
 		else {
-			infoVO.setSubject(subject);
-			infoVO.setRvs(rvs);
-			infoVO.setNickname(nickname);
-			infoVO.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
-			dao.insertWikiInfo(infoVO);
+			info.setSubject(subject);
+			info.setRvs(rvs);
+			info.setNickname(nickname);
+			info.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
+			dao.insertWikiInfo(info);
 			
 			// 위키 콘텐츠 저장
 			List<WikiContentVO> contents = (ArrayList<WikiContentVO>)wikiHelper.paragraphToList(subject, rvs, contentText);
