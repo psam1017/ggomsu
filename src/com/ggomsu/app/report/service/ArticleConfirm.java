@@ -8,6 +8,7 @@ import com.ggomsu.app.report.dao.ReportDAO;
 import com.ggomsu.app.report.vo.ArticleReportVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.board.BoardHelper;
 
 // 작성자 : 손하늘
 public class ArticleConfirm implements Action{
@@ -23,7 +24,7 @@ public class ArticleConfirm implements Action{
 		
 		// 파라미터 저장
 		String nickname = (String) session.getAttribute("nickname");
-		int articleIndex = (int) session.getAttribute("articleIndex");
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		String articleReportReason = req.getParameter("articleReportReason");
 		
 		// 게시글 신고 제출
@@ -31,6 +32,8 @@ public class ArticleConfirm implements Action{
 		vo.setArticleIndex(articleIndex);
 		vo.setArticleReportReason(articleReportReason);
 		dao.replaceArticleReport(vo);
+		
+		new BoardHelper().setArticleSessionFromAttr(req, session);
 		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/report/article/success");

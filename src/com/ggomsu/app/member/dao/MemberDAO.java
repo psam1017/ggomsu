@@ -133,8 +133,8 @@ public class MemberDAO {
 		return sqlSession.selectList("Member.getAllMember");
 	}
 	
-	public void updateAbuseCount(String nickname) {
-		sqlSession.update("Member.updateAbuseCount", nickname);
+	public void increaseAbuseCount(String nickname) {
+		sqlSession.update("Member.increaseAbuseCount", nickname);
 	}
 	
 	public void snsSignUp(MemberSnsVO vo) {

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.wiki.dao.WikiDAO;
-import com.ggomsu.app.wiki.vo.WikiInfoVO;
+import com.ggomsu.app.wiki.vo.WikiInfoDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 
@@ -18,7 +18,7 @@ public class Home implements Action {
 		ActionForward forward = new ActionForward();
 		WikiDAO dao = new WikiDAO();
 		
-		List<WikiInfoVO> list = dao.getRecentSubject();
+		List<WikiInfoDTO> list = dao.getRecentSubject();
 		req.setAttribute("recentList", list);
 		
 		forward.setForward(true);

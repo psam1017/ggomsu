@@ -166,8 +166,8 @@
 	</update>
 	
 	<!-- 이성호 : admin, sns에서 사용  -->
-	<update id="updateAbuseCount" parameterType="string" statementType="CALLABLE">
-		{ CALL updateBlockMember(#{nickname}) }
+	<update id="increaseAbuseCount" parameterType="string" statementType="CALLABLE">
+		CALL increaseAbuseCount(#{nickname})
 	</update>
 	<select id="getAllMember" resultType="member">
 		SELECT nickname, name, statusValue, abuseCount 

@@ -14,7 +14,6 @@ import com.ggomsu.app.report.service.ArticleConfirm;
 import com.ggomsu.app.report.service.ArticleReason;
 import com.ggomsu.app.report.service.ArticleSuccess;
 import com.ggomsu.app.report.service.CommentConfirm;
-import com.ggomsu.app.report.service.CommentSuccess;
 import com.ggomsu.app.report.service.WikiConfirm;
 import com.ggomsu.app.report.service.WikiReason;
 import com.ggomsu.app.report.service.WikiSuccess;
@@ -29,11 +28,13 @@ public class ReportController extends HttpServlet {
 		
 		ActionForward forward = null;
 		
+		// 게시글 신고
 		if(command.equals("/report/article/reason")) { forward = new ArticleReason().execute(req, resp); }
 		else if(command.equals("/report/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
 		else if(command.equals("/report/article/success")) { forward = new ArticleSuccess().execute(req, resp); }
+		// 댓글 신고
 		else if(command.equals("/report/comment/confirm")) { forward = new CommentConfirm().execute(req, resp); }
-		else if(command.equals("/report/comment/success")) { forward = new CommentSuccess().execute(req, resp); }
+		// 위키 신고
 		else if(command.equals("/report/wiki/reason")) { forward = new WikiReason().execute(req, resp); }
 		else if(command.equals("/report/wiki/confirm")) { forward = new WikiConfirm().execute(req, resp); }
 		else if(command.equals("/report/wiki/success")) { forward = new WikiSuccess().execute(req, resp); }

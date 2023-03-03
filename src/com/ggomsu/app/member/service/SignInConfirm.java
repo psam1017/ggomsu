@@ -8,6 +8,7 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
+import com.ggomsu.system.board.BoardHelper;
 import com.ggomsu.system.encrypt.EncryptionHelper;
 
 // 작성자 : 박성민, 손하늘
@@ -25,6 +26,7 @@ public class SignInConfirm implements Action {
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		boolean isSignInOk = false;
+		boolean isRedirectToBoard = false;
 		
 		forward.setForward(false);
 		vo = dao.getMemberInfo(email);
@@ -72,8 +74,11 @@ public class SignInConfirm implements Action {
 				// 이전에 보던 페이지가 있는가?
 				else if(articleIndex != null || (boardValue != null && page != null)) {
 					forward.setPath(req.getContextPath() + "/member/sign-in/board");
+					isRedirectToBoard = true;
 				}
-				// TODO else index로 돌아가기
+				else {
+					forward.setPath(req.getContextPath() + "/main");
+				}
 			}
 			// 로그인할 수 없는 계정 상태
 			else if(statusValue.equals("DEL") || statusValue.equals("SUS") || statusValue.equals("DOR")) {
@@ -87,6 +92,11 @@ public class SignInConfirm implements Action {
 		
 		if(forward.getPath() == null) {
 			forward.setPath(req.getContextPath() + "/error/error");
+		}
+		
+		// 이전 페이지로 돌아가는 게 아니라면 board 검색 정보는 session에서 삭제
+		if(!isRedirectToBoard) {
+			new BoardHelper().setArticleAttrFromSession(req, session);
 		}
 		
 		return forward;

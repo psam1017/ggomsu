@@ -19,7 +19,6 @@
 				#{blindMember}
 			</foreach>
 		</if>
-		AND deletedAt IS NULL
 		GROUP BY commentIndex
 		ORDER BY refIndex ASC, commentIndex ASC
 	</select>
@@ -35,7 +34,6 @@
 		WHERE commentIndex=#{commentIndex}
 	</delete>
 	
-	<!-- 이성호 : admin에서 사용 -->
 	<select id="getCommentOne" parameterType="_int" resultType="comment">
 		SELECT C.*, CL.commentLikeCount 
 		FROM comments AS C
@@ -43,16 +41,19 @@
 		ON C.`commentIndex` = CL.commentIndex
 		WHERE C.`commentIndex` = #{commentIndex}
 	</select>
-	<update id="processReportComment" parameterType="hashmap">
-		UPDATE comments SET deletedAt = now(), commentDeleteReason = #{commentDeleteReason} 
-		WHERE `commentIndex` = #{commentIndex}
+	
+	<!-- 이성호 : admin에서 사용 -->
+	<update id="confirmCommentDelete" parameterType="map">
+		UPDATE comments 
+		SET deletedAt = now(), commentDeleteReason = #{commentDeleteReason} 
+		WHERE commentIndex = #{commentIndex}
 	</update>
 	
 	<!-- 박성민 : my page like comment list에서 사용 -->
 	<select id="findMyCommentLikeTotal" parameterType="string" resultType="_int">
 		SELECT COUNT(1) FROM commentLike WHERE nickname = #{nickname};
 	</select>
-	<select id="getCommentLikeList" parameterType="hashmap" resultType="comment">
+	<select id="getCommentLikeList" parameterType="map" resultType="comment">
 		SELECT C.*, COUNT(CL.commentIndex) AS commentLikeCount, M.profileImageUrl
 		FROM comments AS C
 		LEFT OUTER JOIN commentLike AS CL
@@ -65,17 +66,17 @@
 		LIMIT 10 OFFSET ${page}
 	</select>
 	
-	<!-- 박성민 : 좋아요 체크 -->
-	<select id="checkLiked" parameterType="hashmap" resultType="_int">
+	<!-- 박성민, 이성호 : 좋아요 체크 -->
+	<select id="checkLiked" parameterType="map" resultType="_int">
 		SELECT COUNT(nickname)
 		FROM commentLike
 		WHERE (commentIndex, nickname) = (#{commentIndex}, #{nickname})
 	</select>
-	<insert id="doLike" parameterType="hashmap">
+	<insert id="doLike" parameterType="map">
 		INSERT INTO commentLike(commentIndex, nickname)
 		VALUES (#{commentIndex}, #{nickname})
 	</insert>
-	<delete id="cancelLike" parameterType="hashmap">
+	<delete id="cancelLike" parameterType="map">
 		DELETE FROM commentLike
 		WHERE (commentIndex, nickname) = (#{commentIndex}, #{nickname})
 	</delete>

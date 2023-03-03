@@ -22,25 +22,31 @@ public class ArticleConfirm implements Action {
 		String isDelete = req.getParameter("isDelete");
 		int articleIndex = 0;
 		
-		if(isDelete == null) { }
-		else if(isDelete.contentEquals("on")) {
+		if(isDelete.contentEquals("on")) {
 			articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
-			String reportedNickname = req.getParameter("reportedNickname");
+			String nickname = req.getParameter("nickname");
 			String articleDeleteReason = req.getParameter("articleDeleteReason");
 			
-			// 신고 카운트 증가 및 5 이상이면 statusValue sus로 변경
-			memberDAO.updateAbuseCount(reportedNickname);
-			// 신고 리포트 삭제
-			adminDAO.updateArticleReport(articleDeleteReason, articleIndex);
-			// 게시글 삭제
-			articleDAO.processReportArticle(articleIndex, articleDeleteReason);
+			// 신고 카운트 증가 및 5 이상이면 statusValue SUS로 변경
+			memberDAO.increaseAbuseCount(nickname);
+			// 삭제 사유를 명시하고 처리 완료함
+			adminDAO.confirmReportedArticle(articleIndex, articleDeleteReason);
+			// 게시글을 삭제 처리함
+			articleDAO.confirmArticleDelete(articleIndex, articleDeleteReason);
 			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/admin/article/report?code=success");
 		} else if (isDelete.contentEquals("off")) {
-			// 신고 리포트 보존
+			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
 			adminDAO.deleteArticleReport(articleIndex);	
+			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/admin/article/report?code=success");
 		}
-		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/admin/article/success");
+		else {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/admin/article/report?code=fail");
+		}
 		return forward;
 	}
 }

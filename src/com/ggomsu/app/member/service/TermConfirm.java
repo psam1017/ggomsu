@@ -19,28 +19,17 @@ public class TermConfirm implements Action{
 		HttpSession session = req.getSession();
 		
 		String agreedTermAt = req.getParameter("agreedTermAt");
-		String email = (String)session.getAttribute("email");
-		String articleIndex = (String)session.getAttribute("articleIndex");
-		String boardValue = (String)session.getAttribute("boardValue");
-		String page = (String)session.getAttribute("page");
+		String email = (String)session.getAttribute("disagreedEmail");
+		String nickname = (String)session.getAttribute("disagreedNickname");
 		
 		if(agreedTermAt.equals("renew")) {
-			session.setAttribute("email", session.getAttribute("disagreedEmail"));
-			session.setAttribute("nickname", session.getAttribute("disagreedNickname"));
+			session.setAttribute("email", email);
+			session.setAttribute("nickname", nickname);
 			session.removeAttribute("disagreedEmail");
 			session.removeAttribute("disagreedNickname");
 			
 			dao.updateAgreedTermAtByEmail(email);
-			
-			if(articleIndex != null) {
-				forward.setPath(req.getContextPath() + "/article/view?articleIndex=" + articleIndex);
-			}
-			else if(boardValue != null && page != null){
-				forward.setPath(req.getContextPath() + "/article/list?boardValue=" + boardValue + "&page=" + page);
-			}
-			else {
-				forward.setPath(req.getContextPath() + "/");
-			}
+			forward.setPath(req.getContextPath() + "/main");
 		}
 		else {
 			session.invalidate();

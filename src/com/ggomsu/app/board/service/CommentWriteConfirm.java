@@ -1,12 +1,8 @@
 package com.ggomsu.app.board.service;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONObject;
 
 import com.ggomsu.app.board.dao.CommentDAO;
 import com.ggomsu.app.board.vo.CommentDTO;
@@ -19,8 +15,6 @@ public class CommentWriteConfirm implements Action {
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		// java 객체 생성
-		JSONObject json = new JSONObject();
-		PrintWriter out = resp.getWriter();
 		CommentDAO commentDAO = new CommentDAO();
 		CommentDTO myComment = new CommentDTO();
 		AlarmHelper alarmHelper = new AlarmHelper();
@@ -28,7 +22,7 @@ public class CommentWriteConfirm implements Action {
 		
 		// parameter 저장
 		int refIndex = Integer.parseInt(req.getParameter("refIndex"));
-		int articleIndex = (int) session.getAttribute("articleIndex");
+		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		String nickname = (String) session.getAttribute("nickname");
 		String content = req.getParameter("content");
 		
