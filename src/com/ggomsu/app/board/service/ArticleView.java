@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.board.dao.ArticleDAO;
+import com.ggomsu.app.board.dao.BoardDAO;
 import com.ggomsu.app.board.vo.ArticleDTO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
@@ -19,12 +20,19 @@ public class ArticleView implements Action {
 		
 		// 자바 객체
 		ActionForward forward = new ActionForward();
+		BoardDAO boardDAO = new BoardDAO();
 		ArticleDAO articleDAO = new ArticleDAO();
 		BoardHelper boardHelper = new BoardHelper();
 		AlarmHelper alarmHelper = new AlarmHelper();
 		HttpSession session = req.getSession();
 		
 		// session
+		String statusValue = (String)session.getAttribute("statusValue");
+		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("TMP"))) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/article/no-member");
+			return forward;
+		}
 		String nickname = (String)session.getAttribute("nickname");
 		boolean alarmFlag = (boolean) session.getAttribute("alarmFlag");
 		
@@ -39,6 +47,7 @@ public class ArticleView implements Action {
 		ArticleDTO articleDTO = articleDAO.findArticle(articleIndex);
 		boardHelper.setTagListForOne(articleDTO);
 		String boardValue = articleDTO.getBoardValue();
+		String boardText = boardDAO.findBoardText(boardValue);
 		
 		if(articleDTO.getDeletedAt() != null) {
 			// 게시글 정보 반환
@@ -48,6 +57,7 @@ public class ArticleView implements Action {
 			// 검색 조건 유지
 			req.setAttribute("page", page);
 			req.setAttribute("boardValue", boardValue);
+			req.setAttribute("boardText", boardText);
 			req.setAttribute("criteria", criteria);
 			req.setAttribute("category", category);
 			req.setAttribute("period", period);

@@ -74,14 +74,12 @@ public class MemberController extends HttpServlet {
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());
+			e.printStackTrace();
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
-		
-		System.out.println("member controlller 들어옴");
-		System.out.println(forward.getPath());
-		System.out.println(forward.isForward());
 		
 		if(forward != null) {
 			if(forward.isForward()) {

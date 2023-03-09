@@ -6,6 +6,7 @@ public class AlarmMessageDTO {
 	private String nickname;
 	private String content;
 	private String writtenAt;
+	private int articleIndex;
 	
 	public AlarmMessageDTO() { ; }
 	
@@ -32,5 +33,11 @@ public class AlarmMessageDTO {
 	}
 	public void setWrittenAt(String writtenAt) {
 		this.writtenAt = writtenAt;
+	}
+	public int getArticleIndex() {
+		return articleIndex;
+	}
+	public void setArticleIndex(int articleIndex) {
+		this.articleIndex = articleIndex;
 	}
 }

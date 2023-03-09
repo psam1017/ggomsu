@@ -19,7 +19,7 @@ public class ArticleUpdateConfirm implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-	
+		
 		ActionForward forward = new ActionForward();
 		TagDAO tagDAO = new TagDAO();
 		ArticleDAO articleDAO = new ArticleDAO();
@@ -54,7 +54,6 @@ public class ArticleUpdateConfirm implements Action {
 			
 			// boardValue 쿠키 저장
 			boardHelper.setBoardCookie(req, resp, boardValue);
-			session.setAttribute("ArticleUpdate", "success");
 			
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/article/update/success");

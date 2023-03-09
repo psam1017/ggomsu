@@ -27,6 +27,7 @@ public class AdminController extends HttpServlet{
 			forward = new ActionForward();
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error");
+			return forward;
 		}
 		
 		// depend on my page
@@ -42,19 +43,17 @@ public class AdminController extends HttpServlet{
 		else if(command.equals("/admin/like/comment")) { forward = new LikeComment().execute(req, resp); }
 		else if(command.equals("/admin/config")) { forward = new Config().execute(req, resp); }
 		else if(command.equals("/admin/config/confirm")) { forward = new ConfigConfirm().execute(req, resp); }
-		// article process
+		// report
 		else if(command.equals("/admin/article/report")) { forward = new ArticleReport().execute(req, resp); }
 		else if(command.equals("/admin/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
 		else if(command.equals("/admin/article/view")) { forward = new ArticleView().execute(req, resp); }
-		// comment porcess
 		else if(command.equals("/admin/comment/report")) { forward = new CommentReport().execute(req, resp); }
 		else if(command.equals("/admin/comment/confirm")) { forward = new CommentConfirm().execute(req, resp); }
 		else if(command.equals("/admin/comment/view")) { forward = new CommentView().execute(req, resp); }
-		// wiki process
 		else if(command.equals("/admin/wiki/report")) { forward = new WikiReport().execute(req, resp); }
 		else if(command.equals("/admin/wiki/confirm")) { forward = new WikiConfirm().execute(req, resp); }
 		else if(command.equals("/admin/wiki/view")) { forward = new WikiView().execute(req, resp); }
-		// members process
+		// members status
 		else if(command.equals("/admin/members")) { forward = new Members().execute(req, resp); }
 		else if(command.equals("/admin/members/confirm")) { forward = new MembersConfirm().execute(req, resp); }
 		// add ADM

@@ -41,7 +41,7 @@ public class CheckAuth implements Action {
 			return null;
 		}
 		
-		if(!memberKey.equals(authKey) && authFailCount < 2) {
+		if(!memberKey.equals(authKey) && authFailCount < 3) {
 			authFailCount++;
 			json.put("auth", "not-ok");
 			json.put("authFailCount", authFailCount);
@@ -52,7 +52,7 @@ public class CheckAuth implements Action {
 			session.removeAttribute("authFailCount");
 			dao.insertAuthFailedEmail(tempEmail);
 		}
-		else if(memberKey.equals(authKey) && authFailCount < 2) {
+		else if(memberKey.equals(authKey) && authFailCount < 3) {
 			json.put("auth", "ok");
 			session.removeAttribute("authKey");
 			session.removeAttribute("tempEmail");

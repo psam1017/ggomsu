@@ -101,8 +101,8 @@ $(document).ready(function() {
 			path = "/wiki";
 		}
 		else{
-			alert("잘못된 접근입니다. 올바른 경로로 다시 시도해주십시오.\ntype : " + type);
-			location.replace("/ggomsu");
+			alert("잘못된 접근입니다. 올바른 경로로 다시 시도해주십시오.\n");
+			location.replace("/main");
 			return false;
 		}
 	}
@@ -114,4 +114,10 @@ $(document).ready(function() {
 		$(".summernote").html(innerContent);
 		original.innerHTML = "";
 	}
+	
+	// 0306 추가. 스타일 조정
+	
+	const noteEditable = document.querySelector(".note-editable");
+	noteEditable.className += " bg-white";
+	noteEditable.style.height = "350px";
 });

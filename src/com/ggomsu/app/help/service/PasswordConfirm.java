@@ -44,7 +44,7 @@ public class PasswordConfirm implements Action{
     	session.invalidate();
 		
     	forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/member/welcome");
+		forward.setPath(req.getContextPath() + "/member/sign-in?code=change");
 	    
 		return forward;
 	}

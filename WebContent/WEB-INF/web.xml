@@ -14,7 +14,7 @@
   </context-param>
   <context-param>
     <param-name>password</param-name>
-    <param-value>###서버 등록할 때 작성###</param-value>
+    <param-value>bluff12!@</param-value>
   </context-param>
   <filter>
     <filter-name>encodingFilter</filter-name>

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.member.dao.MemberDAO;
-import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 
@@ -15,13 +14,11 @@ public class Personal implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
-		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
 		
 		String email = (String)req.getSession().getAttribute("email");
-		vo = dao.getMemberInfo(email);
-		req.setAttribute("member", vo);
+		req.setAttribute("member", dao.getMemberInfo(email));
 		
 		forward.setForward(true);
 		forward.setPath("/views/my/Personal.jsp");

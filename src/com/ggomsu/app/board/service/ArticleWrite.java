@@ -16,14 +16,13 @@ public class ArticleWrite implements Action{
 		
 		if(!(statusValue.equals("MEM") || statusValue.equals("ADM"))) {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
-			return forward;
+			forward.setPath(req.getContextPath() + "/article/no-member");
 		}
-		
-		req.setAttribute("type", "boardWrite");
-		
-		forward.setForward(true);
-		forward.setPath("/views/board/ArticleWrite.jsp");
+		else {
+			req.setAttribute("type", "boardWrite");
+			forward.setForward(true);
+			forward.setPath("/views/board/ArticleWrite.jsp");
+		}
 		return forward;
 	}
 }

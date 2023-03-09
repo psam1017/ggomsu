@@ -39,6 +39,7 @@ public class ListView implements Action{
 			temp.put("nickname", message.getNickname());
 			temp.put("content", message.getContent());
 			temp.put("writtenAt", message.getWrittenAt());
+			temp.put("articleIndex", message.getArticleIndex());
 			array.add(temp);
 		}
 		

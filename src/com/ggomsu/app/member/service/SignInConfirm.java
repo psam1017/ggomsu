@@ -8,7 +8,6 @@ import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.board.BoardHelper;
 import com.ggomsu.system.encrypt.EncryptionHelper;
 
 // 작성자 : 박성민, 손하늘
@@ -26,16 +25,21 @@ public class SignInConfirm implements Action {
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		boolean isSignInOk = false;
-		boolean isRedirectToBoard = false;
 		
 		forward.setForward(false);
+		
+		if(!dao.checkEmail(email)) {
+			forward.setPath(req.getContextPath() + "/member/sign-in?code=fail");
+			return forward;
+		}
+		
 		vo = dao.getMemberInfo(email);
 		String nickname = vo.getEmail();
 		String statusValue = vo.getStatusValue();
 		
 		isSignInOk = encryptionHelper.compare(password, vo.getPassword(), vo.getSalt());
 		
-		if(!isSignInOk) { // 로그인 실패
+		if(!isSignInOk) {
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=fail");
 			return forward;
 		}
@@ -54,6 +58,7 @@ public class SignInConfirm implements Action {
 			if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
 				session.setAttribute("email", email);
 				session.setAttribute("nickname", nickname);
+				session.setAttribute("profileImageUrl", vo.getProfileImageUrl());
 				
 				// 로그인 날짜 갱신 -> 휴면계정 조회용
 				dao.updateSignAt(email);
@@ -74,7 +79,6 @@ public class SignInConfirm implements Action {
 				// 이전에 보던 페이지가 있는가?
 				else if(articleIndex != null || (boardValue != null && page != null)) {
 					forward.setPath(req.getContextPath() + "/member/sign-in/board");
-					isRedirectToBoard = true;
 				}
 				else {
 					forward.setPath(req.getContextPath() + "/main");
@@ -92,11 +96,6 @@ public class SignInConfirm implements Action {
 		
 		if(forward.getPath() == null) {
 			forward.setPath(req.getContextPath() + "/error/error");
-		}
-		
-		// 이전 페이지로 돌아가는 게 아니라면 board 검색 정보는 session에서 삭제
-		if(!isRedirectToBoard) {
-			new BoardHelper().setArticleAttrFromSession(req, session);
 		}
 		
 		return forward;

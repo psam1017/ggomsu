@@ -22,7 +22,13 @@ public class CommentConfirm implements Action {
 		String isDelete = req.getParameter("isDelete");
 		int commentIndex = 0;
 		
-		if(isDelete.contentEquals("on")) {
+		if(isDelete == null || isDelete.equals("off")) {
+			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
+			adminDAO.deleteCommentReport(commentIndex);	
+			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/admin/comment/report?code=keep");
+		} else if (isDelete.equals("on")) {
 			commentIndex = Integer.parseInt(req.getParameter("commentIndex"));
 			String nickname = req.getParameter("nickname");
 			String commentDeleteReason = req.getParameter("commentDeleteReason");
@@ -35,13 +41,7 @@ public class CommentConfirm implements Action {
 			commentDAO.confirmCommentDelete(commentIndex, commentDeleteReason);
 			
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/admin/comment/report?code=success");
-		} else if (isDelete.contentEquals("off")) {
-			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
-			adminDAO.deleteCommentReport(commentIndex);	
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/admin/comment/report?code=success");
+			forward.setPath(req.getContextPath() + "/admin/comment/report?code=delete");
 		}
 		else {
 			forward.setForward(false);

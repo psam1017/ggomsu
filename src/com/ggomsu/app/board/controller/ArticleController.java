@@ -25,6 +25,7 @@ public class ArticleController extends HttpServlet {
 		if(command.equals("/article/list")) { forward = new ArticleList().execute(req, resp); }
 		// 게시글 내용 CRUD
 		else if(command.equals("/article/view")) { forward = new ArticleView().execute(req, resp); }
+		else if(command.equals("/article/no-member")) { forward = new ArticleNoMember().execute(req, resp); }
 		else if(command.equals("/article/deleted")) { forward = new ArticleDeleted().execute(req, resp); }
 		else if(command.equals("/article/delete/confirm")) { forward = new ArticleDeleteConfirm().execute(req, resp); }
 		else if(command.equals("/article/delete/success")) { forward = new ArticleDeleteSuccess().execute(req, resp); }
@@ -65,9 +66,11 @@ public class ArticleController extends HttpServlet {
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());
+			e.printStackTrace();
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 		
 		if(forward != null) {

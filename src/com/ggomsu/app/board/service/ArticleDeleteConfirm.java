@@ -25,15 +25,6 @@ public class ArticleDeleteConfirm implements Action{
 		if(articleDAO.findArticle(articleIndex).getNickname().equals(nickname)) {
 			articleDAO.deleteArticle(articleIndex);
 			
-			// 삭제 성공을 안내하고 request 정보를 들고 있기 위한 임시 session 발급
-			session.setAttribute("boardValue", req.getParameter("boardValue"));
-			session.setAttribute("page", req.getParameter("page"));
-			session.setAttribute("criteria", req.getParameter("criteria"));
-			session.setAttribute("category", req.getParameter("category"));
-			session.setAttribute("period", req.getParameter("period"));
-			session.setAttribute("search", req.getParameter("search"));
-			session.setAttribute("ArticleDeleteSuccess", true);
-			
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/article/delete/success");
 		}

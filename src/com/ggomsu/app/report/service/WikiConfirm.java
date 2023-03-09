@@ -15,6 +15,8 @@ public class WikiConfirm implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		// ajax로 변경 필요
+		
 		// 자바 객체 생성
 		ActionForward forward = new ActionForward();
 		ReportDAO dao = new ReportDAO();

@@ -109,10 +109,10 @@
 		GROUP BY A.articleIndex
 		<!-- order criteria -->
 		<choose>
-			<when test='criteria == "like"'>
+			<when test='"like".equals(criteria)'>
 			ORDER BY articleLikeCount DESC, A.articleIndex DESC
 			</when>
-			<when test='criteria == "view"'>
+			<when test='"view".equals(criteria)'>
 			ORDER BY A.viewCount DESC, A.articleIndex DESC
 			</when>
 			<otherwise>
@@ -195,7 +195,7 @@
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
 		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 7 DAY ]]>
-		<if test="boardValue != null">
+		<if test='value != null and !"".equals(value)'>
 			AND boardValue = #{boardValue}
 		</if>
 		GROUP BY A.articleIndex
@@ -208,7 +208,7 @@
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
 		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 7 DAY ]]>
-		<if test="boardValue != null">
+		<if test='value != null and !"".equals(value)'>
 			AND boardValue = #{boardValue}
 		</if>
 		GROUP BY A.articleIndex

@@ -16,17 +16,13 @@ public class ArticleWriteSuccess implements Action {
 		
 		ActionForward forward = new ActionForward();
 		Cookie[] cookies = req.getCookies();
-		HttpSession session = req.getSession();
 		
-		if(session.getAttribute("ArticleWrite").equals("success")) {
-			session.removeAttribute("ArticleWrite");
-			if(cookies != null && cookies.length > 0) {
-				for(Cookie c : cookies) {
-					if(c.getName().equals("boardValue")) {
-						req.setAttribute("boardValue", c.getValue());
-						forward.setForward(true);
-						forward.setPath("/views/board/ArticleWriteSuccess.jsp");
-					}
+		if(cookies != null && cookies.length > 0) {
+			for(Cookie c : cookies) {
+				if(c.getName().equals("boardValue")) {
+					req.setAttribute("boardValue", c.getValue());
+					forward.setForward(true);
+					forward.setPath("/views/board/ArticleWriteSuccess.jsp");
 				}
 			}
 		}

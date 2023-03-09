@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.admin.dao.AdminDAO;
-import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.wiki.dao.WikiDAO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
@@ -16,14 +15,19 @@ public class WikiConfirm implements Action {
 
 		AdminDAO adminDAO = new AdminDAO();
 		WikiDAO wikiDAO = new WikiDAO();
-		MemberDAO memberDAO = new MemberDAO();
 		ActionForward forward = new ActionForward();
 		
 		String isDelete = req.getParameter("isDelete");
 		String subject = null;
 		int rvs = 0;
 		
-		if(isDelete.contentEquals("on")) {
+		if(isDelete == null || isDelete.equals("off")) {
+			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
+			adminDAO.deleteWikiReport(subject, rvs);	
+			
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=keep");
+		} else if (isDelete.equals("on")) {
 			subject = req.getParameter("subject");
 			rvs = Integer.parseInt(req.getParameter("rvs"));
 			String wikiDeleteReason = req.getParameter("wikiDeleteReason");
@@ -38,13 +42,7 @@ public class WikiConfirm implements Action {
 			wikiDAO.confirmWikiDelete(subject, rvs);
 			
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=success");
-		} else if (isDelete.contentEquals("off")) {
-			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
-			adminDAO.deleteWikiReport(subject, rvs);	
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=success");
+			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=delete");
 		}
 		else {
 			forward.setForward(false);
