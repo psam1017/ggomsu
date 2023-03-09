@@ -26,7 +26,8 @@ public class MyController extends HttpServlet {
 		if(!statusValue.equals("MEM")) {
 			forward = new ActionForward();
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
+			forward.setPath(req.getContextPath() + "/error/error?code=no-member");
+			return forward;
 		}
 		
 		// 프로필

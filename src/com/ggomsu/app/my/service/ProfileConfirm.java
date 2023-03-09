@@ -27,7 +27,7 @@ public class ProfileConfirm implements Action{
 		
 		if(!req.getMethod().equals("POST")) {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
+			forward.setPath(req.getContextPath() + "/my/profile?code=error");
 			
 			return forward;
 		}
@@ -42,7 +42,7 @@ public class ProfileConfirm implements Action{
 		String oldNickname = (String) session.getAttribute("nickname");
 		String newNickname = req.getParameter("nickname");
 		String statusValue = (String) session.getAttribute("statusValue");
-		Part profile = req.getPart("profile");
+		Part profile = req.getPart("profileImageUrl");
 		
 		// multipart config
 		// 프로필 이미지 크기는 160 * 160 pixel 및 25KB 이하
@@ -54,7 +54,7 @@ public class ProfileConfirm implements Action{
 		FileRenamePolicy policy = new ProfileImageRenamePolicy(fileRoot, oldNickname, newNickname);
 		
 		// profile image의 크기 검사
-		if(profile.getSize() >= fileSize) {
+		if(profile != null && profile.getSize() >= fileSize) {
 			forward.setForward(false);
 			if(statusValue.equals("MEM")) {
 				forward.setPath(req.getContextPath() + "/my/profile?code=big-size");
@@ -71,23 +71,24 @@ public class ProfileConfirm implements Action{
 			file.mkdirs();
 		}
 		
-		// 파일업로드
-		MultipartRequest multi = new MultipartRequest(req, fileRoot, fileSize, encoding, policy);
+		vo.setProfileImageUrl(null);
 		
-		Enumeration<String> upload = multi.getFileNames();
-		
-		if(upload.hasMoreElements()) {
-			String name = upload.nextElement();
-			String systemName = multi.getFilesystemName(name);
-			if(systemName != null) {
-				vo.setProfileImageUrl("/uploads/" + category + "/" + systemName);
+		// 업로드한 파일이 있다면...
+		if(profile != null) {
+			// 파일업로드
+			MultipartRequest multi = new MultipartRequest(req, fileRoot, fileSize, encoding, policy);
+			
+			Enumeration<String> upload = multi.getFileNames();
+			
+			if(upload.hasMoreElements()) {
+				String name = upload.nextElement();
+				String systemName = multi.getFilesystemName(name);
+				if(systemName != null) {
+					String profileImageUrl = "/uploads/" + category + "/" + systemName;
+					vo.setProfileImageUrl(profileImageUrl);
+					session.setAttribute("profileImageUrl", profileImageUrl);
+				}
 			}
-			else {
-				vo.setProfileImageUrl(null);
-			}
-		}
-		else {
-			vo.setProfileImageUrl(null);
 		}
 		
 		vo.setNickname(newNickname);

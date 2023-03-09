@@ -21,7 +21,6 @@ public class LikeArticle implements Action{
 		
 		// 파라미터 저장
 		String nickname = (String)session.getAttribute("nickname");
-//		String temp = (String)session.getAttribute("page");
 		String temp = (String)req.getAttribute("page");
 		
 		// 변수 및 초기화
@@ -43,7 +42,6 @@ public class LikeArticle implements Action{
 		req.setAttribute("articleLikeList", articleDAO.getArticleLikeList(nickname, (page - 1) * 10));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
-//		session.setAttribute("page", page);
 		
 		forward.setForward(true);
 		forward.setPath("/views/my/LikeArticle.jsp");
@@ -51,4 +49,3 @@ public class LikeArticle implements Action{
 		return forward;
 	}
 }
-

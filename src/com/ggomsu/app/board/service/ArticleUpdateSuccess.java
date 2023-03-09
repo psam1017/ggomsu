@@ -3,7 +3,6 @@ package com.ggomsu.app.board.service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
@@ -16,17 +15,13 @@ public class ArticleUpdateSuccess implements Action {
 		
 		ActionForward forward = new ActionForward();
 		Cookie[] cookies = req.getCookies();
-		HttpSession session = req.getSession();
 		
-		if(req.getSession().getAttribute("ArticleUpdate").equals("success")) {
-			session.removeAttribute("ArticleUpdate");
-			if(cookies != null && cookies.length > 0) {
-				for(Cookie c : cookies) {
-					if(c.getName().equals("boardValue")) {
-						req.setAttribute("boardValue", c.getValue());
-						forward.setForward(true);
-						forward.setPath("/views/board/ArticleUpdateSuccess.jsp");
-					}
+		if(cookies != null && cookies.length > 0) {
+			for(Cookie c : cookies) {
+				if(c.getName().equals("boardValue")) {
+					req.setAttribute("boardValue", c.getValue());
+					forward.setForward(true);
+					forward.setPath("/views/board/ArticleUpdateSuccess.jsp");
 				}
 			}
 		}

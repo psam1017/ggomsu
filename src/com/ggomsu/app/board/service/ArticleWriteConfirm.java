@@ -57,7 +57,6 @@ public class ArticleWriteConfirm implements Action {
 		
 		// boardValue 쿠키 저장
 		boardHelper.setBoardCookie(req, resp, boardValue);
-		session.setAttribute("ArticleWrite", "success");
 		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/article/write/success");

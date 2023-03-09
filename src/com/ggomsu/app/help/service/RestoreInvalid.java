@@ -29,11 +29,11 @@ public class RestoreInvalid implements Action {
 			dao.restoreInvalid(invalidEmail);
 			session.invalidate();
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/member/welcome");
+			forward.setPath(req.getContextPath() + "/member/sign-in?code=restore");
 		}
 		else {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/help/Invalid?code=fail");
+			forward.setPath(req.getContextPath() + "/help/invalid?code=fail");
 		}
 		
 		return forward;

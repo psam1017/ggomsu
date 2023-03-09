@@ -53,12 +53,12 @@ public class MemberDAO {
 		return sqlSession.update("Member.updateSignAt", email);
 	}
 	
-	public boolean checkPasswordRenew(String email) {
-		return (Integer.parseInt(sqlSession.selectOne("Member.checkPasswordRenew", email)) > 0);
+	public boolean checkTermExpired(String email) {
+		return (Integer)(sqlSession.selectOne("Member.checkTermExpired", email)) > 0;
 	}
 	
-	public boolean checkTermExpired(String email) {
-		return (Integer.parseInt(sqlSession.selectOne("Member.checkTermExpired", email)) > 0);
+	public boolean checkPasswordRenew(String email) {
+		return (Integer)(sqlSession.selectOne("Member.checkPasswordRenew", email)) > 0;
 	}
 	
 	public void updatePasswordAlertAtByEmail(String email) {

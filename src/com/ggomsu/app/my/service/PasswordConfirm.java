@@ -20,9 +20,10 @@ public class PasswordConfirm implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		if(!req.getMethod().equals("POST") && !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
+		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
+			session.removeAttribute("myPasswordAuth");
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
+			forward.setPath(req.getContextPath() + "/my/password/check?code=error");
 			return forward;
 		}
 		

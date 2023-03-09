@@ -91,6 +91,7 @@ public class ArticleList implements Action{
 		
 		forward.setForward(true);
 		forward.setPath("/views/board/ArticleList.jsp");
+		
 		return forward;
 	}
 }

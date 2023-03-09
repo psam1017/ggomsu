@@ -13,13 +13,10 @@
     <title>summernote</title>
     <!-- 현행 부트스트랩과 호환되지 않을 경우 사용
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
      -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<!-- 서머노트를 위해 추가해야할 부분 -->
-	<script src="${pageContext.request.contextPath}/assets/summernote/summernote-lite.js"></script>
-	<script src="${pageContext.request.contextPath}/assets/summernote/lang/summernote-ko-KR.js"></script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/summernote/summernote-lite.css">
 </head>
 <body>
@@ -42,11 +39,15 @@
 			<input type="submit" id="submitBtn" value="작성완료">
 		</form>
 	</div>
+	<c:set var="type" value="boardWrite"></c:set>
 <script>
-	// type에 따라 초기화가 달라집니다. assets/js/Summernote.js를 참고하세요.
+	// type에 따라 초기화가 달라집니다. /assets/js/Summernote.js를 참고하세요.
 	const contextPath = "${pageContext.request.contextPath}";
 	const type = "${type}";
 </script>
+<!-- 서머노트를 위해 추가해야할 부분 -->
+<script src="${pageContext.request.contextPath}/assets/summernote/summernote-lite.js"></script>
+<script src="${pageContext.request.contextPath}/assets/summernote/lang/summernote-ko-KR.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/Summernote.js"></script>
 </body>
 </html>

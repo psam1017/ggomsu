@@ -2,6 +2,9 @@
  * 작성자 : 박성민
  */
 
+// start window.onload
+
+const validationForm = document.getElementById("validationForm");
 const email = document.getElementById("email");
 const emailResult = document.getElementById("emailResult");
 const password = document.getElementById("password");
@@ -19,6 +22,7 @@ const eachContact = document.querySelectorAll(".eachContact");
 const contact = document.getElementById("contact");
 const contactResult = document.getElementById("contactResult");
 const terms = document.querySelectorAll(".agreedTermAt");
+const validationSubmit = document.getElementById("validationSubmit");
 
 let isEmailValid = false;
 let isPasswordValid = false;
@@ -66,7 +70,8 @@ eachContact[2].addEventListener("blur", function(){
 	checkContact(contact.value);
 });
 
-signUpSubmit.addEventListener("click", function(){
+validationSubmit.addEventListener("click", function(e){
+	e.preventDefault();
 	formSubmit();
 });
 
@@ -95,7 +100,7 @@ function checkEmail(emailValue){
 	}
 	
     let xhr = new XMLHttpRequest();
-    let requestURL = contextPath + "/member/member-check-email-ok";
+    let requestURL = contextPath + "/member/check/email";
 
     xhr.open("post", requestURL, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -215,7 +220,7 @@ function checkNickname(nicknameValue){
 	}
 
 	let xhr = new XMLHttpRequest();
-    let requestURL = contextPath + "/member/member-check-nickname-ok";
+    let requestURL = contextPath + "/member/check/nickname";
 
     xhr.open("post", requestURL, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -283,7 +288,7 @@ function checkContact(contactValue){
 	}
 
 	let xhr = new XMLHttpRequest();
-    let requestURL = contextPath + "/member/member-check-contact-ok";
+    let requestURL = contextPath + "/member/check/contact";
 
     xhr.open("post", requestURL, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -303,10 +308,104 @@ function checkContact(contactValue){
     }
 }
 
+// 0304 이메일 인증 기능 추가
+
+const sendMailButton = document.getElementById("sendMailButton");
+const checkAuthButton = document.getElementById("checkAuthButton");
+const memberKey = document.getElementById("memberKey");
+
+let isAuthValid = false;
+
+sendMailButton.addEventListener("click", function(e){
+	e.preventDefault();
+	if(!isAuthValid){
+		sendMail(email.value);
+	}
+	else{
+		alert("이미 인증에 성공했습니다.");
+	}
+});
+
+checkAuthButton.addEventListener("click", function(e){
+	e.preventDefault();
+	if(!isAuthValid){
+		checkAuth(memberKey.value);
+	}
+	else{
+		alert("이미 인증에 성공했습니다.");
+	}
+});
+
+function sendMail(emailValue){
+	
+	isAuthValid = false;
+	
+	let xhr = new XMLHttpRequest();
+    let requestURL = contextPath + "/member/check/code";
+
+    xhr.open("post", requestURL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("email=" + emailValue);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+        	let json = JSON.parse(xhr.responseText);
+            if(json.status == "success"){
+            	alert("이메일 전송에 성공했습니다.\n3회 안에 인증에 성공해주세요.");
+            }
+            else if(json.status == "fail-encoding"){
+            	alert("이메일 전송에 실패했습니다.\n언어를 확인해주세요.");
+            }
+            else if(json.status == "fail-address"){
+            	alert("해당 주소는 존재하지 않습니다.\n주소를 확인해주세요.");
+            }
+            else if(json.status == "fail-transport"){
+            	alert("이메일 전송에 실패했습니다.\n관리자에게 문의해주세요.");
+            }
+        }
+    }
+}
+
+function checkAuth(memberKeyValue){
+	
+	isAuthValid = false;
+	
+	let xhr = new XMLHttpRequest();
+    let requestURL = contextPath + "/member/check/auth";
+
+    xhr.open("post", requestURL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("memberKey=" + memberKeyValue);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+        	let json = JSON.parse(xhr.responseText);
+            if(json.auth == "ok"){
+            	alert("이메일 인증에 성공했습니다.");
+            	isAuthValid = true;
+            }
+            else if(json.auth == "not-ok"){
+            	alert("이메일 인증에 실패했습니다.\n" + json.authFailCount + "번 실패했습니다.");
+            }
+            else if(json.auth == "fail"){
+            	alert("해당 주소는 사용할 수 없습니다.\n다른 주소를 사용해주세요.");
+            }
+        }
+    }
+}
+
+
+// 유효성 검사
 function formSubmit(){
 
 	if(!isEmailValid){
 		alert("이메일을 확인해주세요.");
+		email.focus();
+		return;
+	}
+	
+	if(!isAuthValid){
+		alert("이메일을 인증해주세요.");
 		email.focus();
 		return;
 	}
@@ -389,5 +488,5 @@ function formSubmit(){
 	// 필요한 경우 Base64를 사용할 수 있다.
 	// 진짜 암호화는 JAVA에서 PBKDF2로 수행한다.
 
-	signUpForm.submit();
+	validationForm.submit();
 }

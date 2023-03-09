@@ -1,22 +1,20 @@
-package com.ggomsu.app.report.service;
+package com.ggomsu.app.board.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
-import com.ggomsu.system.board.BoardHelper;
 
-public class ArticleSuccess implements Action {
+// 작성자 : 박성민
+public class ArticleNoMember implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
-		forward.setPath("/views/report/ArticleSuccess.jsp");
-		new BoardHelper().setArticleAttrFromSession(req, req.getSession());
-		
+		forward.setPath("/views/board/NoMember.jsp");
 		return forward;
 	}
 }

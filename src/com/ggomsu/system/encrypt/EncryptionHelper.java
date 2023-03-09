@@ -39,6 +39,10 @@ public class EncryptionHelper{
 	// 예외처리가 필요함.
 	public boolean compare(String inserted, String origin, String salt) throws Exception{
 		
+		if(origin == null || salt == null || origin.equals("") || salt.equals("")) {
+			return false;
+		}
+		
 		KeySpec spec = new PBEKeySpec(inserted.toCharArray(), salt.getBytes(), 1000, 128);
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 		byte[] hash = factory.generateSecret(spec).getEncoded();

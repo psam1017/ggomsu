@@ -21,8 +21,8 @@ public class SignInBoard implements Action{
 		
 		boardHelper.setArticleAttrFromSession(req, session);
 		
+		forward.setPath("/views/member/SignInBoard.jsp");
 		forward.setForward(true);
-		forward.setPath("/member/sign-in/board");
 		return forward;
 	}
 }

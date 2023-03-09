@@ -15,6 +15,8 @@ public class CommentConfirm implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		// ajax로 변경 필요
+		
 		// java 객체 생성
 		ReportDAO dao = new ReportDAO();
 		CommentReportVO vo = new CommentReportVO();
