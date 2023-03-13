@@ -18,6 +18,11 @@ public class WithdrawConfirm implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
+		if(!req.getMethod().equals("POST")) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/error/error");
+		}
+		
 		String email = (String)req.getSession().getAttribute("email");
 		dao.withdraw(email);
 		session.invalidate();

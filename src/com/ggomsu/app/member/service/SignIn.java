@@ -16,24 +16,34 @@ public class SignIn implements Action{
 
 		// referrer 정보 저장
 		String referer = req.getHeader("referer");
-		int articleURIIndex = referer.indexOf("/article");
-		int paramIndex = referer.indexOf("?");
 		
-		// article에서 넘어온 것인지 판단하여 referrer의 servletPath로 가공
-		String command = null;
-		if(articleURIIndex != -1 && paramIndex != -1) {
-			command = referer.substring(articleURIIndex, paramIndex);
+		if(referer != null) {
+			int articleURIIndex = referer.indexOf("/article");
+			int paramIndex = referer.indexOf("?");
 			
-			// article 조회 중이었다면 session에 검색 파라미터를 저장
-			// 로그인을 완료하면 검색 파라미터의 값을 가지고 다시 조회화면으로 이동
-			if(command.equals("/article/list") || command.equals("/article/view")) {
-				new BoardHelper().setArticleSessionFromAttr(req, req.getSession());
+			// article에서 넘어온 것인지 판단하여 referrer의 servletPath로 가공
+			String command = null;
+			if(articleURIIndex != -1 && paramIndex != -1) {
+				command = referer.substring(articleURIIndex, paramIndex);
+				
+				// article 조회 중이었다면 session에 검색 파라미터를 저장
+				// 로그인을 완료하면 검색 파라미터의 값을 가지고 다시 조회화면으로 이동
+				if(command.equals("/article/list") || command.equals("/article/view")) {
+					new BoardHelper().setArticleSessionFromAttr(req, req.getSession());
+				}
 			}
 		}
 		
 		ActionForward forward = new ActionForward();
-		forward.setForward(true);
-		forward.setPath("/views/member/SignIn.jsp");
+		
+		if(req.getSession().getAttribute("email") != null) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/error/error");
+		}
+		else {
+			forward.setForward(true);
+			forward.setPath("/views/member/SignIn.jsp");
+		}
 		
 		return forward;
 	}

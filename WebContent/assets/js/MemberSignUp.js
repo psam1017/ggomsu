@@ -39,6 +39,13 @@ let nameRegExp = /^[가-힣]+$/;
 let contactRegExp = /^[0-9]*$/;
 // 비밀번호는 소문자, 숫자, 특수문자를 포함한 8자 이상
 
+// 0304 이메일 인증 추가
+const sendMailButton = document.getElementById("sendMailButton");
+const checkAuthButton = document.getElementById("checkAuthButton");
+const memberKey = document.getElementById("memberKey");
+
+let isAuthValid = false;
+
 email.addEventListener("blur", function(){
     checkEmail(this.value);
 });
@@ -68,6 +75,10 @@ eachContact.forEach(element => {
 eachContact[2].addEventListener("blur", function(){
 	concatContact();
 	checkContact(contact.value);
+});
+
+email.addEventListener("change", function(){
+	isAuthValid = false;
 });
 
 validationSubmit.addEventListener("click", function(e){
@@ -310,12 +321,6 @@ function checkContact(contactValue){
 
 // 0304 이메일 인증 기능 추가
 
-const sendMailButton = document.getElementById("sendMailButton");
-const checkAuthButton = document.getElementById("checkAuthButton");
-const memberKey = document.getElementById("memberKey");
-
-let isAuthValid = false;
-
 sendMailButton.addEventListener("click", function(e){
 	e.preventDefault();
 	if(!isAuthValid){
@@ -338,6 +343,12 @@ checkAuthButton.addEventListener("click", function(e){
 
 function sendMail(emailValue){
 	
+	if(!isEmailValid){
+		alert("이메일을 확인해주세요.");
+		email.focus();
+		return;
+	}
+	
 	isAuthValid = false;
 	
 	let xhr = new XMLHttpRequest();
@@ -351,7 +362,7 @@ function sendMail(emailValue){
         if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
         	let json = JSON.parse(xhr.responseText);
             if(json.status == "success"){
-            	alert("이메일 전송에 성공했습니다.\n3회 안에 인증에 성공해주세요.");
+            	alert("인증번호를 전송했습니다.\n3회 안에 인증에 성공해주세요.");
             }
             else if(json.status == "fail-encoding"){
             	alert("이메일 전송에 실패했습니다.\n언어를 확인해주세요.");
@@ -384,8 +395,11 @@ function checkAuth(memberKeyValue){
             	alert("이메일 인증에 성공했습니다.");
             	isAuthValid = true;
             }
-            else if(json.auth == "not-ok"){
+            else if(json.auth == "not-ok" && json.authFailCount < 3){
             	alert("이메일 인증에 실패했습니다.\n" + json.authFailCount + "번 실패했습니다.");
+            }
+            else if(json.auth == "not-ok" && json.authFailCount >= 3){
+            	alert(json.authFailCount + "번 실패했습니다. 해당 이메일은 사용하실 수 없습니다.");
             }
             else if(json.auth == "fail"){
             	alert("해당 주소는 사용할 수 없습니다.\n다른 주소를 사용해주세요.");
@@ -440,7 +454,6 @@ function formSubmit(){
 	sex.forEach(element => {
 		if(element.checked == true){
 			isSexValid = true;
-			return;
 		}
 	});
 
@@ -474,7 +487,6 @@ function formSubmit(){
 	terms.forEach(element => {
 		if(element.checked == false){
 			isTermOk = false;
-			return;
 		}
 	});
 	

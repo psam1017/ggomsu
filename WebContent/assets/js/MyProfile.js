@@ -10,6 +10,8 @@ const validationSubmit = document.getElementById("validationSubmit");
 let isNicknameValid = false;
 let nicknameRegExp = /^[가-힣0-9]+$/;
 
+checkNickname(nickname.value);
+
 nickname.addEventListener("blur", function(){
 	checkNickname(this.value);
 });
@@ -76,27 +78,62 @@ function checkNickname(nicknameValue){
     }
 }
 
-// 프로필 이미지 크기 검사 추가
-
+// 프로필 이미지 크기 검사, 삭제, 미리보기 추가
+const profileImage = document.getElementById("profileImage");
 const profileImageUrl = document.getElementById("profileImageUrl");
+const profileDeleteButton = document.getElementById("profileDeleteButton");
 
-let isProfileImageUrlValid = false;
+let isChangeProfileImage = "false";
 
-profileImageUrl.addEventListener("change", function(){
-	checkSize(this);
+profileImageUrl.addEventListener("change", function(e){
+	checkSize(this, e);
 });
 
-function checkSize(image) {
+profileDeleteButton.addEventListener("click", function(e){
+	e.preventDefault();
+	deleteProfile();
+});
+
+// 이미지 크기 검사
+function checkSize(image, event) {
+	let isImageValid = true;
+	
 	if (image.files) {
-		if(image.files[0].size > (160 * 160 * 3)){
-			alert("파일 사이즈가 25KB를 넘습니다.");
-			image.value = null;
-			isProfileImageUrlValid = false;
+		let file = image.files[0];
+		let fileName = file.name;
+		fileName =  fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
+		
+		if(file.size > (1024 * 25)){
+			alert("이미지 사이즈가 25KB를 넘습니다.");
+			isImageValid = false;
 		}
-		else{
-			isProfileImageUrlValid = true;
+		if(fileName != "jpg" && fileName != "jpeg" &&  fileName != "gif" &&  fileName != "png"){
+			alert("이미지는 jpg, jpeg, gif, png 형식만 등록할 수 있습니다.");
+			isImageValid = false;
+		}
+		if(isImageValid){
+			preview(event);
+			isChangeProfileImage = "new";
 		}
 	}
+}
+
+// 업로드 이미지 미리보기
+function preview(event) {
+    let reader = new FileReader();
+
+    reader.onload = function(event) {
+      profileImage.src = event.target.result;
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+// 프로필 이미지 삭제
+function deleteProfile(){
+	profileImage.src = contextPath + "/bs/assets/img/illustrations/profiles/default.png";
+	profileImageUrl.value = null;
+	isChangeProfileImage = "delete";
 }
 
 // 유효성 검사
@@ -108,10 +145,7 @@ function formSubmit(){
 		return;
 	}
 
-	if(!isProfileImageUrlValid){
-		alert("프로필 이미지 유형과 크기를 확인해주세요.");
-		return;
-	}
-
+	validationForm.action += "?nickname=" + nickname.value + "&isChangeProfileImage=" + isChangeProfileImage;
+	
 	validationForm.submit();
 }

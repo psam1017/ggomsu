@@ -106,10 +106,10 @@ public class MemberDAO {
 		sqlSession.insert("Member.insertBlindMember", map);
 	}
 	
-	public void deleteBlindMember(String nickname, List<String> deleteList) {
+	public void deleteBlindMember(String nickname, String editableMember) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("nickname", nickname);
-		map.put("deleteList", deleteList);
+		map.put("editableMember", editableMember);
 		sqlSession.delete("Member.deleteBlindMember", map);
 	}
 

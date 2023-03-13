@@ -21,22 +21,31 @@ public class TermConfirm implements Action{
 		String agreedTermAt = req.getParameter("agreedTermAt");
 		String email = (String)session.getAttribute("disagreedEmail");
 		String nickname = (String)session.getAttribute("disagreedNickname");
+		String statusValue = (String)session.getAttribute("disagreedStatusValue");
 		
-		if(agreedTermAt.equals("renew")) {
-			session.setAttribute("email", email);
-			session.setAttribute("nickname", nickname);
-			session.removeAttribute("disagreedEmail");
-			session.removeAttribute("disagreedNickname");
-			
-			dao.updateAgreedTermAtByEmail(email);
-			forward.setPath(req.getContextPath() + "/main");
+		if(email == null) {
+			forward.setPath(req.getContextPath() + "/error/error");
 		}
 		else {
-			session.invalidate();
-			forward.setPath(req.getContextPath() + "/member/term/cancel");
+			if(agreedTermAt.equals("renew")) {
+				dao.updateAgreedTermAtByEmail(email);
+				
+				session.setAttribute("email", email);
+				session.setAttribute("nickname", nickname);
+				session.setAttribute("statusValue", statusValue);
+				session.removeAttribute("disagreedEmail");
+				session.removeAttribute("disagreedNickname");
+				session.removeAttribute("disagreedStatusValue");
+				
+				forward.setPath(req.getContextPath() + "/my/term?code=success");
+			}
+			else {
+				session.invalidate();
+				forward.setPath(req.getContextPath() + "/member/sign-in?code=disagree");
+			}
 		}
-		
 		forward.setForward(false);
+		
 		return forward;
 	}
 }

@@ -26,8 +26,27 @@ public class ConfigConfirm implements Action{
 		String email = (String)session.getAttribute("email");
 		String nickname = (String)session.getAttribute("nickname");
 		String statusValue = (String)session.getAttribute("statusValue");
-		boolean alarmFlag = req.getAttribute("alarmFlag").equals("on") ? true : false;
-		boolean darkModeFlag = req.getAttribute("darkModeFlag").equals("on") ? true : false;
+		String alarmFlagText = req.getParameter("alarmFlag");
+		String darkModeFlagText = req.getParameter("darkModeFlag");
+		
+		boolean alarmFlag = alarmFlagText != null && alarmFlagText.equals("on") ? true : false;
+		boolean darkModeFlag = darkModeFlagText != null && req.getParameter("darkModeFlag").equals("on") ? true : false;
+		
+		// 잘못된 접근일 때
+		if(!req.getMethod().equals("POST")) {
+			if(statusValue.equals("MEM")) {
+				forward.setPath(req.getContextPath() + "/my/config?code=error");
+			}
+			else if (statusValue.equals("ADM")) {
+				forward.setPath(req.getContextPath() + "/admin/config?code=error");
+			}
+			else {
+				forward.setPath(req.getContextPath() + "/error/error");
+			}
+			forward.setForward(false);
+			
+			return forward;
+		}
 		
 		if(!alarmFlag) {
 			alarmDAO.deleteAlarmListByNickname(nickname);
@@ -37,6 +56,9 @@ public class ConfigConfirm implements Action{
 		vo.setAlarmFlag(alarmFlag);
 		vo.setDarkModeFlag(darkModeFlag);
 		memberDAO.updateConfig(vo);
+		
+		session.setAttribute("alarmFlag", alarmFlag);
+		session.setAttribute("darkModeFlag", darkModeFlag);
 		
 		forward.setForward(false);
 		if(statusValue.equals("MEM")) {
