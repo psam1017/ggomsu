@@ -12,6 +12,8 @@ public class Password implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		req.getSession().invalidate();
+		
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
 		forward.setPath("/views/help/Password.jsp");

@@ -19,6 +19,19 @@ public class TermConfirm implements Action{
 		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
 		
+		// 잘못된 접근일 때
+		if(!req.getMethod().equals("POST")) {
+			if(req.getSession().getAttribute("statusValue").equals("MEM")) {
+				forward.setPath(req.getContextPath() + "/my/term?code=error");
+			}
+			else {
+				forward.setPath(req.getContextPath() + "/error/error");
+			}
+			forward.setForward(false);
+			
+			return forward;
+		}
+		
 		String agreedTermAt = req.getParameter("agreedTermAt");
 		String agreedMarketingAt = req.getParameter("agreedMarketingAt");
 		

@@ -69,7 +69,6 @@ public class UploadSaveWikiImage implements Action {
 		
 		PrintWriter out = resp.getWriter();
 		out.print(json.toJSONString());
-		System.out.println(json.toJSONString());
 		out.close();
 		
 		return null;

@@ -10,7 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggomsu.app.member.service.*;
+import com.ggomsu.app.member.service.CheckAuth;
+import com.ggomsu.app.member.service.CheckContact;
+import com.ggomsu.app.member.service.CheckEmail;
+import com.ggomsu.app.member.service.CheckNickname;
+import com.ggomsu.app.member.service.NaverCallback;
+import com.ggomsu.app.member.service.PasswordRenew;
+import com.ggomsu.app.member.service.SignIn;
+import com.ggomsu.app.member.service.SignInBoard;
+import com.ggomsu.app.member.service.SignInConfirm;
+import com.ggomsu.app.member.service.SignOut;
+import com.ggomsu.app.member.service.SignUp;
+import com.ggomsu.app.member.service.SignUpConfirm;
+import com.ggomsu.app.member.service.SnsConfirm;
+import com.ggomsu.app.member.service.SnsNickname;
+import com.ggomsu.app.member.service.TermConfirm;
+import com.ggomsu.app.member.service.TermExpired;
+import com.ggomsu.app.member.service.Welcome;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.mail.SendMail;
 
@@ -43,7 +59,6 @@ public class MemberController extends HttpServlet {
 		else if(command.equals("/member/password/renew")) { forward = new PasswordRenew().execute(req, resp); }
 		else if(command.equals("/member/term/expired")) { forward = new TermExpired().execute(req, resp); }
 		else if(command.equals("/member/term/confirm")) { forward = new TermConfirm().execute(req, resp); }
-		else if(command.equals("/member/term/cancel")) { forward = new TermCancel().execute(req, resp); }
 		else { 
 			forward = new ActionForward();
 			forward.setAction404(req.getContextPath());

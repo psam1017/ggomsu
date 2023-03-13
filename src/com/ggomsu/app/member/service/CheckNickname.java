@@ -23,8 +23,11 @@ public class CheckNickname implements Action {
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		if(dao.checkNickname(nickname)) {
-			json.put("nicknameStatus", "not-ok");
+		if(nickname.equals(req.getSession().getAttribute("nickname"))) {
+			json.put("nicknameStatus", "ok");
+		}
+		else if(dao.checkNickname(nickname)) {
+				json.put("nicknameStatus", "not-ok");
 		}
 		else {
 			json.put("nicknameStatus", "ok");

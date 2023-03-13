@@ -34,7 +34,7 @@ public class SignInConfirm implements Action {
 		}
 		
 		vo = dao.getMemberInfo(email);
-		String nickname = vo.getEmail();
+		String nickname = vo.getNickname();
 		String statusValue = vo.getStatusValue();
 		
 		isSignInOk = encryptionHelper.compare(password, vo.getPassword(), vo.getSalt());
@@ -51,7 +51,7 @@ public class SignInConfirm implements Action {
 			
 			session.setAttribute("blindList", dao.getBlindList(nickname));
 			session.setAttribute("statusValue", statusValue);
-			session.setAttribute("dakrModeFlag", vo.isDarkModeFlag());
+			session.setAttribute("darkModeFlag", vo.isDarkModeFlag());
 			session.setAttribute("alarmFlag", vo.isAlarmFlag());
 			
 			//회원상태가 MEM, ADM일 때는 필요한 session을 발급
@@ -66,10 +66,7 @@ public class SignInConfirm implements Action {
 				// 로그인 후 redirect 우선순위 : 약관 재동의 > 비밀번호 변경 > 이전 페이지
 				// 약관을 재동의해야 하는가? 1년
 				if(dao.checkTermExpired(email)) {
-					session.setAttribute("disagreedEmail", email);
-					session.setAttribute("disagreedNickname", nickname);
-					session.removeAttribute("email");
-					session.removeAttribute("nickname");
+					session.setAttribute("disagree", "true");
 					forward.setPath(req.getContextPath() + "/member/term/expired");
 				}
 				// 비밀번호를 변경해야 하는가? -> 3개월
@@ -86,10 +83,9 @@ public class SignInConfirm implements Action {
 			}
 			// 로그인할 수 없는 계정 상태
 			else if(statusValue.equals("DEL") || statusValue.equals("SUS") || statusValue.equals("DOR")) {
-				session.removeAttribute("email");
-				session.removeAttribute("nickname");
 				session.setAttribute("invalidEmail", email);
 				session.setAttribute("invalidNickname", nickname);
+				session.setAttribute("invalid", "true");
 				forward.setPath(req.getContextPath() + "/help/invalid");
 			}
 		}

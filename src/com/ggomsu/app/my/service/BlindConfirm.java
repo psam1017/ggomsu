@@ -1,8 +1,5 @@
 package com.ggomsu.app.my.service;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,34 +21,44 @@ public class BlindConfirm implements Action{
 		HttpSession session = req.getSession();
 		
 		String nickname = (String)session.getAttribute("nickname");
-		String newBlindMember = req.getParameter("newBlindMember");
-		String[] deleteArray = req.getParameterValues("delete");
-		List<String> deleteList = Arrays.asList(deleteArray);
-		
+		String editableMember = req.getParameter("editableMember");
+		String statusValue = (String)session.getAttribute("statusValue");
 		String edit = req.getParameter("edit");
 		
-		if(nickname.equals(newBlindMember)) { // 회원이 자기 닉네임을 제출한 경우
+		// 잘못된 접근일 때
+		if(!req.getMethod().equals("POST") || edit == null) {
+			if(statusValue.equals("MEM")) {
+				forward.setPath(req.getContextPath() + "/my/blind?code=error");
+			}
+			else {
+				forward.setPath(req.getContextPath() + "/error/error");
+			}
+			forward.setForward(false);
+			
+			return forward;
+		}
+		
+		if(nickname.equals(editableMember)) { // 회원이 자기 닉네임을 제출한 경우
 			forward.setPath(req.getContextPath() + "/my/blind?code=self");
 		}
-		else if(edit.equals("update") && !dao.checkNickname(nickname)) { // 회원이 존재하지 않는 닉네임을 제출한 경우
-			forward.setPath(req.getContextPath() + "/my/blind?code=no-update");
-		}
-		else if(edit.equals("delete") && deleteList.size() == 0) { // 회원이 아무도 선택하지 않고 삭제를 요청한 경우
-			forward.setPath(req.getContextPath() + "/my/blind?code=no-delete");
+		else if(!dao.checkNickname(editableMember)) { // 회원이 존재하지 않는 닉네임을 제출한 경우
+			forward.setPath(req.getContextPath() + "/my/blind?code=no-member");
 		}
 		else if(edit.equals("update")) {
-			dao.insertBlindMember(nickname, newBlindMember);
+			dao.insertBlindMember(nickname, editableMember);
+			session.setAttribute("blindList", dao.getBlindList(nickname));
 			forward.setPath(req.getContextPath() + "/my/blind?code=update");
 		}
 		else if(edit.equals("delete")) {
-			dao.deleteBlindMember(nickname, deleteList);
+			dao.deleteBlindMember(nickname, editableMember);
+			session.setAttribute("blindList", dao.getBlindList(nickname));
 			forward.setPath(req.getContextPath() + "/my/blind?code=delete");
 		}
 		else {
 			forward.setPath(req.getContextPath() + "/error/error");
 		}
-		
 		forward.setForward(false);
+		
 		return forward;
 	}
 }

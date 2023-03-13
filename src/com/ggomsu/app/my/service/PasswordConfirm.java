@@ -20,13 +20,6 @@ public class PasswordConfirm implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
-			session.removeAttribute("myPasswordAuth");
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/my/password/check?code=error");
-			return forward;
-		}
-		
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		EncryptionHelper encryptionHelper = new EncryptionHelper();
@@ -35,6 +28,24 @@ public class PasswordConfirm implements Action{
     	vo.setEmail((String)session.getAttribute("email"));
 		String inserted = req.getParameter("password");
 		String statusValue = (String)session.getAttribute("statusValue");
+		
+		// 잘못된 접근일 때
+		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
+			session.removeAttribute("myPasswordAuth");
+			
+			if(statusValue.equals("MEM")) {
+				forward.setPath(req.getContextPath() + "/my/password/check?code=error");
+			}
+			else if (statusValue.equals("ADM")) {
+				forward.setPath(req.getContextPath() + "/admin/password/check?code=error");
+			}
+			else {
+				forward.setPath(req.getContextPath() + "/error/error");
+			}
+			
+			forward.setForward(false);
+			return forward;
+		}
 		
 		info = encryptionHelper.encrypt(inserted);
 		

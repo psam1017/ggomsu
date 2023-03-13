@@ -29,35 +29,34 @@ public class CheckAuth implements Action {
 		String tempEmail = (String) session.getAttribute("tempEmail");
 		String memberKey = req.getParameter("memberKey");
 		String authKey = (String)session.getAttribute("authKey");
-		String authFailFlag = (String) session.getAttribute("authFailCount");
 		
 		// 초기화
-		int authFailCount = authFailFlag != null ? Integer.parseInt(authFailFlag) : 0;
+		int authFailCount = session.getAttribute("authFailCount") != null ? (int)(session.getAttribute("authFailCount")) : 0;
 		
 		// 사용 불가능인지 검사
 		// 중복검사를 3번 모두 실패한 직후 사용 불가능 이메일로 등록되기 때문에 중복검사 단계에서 실패함
 		if(dao.checkEmail(tempEmail)) {
 			json.put("auth", "fail");
-			return null;
 		}
-		
-		if(!memberKey.equals(authKey) && authFailCount < 3) {
-			authFailCount++;
-			json.put("auth", "not-ok");
-			json.put("authFailCount", authFailCount);
-			session.setAttribute("authFailCount", authFailCount);
-		}
-		else if(!memberKey.equals(authKey)) {
-			json.put("auth", "fail");
-			session.removeAttribute("authFailCount");
-			dao.insertAuthFailedEmail(tempEmail);
-		}
-		else if(memberKey.equals(authKey) && authFailCount < 3) {
-			json.put("auth", "ok");
-			session.removeAttribute("authKey");
-			session.removeAttribute("tempEmail");
-			session.removeAttribute("authFailCount");
-			session.setAttribute("auth", "ok");
+		else {
+			if(!memberKey.equals(authKey) && authFailCount < 3) {
+				authFailCount++;
+				json.put("auth", "not-ok");
+				json.put("authFailCount", authFailCount);
+				session.setAttribute("authFailCount", authFailCount);
+			}
+			else if(!memberKey.equals(authKey)) {
+				json.put("auth", "fail");
+				session.removeAttribute("authFailCount");
+				dao.insertAuthFailedEmail(tempEmail);
+			}
+			else if(memberKey.equals(authKey) && authFailCount < 3) {
+				json.put("auth", "ok");
+				session.removeAttribute("authKey");
+				session.removeAttribute("tempEmail");
+				session.removeAttribute("authFailCount");
+				session.setAttribute("auth", "ok");
+			}
 		}
 		
 		out.print(json.toJSONString());

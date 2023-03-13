@@ -128,7 +128,7 @@
 			<when test='"renew".equals(agreedTermAt)'>
 			SET agreedTermAt = NOW(), agreedMarketingAt = NULL
 			</when>
-			<when test='"agree".equals("agreedMarketingAt")'>
+			<when test='"agree".equals(agreedMarketingAt)'>
 			SET agreedMarketingAt = NOW()
 			</when>
 			<otherwise>
@@ -149,10 +149,7 @@
 	<delete id="deleteBlindMember" parameterType="map">
 		DELETE FROM memberBlind
 		WHERE nickname = #{nickname} 
-		AND blindMember IN
-		<foreach collection="deleteList" item="item" separator="," open="(" close=")">
-			#{item}
-		</foreach>
+		AND blindMember = #{editableMember}
 	</delete>
 	<update id="updateDarkMode" parameterType="map">
 		UPDATE members

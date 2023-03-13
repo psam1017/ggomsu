@@ -18,18 +18,26 @@ public class PersonalConfirm implements Action{
 		
 		ActionForward forward = new ActionForward();
 		
-		if(!req.getMethod().equals("POST")) {
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
-			
-			return forward;
-		}
-		
-		// personal 목록 : name, birthDate, sex, telecomValue, contact, zipcode, address, addressDetail 
+		// personal 목록 : telecomValue, contact, zipcode, address, addressDetail 
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
 		HttpSession session = req.getSession();
 		String statusValue = (String)session.getAttribute("statusValue");
+		
+		if(!req.getMethod().equals("POST")) {
+			if(statusValue.equals("MEM")) {
+				forward.setPath(req.getContextPath() + "/my/personal?code=error");
+			}
+			else if(statusValue.equals("ADM")) {
+				forward.setPath(req.getContextPath() + "/admin/personal?code=error");
+			}
+			else {
+				forward.setPath(req.getContextPath() + "/error/error");
+			}
+			forward.setForward(false);
+			
+			return forward;
+		}
 		
 		vo.setEmail((String)session.getAttribute("email"));
 		vo.setTelecomValue(req.getParameter("telecomValue"));

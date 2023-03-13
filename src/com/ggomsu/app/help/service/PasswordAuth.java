@@ -26,13 +26,13 @@ public class PasswordAuth implements Action {
 
 		if(memberKey.equals(authKey) && dao.checkEmail(tempEmail)) {
 			session.setAttribute("helpPasswordAuth", "success");
+			session.removeAttribute("authKey");
 			forward.setPath(req.getContextPath() + "/help/password/form");
 		}
 		else {
+			session.invalidate();
 			forward.setPath(req.getContextPath() + "/help/password?code=fail");
 		}
-		
-		session.removeAttribute("authKey");
 		forward.setForward(false);
 		
 		return forward;

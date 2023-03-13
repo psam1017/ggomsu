@@ -11,7 +11,7 @@ import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.encrypt.EncryptionInfo;
 import com.ggomsu.system.encrypt.EncryptionHelper;
 
-	//작성자 : 손하늘
+//작성자 : 손하늘, 박성민
 public class PasswordConfirm implements Action{
 	
 	@Override
@@ -20,7 +20,7 @@ public class PasswordConfirm implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		if(!req.getMethod().equals("POST") && !((String)session.getAttribute("helpPasswordAuth")).equals("success")) {
+		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("helpPasswordAuth")).equals("success")) {
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error");
 			return forward;
