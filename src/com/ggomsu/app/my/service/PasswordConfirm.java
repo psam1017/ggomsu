@@ -28,21 +28,19 @@ public class PasswordConfirm implements Action{
     	vo.setEmail((String)session.getAttribute("email"));
 		String inserted = req.getParameter("password");
 		String statusValue = (String)session.getAttribute("statusValue");
+		String statusURI = null;
+		if(statusValue.equals("MEM")) {
+			statusURI = "my";
+		}
+		else if (statusValue.equals("ADM")) {
+			statusURI = "admin";
+		}
+		
 		
 		// 잘못된 접근일 때
 		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
 			session.removeAttribute("myPasswordAuth");
-			
-			if(statusValue.equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/password/check?code=error");
-			}
-			else if (statusValue.equals("ADM")) {
-				forward.setPath(req.getContextPath() + "/admin/password/check?code=error");
-			}
-			else {
-				forward.setPath(req.getContextPath() + "/error/error");
-			}
-			
+			forward.setPath(req.getContextPath() + "/" + statusURI + "/password/check?code=error");
 			forward.setForward(false);
 			return forward;
 		}
@@ -57,13 +55,7 @@ public class PasswordConfirm implements Action{
 		session.removeAttribute("myPasswordAuth");
     	
     	forward.setForward(false);
-    	if(statusValue.equals("MEM")) {
-    		forward.setPath(req.getContextPath() + "/my/password/check?code=success");
-    	}
-    	else if(statusValue.equals("ADM")) {
-    		forward.setPath(req.getContextPath() + "/admin/password/check?code=success");
-    	}
-	    
+		forward.setPath(req.getContextPath() + "/" + statusURI + "/password/check?code=success");
 		return forward;
 	}
 }

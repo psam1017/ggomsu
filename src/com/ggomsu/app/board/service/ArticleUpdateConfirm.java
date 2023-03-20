@@ -28,7 +28,7 @@ public class ArticleUpdateConfirm implements Action {
 		HttpSession session = req.getSession();
 		
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
-		String tags = req.getParameter("tags");
+		String tags = req.getParameter("basic");
 		String boardValue = req.getParameter("boardValue");
 		String nickname = (String)session.getAttribute("nickname");
 		String title = req.getParameter("title");
@@ -45,18 +45,20 @@ public class ArticleUpdateConfirm implements Action {
 			// 태그 수정 -> 모두 지웠다가 다시 삽입
 			tagDAO.deleteTags(articleIndex);
 			
-			JSONArray jsonArray = (JSONArray) new JSONParser().parse(tags.toString());
-			
-			for(Object tag : jsonArray) {
-				JSONObject tagValue = (JSONObject) tag;
-				tagDAO.insertTag(articleIndex, (String)tagValue.get("value"));
+			if(!tags.equals("")) {
+				JSONArray jsonArray = (JSONArray) new JSONParser().parse(tags.toString());
+				for(Object tag : jsonArray) {
+					JSONObject tagValue = (JSONObject) tag;
+					tagDAO.insertTag(articleIndex, (String)tagValue.get("value"));
+				}
 			}
 			
 			// boardValue 쿠키 저장
 			boardHelper.setBoardCookie(req, resp, boardValue);
 			
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/article/update/success");
+			forward.setPath(req.getContextPath() + "/article/list?boardValue=" + boardValue + "&page=1&code=update");
+			forward.setPath(req.getContextPath() + "/article/view?articleIndex=" + articleIndex + "&code=update");
 		}
 		else {
 			forward.setForward(false);

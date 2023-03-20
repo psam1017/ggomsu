@@ -21,17 +21,27 @@ public class CommentLike implements Action {
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		String nickname = req.getParameter("nickname");
+		String nickname = (String) req.getSession().getAttribute("nickname");
+		String statusValue = (String) req.getSession().getAttribute("statusValue");
 		int commentIndex = Integer.parseInt(req.getParameter("commentIndex"));
 		
-		if(commentDAO.checkLiked(nickname, commentIndex)) {
-			commentDAO.cancelLike(nickname, commentIndex);
-			json.put("like", "do");
+		if(statusValue == null || statusValue.equals("TMP")) {
+			json.put("status", "tmp");
+		}
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
+			if(commentDAO.checkLiked(nickname, commentIndex)) {
+				commentDAO.cancelLike(nickname, commentIndex);
+				json.put("status", "cancel");
+			}
+			else {
+				commentDAO.doLike(nickname, commentIndex);
+				json.put("status", "do");
+			}
 		}
 		else {
-			commentDAO.doLike(nickname, commentIndex);
-			json.put("like", "cancel");
+			json.put("status", "not-ok");
 		}
+		
 		
 		out.print(json.toJSONString());
 		out.close();

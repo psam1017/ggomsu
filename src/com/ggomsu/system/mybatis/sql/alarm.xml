@@ -28,11 +28,11 @@
 	</select>
 	<delete id="deleteArticleAlarm" parameterType="_int">
 		DELETE FROM articleAlarm
-		WHERE articleIndex = #{index}
+		WHERE articleIndex = #{articleIndex}
 	</delete>
 	<delete id="deleteCommentAlarm" parameterType="_int">
 		DELETE FROM commentAlarm
-		WHERE refIndex = #{index}
+		WHERE commentIndex = #{commentIndex}
 	</delete>
 	<select id="findAlarmListByNickname" parameterType="string" resultType="alarmMessage">
 		SELECT A.title as original, C.nickname, C.content, C.writtenAt, A.articleIndex

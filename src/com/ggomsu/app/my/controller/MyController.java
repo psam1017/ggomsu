@@ -23,7 +23,7 @@ public class MyController extends HttpServlet {
 		
 		// my page는 정상회원만 사용할 수 있다.
 		String statusValue = (String) req.getSession().getAttribute("statusValue");
-		if(!statusValue.equals("MEM")) {
+		if(statusValue == null || !statusValue.equals("MEM")) {
 			forward = new ActionForward();
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error?code=no-member");
@@ -41,9 +41,11 @@ public class MyController extends HttpServlet {
 		else if(command.equals("/my/password/auth")) { forward = new PasswordAuth().execute(req, resp); }
 		else if(command.equals("/my/password/form")) { forward = new PasswordForm().execute(req, resp); }
 		else if(command.equals("/my/password/confirm")) { forward = new PasswordConfirm().execute(req, resp); }
-		// 좋아요 활동
+		// 최근 활동
 		else if(command.equals("/my/like/article")) { forward = new LikeArticle().execute(req, resp); }
 		else if(command.equals("/my/like/comment")) { forward = new LikeComment().execute(req, resp); }
+		else if(command.equals("/my/history/article")) { forward = new HistoryArticle().execute(req, resp); }
+		else if(command.equals("/my/history/comment")) { forward = new HistoryComment().execute(req, resp); }
 		// 약관
 		else if(command.equals("/my/term")) { forward = new Term().execute(req, resp); }
 		else if(command.equals("/my/term/confirm")) { forward = new TermConfirm().execute(req, resp); }
@@ -87,9 +89,11 @@ public class MyController extends HttpServlet {
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());
+			e.printStackTrace();
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 		
 		// forward or redirect

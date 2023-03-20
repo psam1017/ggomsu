@@ -64,6 +64,17 @@ public class CommentDAO {
 		return sqlSession.selectList("Comment.getCommentLikeList", map);
 	}
 	
+	public int findMyCommentHistoryTotal(String nickname) {
+		return sqlSession.selectOne("Comment.findMyCommentHistoryTotal", nickname);
+	}
+	
+	public List<ArticleDTO> getCommentHistoryList(String nickname, int page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nickname", nickname);
+		map.put("page", page);
+		return sqlSession.selectList("Comment.getCommentHistoryList", map);
+	}
+	
 	public boolean checkLiked(String nickname, int commentIndex){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("nickname", nickname);

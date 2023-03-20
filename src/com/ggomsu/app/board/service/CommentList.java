@@ -48,7 +48,8 @@ public class CommentList implements Action {
 			object.put("articleIndex", comment.getArticleIndex());
 			object.put("nickname", comment.getNickname());
 			object.put("content", comment.getContent());
-			object.put("writtenAt", comment.getWrittenAt());
+			String writtenAt = comment.getWrittenAt().substring(0, comment.getWrittenAt().indexOf("."));
+			object.put("writtenAt", writtenAt);
 			object.put("deletedAt", comment.getDeletedAt());
 			object.put("commentDeleteReason", comment.getCommentDeleteReason());
 			object.put("commentLikeCount", comment.getCommentLikeCount());

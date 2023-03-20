@@ -16,7 +16,7 @@ public class SignOut implements Action{
 		
 		ActionForward forward = new ActionForward();
 		forward.setForward(false);
-		forward.setPath(req.getContextPath() + "/");
+		forward.setPath(req.getContextPath() + "/main");
 		return forward;
 	}
 }

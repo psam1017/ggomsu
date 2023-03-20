@@ -30,7 +30,7 @@
 				<when test='"nickname".equals(category)'>
 					AND A.nickname LIKE CONCAT('%', TRIM(#{search}), '%') 
 				</when>
-				<when test='"article".quals(category)'>
+				<when test='"article".equals(category)'>
 					AND CONCAT(A.title, A.content) LIKE CONCAT('%', TRIM(#{search}), '%') 
 				</when>
 				<when test='"tag".equals(category)'>
@@ -56,8 +56,8 @@
 	
 	<!-- 게시글 조회 : blind, 순서, 검색어, 기간 통합 -->
 	<select id="findList" parameterType="map" resultType="article">
-		SELECT 	A.articleIndex, A.title, A.nickname , A.writtenAt, A.viewCount, 
-				COUNT(AL.articleIndex) AS articleLikeCount, T.tagString
+		SELECT 	A.articleIndex, A.title, A.nickname , A.writtenAt, A.updatedAt, A.viewCount, 
+				COUNT(AL.articleIndex) AS articleLikeCount, T.tagString, M.profileImageUrl
 		FROM articles AS A 
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
@@ -66,6 +66,8 @@
 			FROM tags 
 			GROUP BY tags.articleIndex) AS T
 		ON A.articleIndex = T.articleIndex
+		LEFT OUTER JOIN members AS M
+		ON A.nickname = M.nickname
 		WHERE A.boardValue = #{boardValue}
 		AND A.deletedAt IS NULL
 		<!-- blind list -->
@@ -84,7 +86,7 @@
 				<when test='"nickname".equals(category)'>
 					AND A.nickname LIKE CONCAT('%', TRIM(#{search}), '%') 
 				</when>
-				<when test='"article".quals(category)'>
+				<when test='"article".equals(category)'>
 					AND CONCAT(A.title, A.content) LIKE CONCAT('%', TRIM(#{search}), '%') 
 				</when>
 				<when test='"tag".equals(category)'>
@@ -123,25 +125,30 @@
 	</select>
 	<!-- 게시글 세부 CRUD -->
 	<select id="findArticle" parameterType="_int" resultType="article">
-		SELECT A.*, COUNT(AL.articleIndex) AS articleLikeCount, M.profileImageUrl
+		SELECT A.*, COUNT(AL.articleIndex) AS articleLikeCount, M.profileImageUrl, T.tagString
 		FROM articles AS A 
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
 		LEFT OUTER JOIN members AS M
 		ON A.nickname = M.nickname
+		LEFT OUTER JOIN 
+			(SELECT articleIndex, GROUP_CONCAT(tags.tagValue) AS tagString 
+			FROM tags 
+			GROUP BY tags.articleIndex) AS T
+		ON A.articleIndex = T.articleIndex
 		WHERE A.articleIndex = #{articleIndex}
 	</select>
 	<!-- 좋아요 체크 -->
-	<select id="checkLiked" parameterType="hashmap" resultType="_int">
+	<select id="checkLiked" parameterType="map" resultType="_int">
 		SELECT COUNT(nickname)
 		FROM articleLike
 		WHERE (articleIndex, nickname) = (#{articleIndex}, #{nickname})
 	</select>
-	<insert id="doLike" parameterType="hashmap">
+	<insert id="doLike" parameterType="map">
 		INSERT INTO articleLike(articleIndex, nickname)
 		VALUES (#{articleIndex}, #{nickname})
 	</insert>
-	<delete id="cancelLike" parameterType="hashmap">
+	<delete id="cancelLike" parameterType="map">
 		DELETE FROM articleLike
 		WHERE (articleIndex, nickname) = (#{articleIndex}, #{nickname})
 	</delete>
@@ -152,12 +159,12 @@
 		WHERE articleIndex = #{articleIndex}
 	</select>
 	<!-- 게시글 작성, 수정, 삭제 -->
-	<select id="doInsertArticleProcedure" statementType="CALLABLE" parameterType="article">
+	<select id="doInsertArticleProcedure" statementType="CALLABLE" parameterType="article" resultType="_int">
 		CALL insertArticle(#{boardValue}, #{nickname}, #{title}, #{content})
 	</select>
 	<update id="updateArticle" parameterType="article">
 		UPDATE articles
-		SET boardValue = #{boardValue}, title = #{title}, content = #{content}
+		SET boardValue = #{boardValue}, title = #{title}, content = #{content}, updatedAt = NOW()
 		WHERE articleIndex = #{articleIndex}
 	</update>
 	<delete id="deleteArticle" parameterType="_int">
@@ -165,7 +172,7 @@
 	</delete>
 	
 	<!-- admin에서 사용 -->
-	<update id="confirmArticleDelete" parameterType="hashmap">
+	<update id="confirmArticleDelete" parameterType="map">
 		UPDATE articles 
 		SET deletedAt = now(), articleDeleteReason = #{articleDeleteReason} 
 		WHERE articleIndex = #{articleIndex}
@@ -175,26 +182,50 @@
 	<select id="findMyArticleLikeTotal" parameterType="string" resultType="_int">
 		SELECT COUNT(1) FROM articleLike WHERE nickname = #{nickname};
 	</select>
-	<select id="getArticleLikeList" parameterType="hashmap" resultType="article">
-		SELECT A.*, COUNT(AL.articleIndex) AS articleLikeCount, M.profileImageUrl
+	<select id="getArticleLikeList" parameterType="map" resultType="article">
+		SELECT A.*, COUNT(AL.articleIndex) AS articleLikeCount, M.profileImageUrl, T.tagString
 		FROM articles AS A
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
 		LEFT OUTER JOIN members AS M
 		ON A.nickname = M.nickname
+		LEFT OUTER JOIN 
+			(SELECT articleIndex, GROUP_CONCAT(tags.tagValue) AS tagString 
+			FROM tags 
+			GROUP BY tags.articleIndex) AS T
+		ON A.articleIndex = T.articleIndex
 		WHERE A.articleIndex IN (SELECT articleIndex FROM articleLike WHERE nickname = #{nickname})
+		AND A.deletedAt IS NULL
 		GROUP BY articleIndex
 		ORDER BY articleIndex DESC
-		LIMIT 10 OFFSET ${page}
+		LIMIT 10 OFFSET #{page}
+	</select>
+	<select id="findMyArticleHistoryTotal" parameterType="string" resultType="_int">
+		SELECT COUNT(1) FROM articles WHERE nickname = #{nickname};
+	</select>
+	<select id="getArticleHistoryList" parameterType="map" resultType="article">
+		SELECT A.*, COUNT(AL.articleIndex) AS articleLikeCount, T.tagString
+		FROM articles AS A
+		LEFT OUTER JOIN articleLike AS AL
+		ON A.articleIndex = AL.articleIndex
+		LEFT OUTER JOIN 
+			(SELECT articleIndex, GROUP_CONCAT(tags.tagValue) AS tagString 
+			FROM tags 
+			GROUP BY tags.articleIndex) AS T
+		ON A.articleIndex = T.articleIndex
+		WHERE A.nickname = #{nickname}
+		GROUP BY articleIndex
+		ORDER BY articleIndex DESC
+		LIMIT 10 OFFSET #{page}
 	</select>
 	
 	<!-- index -->
-	<select id="findWeeklyMostLikedList" parameterType="string" resultType="article">
+	<select id="findYearlyMostLikedList" parameterType="string" resultType="article">
 		SELECT A.articleIndex, A.title, A.nickname, A.viewCount, COUNT(AL.articleIndex) as articleLikeCount
 		FROM articles AS A
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
-		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 7 DAY ]]>
+		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 365 DAY ]]>
 		<if test='value != null and !"".equals(value)'>
 			AND boardValue = #{boardValue}
 		</if>
@@ -202,12 +233,12 @@
 		ORDER BY articleLikeCount DESC
 		LIMIT 5
 	</select>
-	<select id="findWeeklyMostViewedList" parameterType="string" resultType="article">
+	<select id="findYearlyMostViewedList" parameterType="string" resultType="article">
 		SELECT A.articleIndex, A.title, A.nickname, A.viewCount, COUNT(AL.articleIndex) as articleLikeCount
 		FROM articles AS A
 		LEFT OUTER JOIN articleLike AS AL
 		ON A.articleIndex = AL.articleIndex
-		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 7 DAY ]]>
+		<![CDATA[ WHERE writtenAt > NOW() - INTERVAL 365 DAY ]]>
 		<if test='value != null and !"".equals(value)'>
 			AND boardValue = #{boardValue}
 		</if>

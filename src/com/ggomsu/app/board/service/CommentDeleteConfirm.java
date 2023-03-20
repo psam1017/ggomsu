@@ -22,11 +22,20 @@ public class CommentDeleteConfirm implements Action {
 		PrintWriter out = resp.getWriter();
 		
 	    String nickname = (String) req.getSession().getAttribute("nickname");
+	    String statusValue = (String) req.getSession().getAttribute("statusValue");
 		int commentIndex = Integer.parseInt(req.getParameter("commentIndex"));
 	    
-		if(dao.getCommentOne(commentIndex).getNickname().equals(nickname)) {
-			dao.deleteCommentByCommentIndex(commentIndex);
-			json.put("status", "ok");
+		if(statusValue == null || statusValue.equals("TMP")) {
+			json.put("status", "tmp");
+		}
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
+			if(dao.getCommentOne(commentIndex).getNickname().equals(nickname)) {
+				dao.deleteCommentByCommentIndex(commentIndex);
+				json.put("status", "ok");
+			}
+			else {
+				json.put("status", "not-ok");
+			}
 		}
 		else {
 			json.put("status", "not-ok");

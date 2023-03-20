@@ -5,7 +5,7 @@
   --tagify-dd-item-pad: 0.3em 0.5em;
 }
 .tagify {
-  width: 80%;
+  width: 100%;
   --tags-disabled-bg: #f1f1f1;
   --tags-border-color: #ddd;
   --tags-hover-border-color: #ccc;

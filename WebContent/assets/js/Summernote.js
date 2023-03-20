@@ -6,14 +6,19 @@ $(document).ready(function() {
 	let path = "";
 	
 	const contentForm = document.getElementById("contentForm");
-	const original = document.getElementById("original");
+	const submitBtn = document.getElementById("submitBtn");
+	
+	submitBtn.addEventListener("click", function(e){
+		e.preventDefault();
+		contentFormSubmit();
+	});
 	
 	// (1) content 전송 영역은 type에 따라 action과 content name, 콜백함수의 url이 달라진다.
-	// type = [ board-write | board-update | wiki-write | wiki-revise ]
+	// type = [ boardWrite | boardUpdate | wikiWrite | wikiRevise ]
 	changeAttrByType(type);
 	
 	// (2) summernote 내용 불러오기. 반드시 'summernote 초기화 이전에' 'script 안에서' 불러와야 함. 순서에 주의할 것.
-	getOriginalContent();
+	setContent(type);
 	
 	// (3) summernote 초기화
 	$('.summernote').summernote({
@@ -22,7 +27,7 @@ $(document).ready(function() {
 		// 에디터 한글 설정
 		lang: "ko-KR",
 		// 에디터에 커서 이동 (input창의 autofocus라고 생각하시면 됩니다.)
-		focus : true,
+		focus : false,
 		toolbar: [
 			// 글꼴 설정
 			['fontname', ['fontname']],
@@ -44,13 +49,29 @@ $(document).ready(function() {
 			['view', ['codeview','fullscreen', 'help']]
 		],
 		// 추가한 글꼴
-		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','궁서','굴림체','굴림','돋음체','바탕체'],
+		fontNames : ['Noto Sans KR', 'Noto Serif KR', 'Nanum Gothic', 'Nanum Myeongjo', 'Nanum Pen Script'],
+		fontNamesIgnoreCheck : ['Noto Sans KR', 'Noto Serif KR', 'Nanum Gothic', 'Nanum Myeongjo', 'Nanum Pen Script'],
 		// 추가한 폰트사이즈
 		fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-		callbacks : { //여기 부분이 이미지를 첨부하는 부분
+		callbacks : { 
+			// 여기 부분이 이미지를 첨부하는 부분
 			onImageUpload : function(files, editor, welEditable) {
 				for (var i = files.length - 1; i >= 0; i--) {
 					uploadSummernoteImageFile(files[i], this);
+				}
+			},
+			// 0315 추가. 길이 제한
+			onChange : function(contents){
+				const maxlength = 10000;
+				
+//				// back tick 제한 -> JSTL을 사용하여 백틱 제한은 사라짐.
+//				if(contents.lastIndexOf("`") != -1){
+//					noteEditable.innerHTML = noteEditable.innerHTML.replace(/`/g, "");
+//					alert("백틱( ` )은 사용할 수 없습니다.");
+//				}
+				if(contents.length > maxlength)  {
+					noteEditable.innerHTML = noteEditable.innerHTML.substr(0, maxlength - 100);
+					alert("본문은 코드를 포함하여 9900자 내외로 제한됩니다.");
 				}
 			}
 		}
@@ -81,11 +102,11 @@ $(document).ready(function() {
 	// action 초기화 함수
 	function changeAttrByType(type){
 		if(type === "boardWrite"){
-			contentForm.action = contextPath + "/board/article-write-ok";
+			contentForm.action = contextPath + "/article/write/confirm";
 			path = "/board";
 		}
 		else if(type === "boardUpdate"){
-			contentForm.action = contextPath + "/board/article-update-ok";
+			contentForm.action = contextPath + "/article/update/confirm";
 			path = "/board";
 		}
 		else if(type === "wikiWrite"){
@@ -108,16 +129,55 @@ $(document).ready(function() {
 	}
 	
 	// 수정 시 원문을 가져오는 함수
-	function getOriginalContent(){
+	function setContent(type){
 		
-		let innerContent = original.innerHTML;
-		$(".summernote").html(innerContent);
+		// 일단 textarea의 모든 내용을 비운다.
+		contentForm.content.value = "";
+		
+		// 만약 수정한다면 이전 글 내용을 불러온다.
+		if(type == 'boardUpdate' || type == 'wikiRevise'){
+			contentForm.content.value = unescapeHtml(original.innerHTML);
+		}
+		
 		original.innerHTML = "";
 	}
 	
-	// 0306 추가. 스타일 조정
+	function unescapeHtml(str) {
+
+		if (str == null) {
+		 return "";
+		}
+
+		return str
+		  .replace(/&amp;/g, '&')
+		  .replace(/&lt;/g, '<')
+		  .replace(/&gt;/g, '>')
+		  .replace(/&quot;/g, '"')
+		  .replace(/&#039;/g, "'")
+		  .replace(/&#39;/g, "'");
+	}
 	
+	// 0306 추가. 스타일 조정
 	const noteEditable = document.querySelector(".note-editable");
 	noteEditable.className += " bg-white";
 	noteEditable.style.height = "350px";
+	
+	// 0316 추가. 빈 값 불허용
+	function contentFormSubmit(){
+		
+		let title = contentForm.title.value;
+		let content = contentForm.content.value;
+		
+		if(title.replace(/ /g, "") == ""){
+			alert("제목이 비어있습니다.");
+			return;
+		}
+		
+	    if(content.replace(/ /g, "") == "" || content == "<p><br></p>"){
+	    	alert("내용이 비어있습니다.");
+	    	return;
+	    }
+	    
+	    contentForm.submit();
+	}
 });

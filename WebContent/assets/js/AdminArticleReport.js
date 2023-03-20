@@ -1,90 +1,49 @@
+const articleConfirmButton = document.querySelectorAll(".articleConfirmButton");
+const articleConfirmForm = document.querySelectorAll(".articleConfirmForm");
+const articleViewButton = document.querySelectorAll(".articleViewButton");
+const reportArticleViewContainer = document.getElementById("reportArticleViewContainer");
 
-// ajax로 신고글 가져오기
-const con = document.getElementById("con");
-var tr = document.querySelectorAll('.clickable-tr');
-const articleIndex = document.getElementById("articleIndex");
-const reportContent = document.getElementById("reportReason");
-const articleContent = document.getElementById("articleContent");
-const reportMember = document.getElementById("reportMember");
-const reportedMember = document.getElementById("reportedMember");
-const reportDate = document.getElementById("reportDate");
-const deleteReason = document.querySelector('input[type=radio][name=deleteReason]:checked')
-  
-    var nickname;
-    var reportArticleIndex;
-    var reportedNickname;
-    
-    tr.forEach(element => {
-        element.addEventListener('click',function(){  
-    	con.classList.remove('off')
-    	reportArticleIndex = element.children[0].innerText;
-    	nickname = element.children[1].innerText;
-    	
-        let xhr = new XMLHttpRequest();
-        let requestURL = contextPath + "/admin/admin-article-report-get-ok";
-        
-        var obj =new Object();
-        obj.nickname = nickname;
-        obj.articleIndex = reportArticleIndex;
-      	
-        xhr.open("post", requestURL, true);
-        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-        var jsonData = JSON.stringify(obj);
-        
-        xhr.send(jsonData);
-        
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
-            	let json = JSON.parse(xhr.responseText);
-                if(json.reportStatus == "ok"){
-                	articleIndex.innerText = json.articleIndex;
-                	reportContent.innerText = json.reportContent;
-                	articleContent.innerText = json.articleContent;
-                	reportMember.innerText = json.reportMember;
-                	reportedMember.innerText = json.reportedMember;
-                	
-                	reportedNickname = json.reportedMember;
-                }
-                else{
-                	alert('이미 처리된 신고글 입니다.');
-                }
+if(articleConfirmButton != null && articleConfirmButton.length > 0){
+	articleConfirmButton.forEach((element, index) => {
+	 	element.addEventListener("click", function(e){
+	 		e.preventDefault();
+	 		articleConfirmForm[index].submit();
+		});
+	});
+}
+
+if(articleViewButton != null && articleViewButton.length > 0){
+	articleViewButton.forEach((element, index) => {
+	 	element.addEventListener("click", function(e){
+	 		e.preventDefault();
+	 		articleView(element.dataset.value);
+		});
+	});
+}
+
+function articleView(articleIndex){
+	
+	let xhr = new XMLHttpRequest();
+    let requestURL = contextPath + "/admin/article/view";
+
+    xhr.open("post", requestURL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("articleIndex=" + articleIndex);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+        	let json = JSON.parse(xhr.responseText);
+        	let text = "";
+        	
+            if(json.status == "ok"){
+            	reportArticleViewContainer.innerHTML = "";
+            	text += '<a href="' + contextPath + '/article/view?articleIndex=' + json.articleIndex + '" class="btn btn-primary w-100 mb-2">자세히 보러가기</a><button id="closeButton" class="btn btn-warning w-100 mb-2">닫기</button><div class="card mb-4" style="height: 300px; overflow-x: hidden; overflow-y: auto"><div class="card-header" style="font-size: 0.8rem;"><span>작성자 : ' + json.nickname + '</span><br><span>작성일 : ' + json.writtenAt + '</span><br><span>제목 : ' + json.title + '(' + json.articleIndex + '번)</span><br></div><div class="card-body">' + json.content + '</div></div>';
+            	reportArticleViewContainer.innerHTML = text;
+            	reportArticleViewContainer.style.height = "450px";
+            	
+            	const closeButton = document.getElementById("closeButton");
+            	closeButton.addEventListener("click", function(){ reportArticleViewContainer.style.height = "0"; });
             }
         }
-    })
-});
-    
-    
-// 신고글 삭제 처리
-const btnDelete = document.getElementById("reportDelete");
-const btnPreserve = document.getElementById("reportPreserve");
-const reasonValue = deleteReason.value;
-
-btnDelete.addEventListener('click', function() {	 
-	if(reasonValue == null){
-		alert('신고 사유를 선택해주세요!');
-		return false;
 	}
-	var isDelete = confirm('한번 삭제하면 되돌릴 수 없습니다.\n 정말로 삭제 하시겠습니까? ');
-	if(isDelete){
-		reportDeleteURL = contextPath + "/admin/admin-article-report-ok?isDelete=on&articleIndex=" + reportArticleIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&articleDeleteReason=" + reasonValue;
-		location.href = reportDeleteURL;
-	}else {
-		alert('삭제취소');
-	}
-})
-
-btnPreserve.addEventListener('click', function() {
-	var isDelete = confirm('신고처리는 하고 .\n 정말로 삭제 하시겠습니까? ');
-	if(isDelete){
-		reportDeleteURL = contextPath + "/admin/admin-article-report-ok?isDelete=off&articleIndex=" + reportArticleIndex + "&nickname=" + nickname + "&reportedNickname=" + reportedNickname + "&articleDeleteReason=" + reasonValue;
-		location.href = reportDeleteURL;
-	}else {
-		alert('보존취소');
-	}
-})
-    
-    
-    
-    
-    
-    
+}

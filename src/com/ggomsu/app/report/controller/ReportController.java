@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggomsu.app.report.service.ArticleConfirm;
-import com.ggomsu.app.report.service.ArticleReason;
 import com.ggomsu.app.report.service.CommentConfirm;
 import com.ggomsu.app.report.service.WikiConfirm;
-import com.ggomsu.app.report.service.WikiReason;
 import com.ggomsu.system.action.ActionForward;
 
 // 작성자 : 박성민, 손하늘
@@ -26,13 +24,8 @@ public class ReportController extends HttpServlet {
 		
 		ActionForward forward = null;
 		
-		// 게시글 신고
-		if(command.equals("/report/article/reason")) { forward = new ArticleReason().execute(req, resp); }
-		else if(command.equals("/report/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
-		// 댓글 신고
+		if(command.equals("/report/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
 		else if(command.equals("/report/comment/confirm")) { forward = new CommentConfirm().execute(req, resp); }
-		// 위키 신고
-		else if(command.equals("/report/wiki/reason")) { forward = new WikiReason().execute(req, resp); }
 		else if(command.equals("/report/wiki/confirm")) { forward = new WikiConfirm().execute(req, resp); }
 		else { 
 			forward = new ActionForward();

@@ -298,7 +298,7 @@
     // RegEx pattern to validate input by. Ex: /[1-9]/
     tagTextProp: 'value',
     // tag data Object property which will be displayed as the tag's text
-    maxTags: Infinity,
+    maxTags: 3,
     // Maximum number of tags
     callbacks: {},
     // Exposed callbacks object to be triggered on certain events

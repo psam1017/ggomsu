@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.ggomsu.app.board.vo.ArticleDTO;
 
@@ -16,43 +15,51 @@ public class BoardHelper {
 		
 		Cookie[] cookies = req.getCookies();
 		boolean isBoardValueExist = false;
+		Cookie cookie = null;
 		
 		// 쿠키 배열에 boardValue가 있고, 그 값이 현재 boardValue와 다르다면 cookie 추가
 		if(cookies != null && cookies.length > 0) {
 			for(Cookie c : cookies) {
-				if(c.getName().equals("boardValue") && !c.getValue().equals(boardValue)) {
-					Cookie cookie = new Cookie("boardValue", boardValue);
-					cookie.setMaxAge(60 * 60 * 24 * 7);
-					resp.addCookie(cookie);
-					isBoardValueExist = true;
+				if(c.getName().equals("boardValue")) {
+					if(!c.getValue().equals(boardValue)) {
+						cookie = new Cookie("boardValue", boardValue);
+						cookie.setMaxAge(60 * 60 * 24 * 7);
+						resp.addCookie(cookie);
+						isBoardValueExist = true;
+					}
+					break;
 				}
 			}
 		}
 		
 		// 쿠키 배열에 boardValue가 없다면 cookie 추가
 		if(!isBoardValueExist) {
-			resp.addCookie(new Cookie("boardValue", boardValue));
+			cookie = new Cookie("boardValue", boardValue);
+			cookie.setMaxAge(60 * 60 * 24 * 7);
+			resp.addCookie(cookie);
 		}
+		
 	}
 	
 	public boolean setArticleCookie(HttpServletRequest req, HttpServletResponse resp, int articleIndex) {
 		
 		Cookie[] cookies = req.getCookies();
 		boolean isFirst = true;
-		String articleCookie = "AI" + articleIndex;
+		String articleValue = "AI" + articleIndex;
 		
 		// 이미 봤다면 false
 		if(cookies != null && cookies.length > 0) {
 			for(Cookie c : cookies) {
-				if(c.getName().equals(articleCookie)) {
+				if(c.getName().equals(articleValue)) {
 					isFirst = false;
+					break;
 				}
 			}
 		}
 		
 		// 아직 안 봤다면 cookie 추가
 		if(isFirst) {
-			Cookie cookie = new Cookie(articleCookie, articleCookie);
+			Cookie cookie = new Cookie(articleValue, articleValue);
 			cookie.setMaxAge(60 * 60 * 24 * 1);
 			resp.addCookie(cookie);
 		}
@@ -74,36 +81,25 @@ public class BoardHelper {
 	
 	public String[] setTagListForOne(ArticleDTO article){
 		
-		String[] tagList = article.getTagString().split(",");
-		article.setTagArray(tagList);
+		String[] tagList = null;
+		if(article.getTagString() != null) {
+			tagList = article.getTagString().split(",");
+			article.setTagArray(tagList);
+		}
 		
 		return tagList;
 	}
 	
-	public void setArticleSessionFromAttr(HttpServletRequest req, HttpSession session) {
-		session.setAttribute("articleIndex", req.getAttribute("articleIndex"));
-		session.setAttribute("boardValue", req.getAttribute("boardValue"));
-		session.setAttribute("page", req.getAttribute("page"));
-		session.setAttribute("criteria", req.getAttribute("criteria"));
-		session.setAttribute("category", req.getAttribute("category"));
-		session.setAttribute("period", req.getAttribute("period"));
-		session.setAttribute("search", req.getAttribute("search"));
-	}
-	
-	public void setArticleAttrFromSession(HttpServletRequest req, HttpSession session) {
-		req.setAttribute("articleIndex", session.getAttribute("articleIndex"));
-		req.setAttribute("boardValue", session.getAttribute("boardValue"));
-		req.setAttribute("page", session.getAttribute("page"));
-		req.setAttribute("criteria", session.getAttribute("criteria"));
-		req.setAttribute("category", session.getAttribute("category"));
-		req.setAttribute("period", session.getAttribute("period"));
-		req.setAttribute("search", session.getAttribute("search"));
-		session.removeAttribute("articleIndex");
-		session.removeAttribute("boardValue");
-		session.removeAttribute("page");
-		session.removeAttribute("criteria");
-		session.removeAttribute("category");
-		session.removeAttribute("period");
-		session.removeAttribute("search");
+	public String getValueFromCookie(HttpServletRequest req, String name) {
+		
+		Cookie[] cookies = req.getCookies();
+		if(cookies != null && cookies.length > 0) {
+			for(Cookie c : cookies) {
+				if(c.getName().equals(name)) {
+					return c.getValue();
+				}
+			}
+		}
+		return null;
 	}
 }

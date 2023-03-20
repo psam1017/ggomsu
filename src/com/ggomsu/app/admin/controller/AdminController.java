@@ -41,6 +41,8 @@ public class AdminController extends HttpServlet{
 		else if(command.equals("/admin/password/confirm")) { forward = new PasswordConfirm().execute(req, resp); }
 		else if(command.equals("/admin/like/article")) { forward = new LikeArticle().execute(req, resp); }
 		else if(command.equals("/admin/like/comment")) { forward = new LikeComment().execute(req, resp); }
+		else if(command.equals("/admin/history/article")) { forward = new HistoryArticle().execute(req, resp); }
+		else if(command.equals("/admin/history/comment")) { forward = new HistoryComment().execute(req, resp); }
 		else if(command.equals("/admin/config")) { forward = new Config().execute(req, resp); }
 		else if(command.equals("/admin/config/confirm")) { forward = new ConfigConfirm().execute(req, resp); }
 		// report

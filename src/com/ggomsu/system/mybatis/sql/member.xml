@@ -167,10 +167,7 @@
 		CALL increaseAbuseCount(#{nickname})
 	</update>
 	<select id="getAllMember" resultType="member">
-		SELECT nickname, name, statusValue, abuseCount 
-		FROM members
-		WHERE statusValue = 'MEM'
-		ORDER BY statusValue
+		SELECT * FROM members
 	</select>
 	<insert id="snsSignUp" parameterType="memberSns">
 		INSERT INTO memberSNS

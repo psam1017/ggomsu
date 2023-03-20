@@ -45,8 +45,8 @@ public class SendMail implements Action {
 		String emailSubject = "꼼수닷컴 인증번호입니다";
 		String emailContent = 
 				"<!DOCTYPE html>\r\n" + 
-				"<div style=\"width: 90%; height: 130px; border: 1px solid grey; padding: 10px; border-radius: 6px; display: flex; flex-wrap: wrap; margin: 0 auto;\">\r\n" + 
-				"  <div style=\"background-color: #0d6efd; width: 100%; height: 40%; border-radius: 6px;\">\r\n" + 
+				"<div style=\"width: 90%; height: 130px; border: 1px solid grey; padding: 10px; border-radius: 6px; flex-wrap: wrap; margin: 0 auto;\">\r\n" + 
+				"  <div style=\"background-color: #0d6efd; width: 100%; height: 40%; border-radius: 6px; box-sizing: border-box; padding-top: 3px;\">\r\n" + 
 				"    <span style=\"display: block; color: white; font-size: x-large; margin-left: 3%; margin-top: 8px;\">꼼수닷컴 인증번호입니다</span>\r\n" + 
 				"  </div>\r\n" + 
 				"  <div style=\"width: 100%; height: 60%; padding-top: 10px; padding-left: 2%; font-size: medium;\">\r\n" + 

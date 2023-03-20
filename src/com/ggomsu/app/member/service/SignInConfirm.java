@@ -1,5 +1,6 @@
 package com.ggomsu.app.member.service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,9 +25,25 @@ public class SignInConfirm implements Action {
 		
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
+		String rememberEmail = req.getParameter("rememberEmail");
 		boolean isSignInOk = false;
 		
-		forward.setForward(false);
+		if(rememberEmail.equals("on")) {
+			Cookie emailCookie = new Cookie("email", email);
+			Cookie rememberEmailCookie = new Cookie("rememberEmail", "on");
+			emailCookie.setMaxAge(60 * 60 * 24 * 30);
+			rememberEmailCookie.setMaxAge(60 * 60 * 24 * 30);
+			resp.addCookie(emailCookie);
+			resp.addCookie(rememberEmailCookie);
+		}
+		else {
+			Cookie emailCookie = new Cookie("email", email);
+			Cookie rememberEmailCookie = new Cookie("rememberEmail", "on");
+			emailCookie.setMaxAge(0);
+			rememberEmailCookie.setMaxAge(0);
+			resp.addCookie(emailCookie);
+			resp.addCookie(rememberEmailCookie);
+		}
 		
 		if(!dao.checkEmail(email)) {
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=fail");
@@ -44,10 +61,7 @@ public class SignInConfirm implements Action {
 			return forward;
 		}
 		else {
-			// 게시판 정보를 저장 및 세션에서 삭제
-			String articleIndex = (String)session.getAttribute("articleIndex");
-			String boardValue = (String)session.getAttribute("boardValue");
-			String page = (String)session.getAttribute("page");
+			String articleForward = (String) session.getAttribute("articleForward");
 			
 			session.setAttribute("blindList", dao.getBlindList(nickname));
 			session.setAttribute("statusValue", statusValue);
@@ -74,7 +88,7 @@ public class SignInConfirm implements Action {
 					forward.setPath(req.getContextPath() + "/member/password/renew");
 				}
 				// 이전에 보던 페이지가 있는가?
-				else if(articleIndex != null || (boardValue != null && page != null)) {
+				else if(articleForward != null) {
 					forward.setPath(req.getContextPath() + "/member/sign-in/board");
 				}
 				else {
@@ -93,6 +107,7 @@ public class SignInConfirm implements Action {
 		if(forward.getPath() == null) {
 			forward.setPath(req.getContextPath() + "/error/error");
 		}
+		forward.setForward(false);
 		
 		return forward;
 	}

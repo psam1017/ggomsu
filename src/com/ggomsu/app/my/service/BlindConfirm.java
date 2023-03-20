@@ -22,19 +22,12 @@ public class BlindConfirm implements Action{
 		
 		String nickname = (String)session.getAttribute("nickname");
 		String editableMember = req.getParameter("editableMember");
-		String statusValue = (String)session.getAttribute("statusValue");
 		String edit = req.getParameter("edit");
 		
 		// 잘못된 접근일 때
 		if(!req.getMethod().equals("POST") || edit == null) {
-			if(statusValue.equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/blind?code=error");
-			}
-			else {
-				forward.setPath(req.getContextPath() + "/error/error");
-			}
+			forward.setPath(req.getContextPath() + "/my/blind?code=error");
 			forward.setForward(false);
-			
 			return forward;
 		}
 		
