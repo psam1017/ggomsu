@@ -39,6 +39,7 @@ CREATE TABLE memberStatus
 INSERT INTO memberStatus
 VALUES	("ADM", "관리자"),
 		("MEM", "정상회원"),
+		("SNS", "SNS회원"),
 		("TMP", "비회원"),
 		("DOR", "휴면계정"),
 		("SUS", "관리자에 의해 정지"),
@@ -64,24 +65,24 @@ CREATE TABLE members
 	password			VARCHAR(128) 	NULL,
 	salt				VARCHAR(128)	NULL,
 	signAt				DATETIME 		NOT NULL	DEFAULT NOW(),
-    passwordAlertAt		DATETIME 		NULL,
-    nickname			VARCHAR(10) 	NULL	 	UNIQUE,
+    passwordAlertAt		DATETIME 		NULL		DEFAULT NOW(),
+    nickname			VARCHAR(10) 	NOT NULL	UNIQUE,
 	profileImageUrl		VARCHAR(128) 	NULL		UNIQUE,
-	name				VARCHAR(5) 	NULL,
+	name				VARCHAR(5) 		NULL,
     birthDate			DATE 			NULL,
-    sex					VARCHAR(1) 	NULL,
-    telecomValue		VARCHAR(3) 	NULL,
-    contact				VARCHAR(12) 	NULL	UNIQUE,
+    sex					VARCHAR(1) 		NULL,
+    telecomValue		VARCHAR(3) 		NULL,
+    contact				VARCHAR(12) 	NULL		UNIQUE,
 	zipcode				VARCHAR(5)		NULL,
 	address				VARCHAR(100)	NULL,
 	addressDetail		VARCHAR(100)	NULL,
     agreedTermAt		DATETIME 		NOT NULL	DEFAULT NOW(),
     agreedMarketingAt	DATETIME 		NULL,
     createdAt			DATETIME 		NOT NULL 	DEFAULT NOW(),
-    statusValue			VARCHAR(3) 	NOT NULL	DEFAULT 'MEM',
-    abuseCount			TINYINT		NOT NULL	DEFAULT 0,
-    alarmFlag			BOOLEAN		NOT NULL	DEFAULT 1,
-    darkModeFlag		BOOLEAN		NOT NULL	DEFAULT 0,
+    statusValue			VARCHAR(3) 		NOT NULL	DEFAULT 'MEM',
+    abuseCount			TINYINT			NOT NULL	DEFAULT 0,
+    alarmFlag			BOOLEAN			NOT NULL	DEFAULT 1,
+    darkModeFlag		BOOLEAN			NOT NULL	DEFAULT 0,
 	CONSTRAINT FOREIGN KEY(sex)
 		REFERENCES memberSex(value)
         ON DELETE CASCADE
@@ -96,13 +97,27 @@ CREATE TABLE members
         ON UPDATE CASCADE
 );
 
+CREATE TABLE snsType
+(
+	value VARCHAR(20) NOT NULL PRIMARY KEY,
+    text VARCHAR(20) NOT NULL
+);
+
+INSERT INTO snsType
+VALUES	("naver", "네이버");
+
 CREATE TABLE memberSns
 (
 	email		VARCHAR(50) NOT NULL,
-    accessToken	VARCHAR(128) NOT NULL,
-    CONSTRAINT PRIMARY KEY(email, accessToken),
+    snsKey		VARCHAR(128) NOT NULL,
+    `type`		VARCHAR(20) NOT NULL,
+    CONSTRAINT PRIMARY KEY(email, snsKey),
     CONSTRAINT FOREIGN KEY(email)
 		REFERENCES members(email)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY(`type`)
+		REFERENCES snsType(value)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -129,7 +144,7 @@ CREATE TABLE boards
 );
 
 INSERT INTO boards
-VALUES	("notice", "공지사항"),
+VALUES	("portfolio", "포트폴리오"),
 		("free", "자유꼼수판"),
 		("coding", "코딩꼼수판"),
         ("game", "게임꼼수판");
@@ -146,6 +161,7 @@ CREATE TABLE articles
     content				VARCHAR(10000) NOT NULL,
     viewCount			INT UNSIGNED NOT NULL DEFAULT 0,
     writtenAt			DATETIME NOT NULL DEFAULT NOW(),
+    updatedAt			DATETIME NULL,
     deletedAt			DATETIME NULL,
     articleDeleteReason	VARCHAR(50) NULL,
     CONSTRAINT FOREIGN KEY(boardValue)
@@ -314,13 +330,18 @@ CREATE TABLE commentAlarm
 INSERT INTO members
 (email, password, salt, signAt, passwordAlertAt, nickname, profileImageUrl, name, birthDate, sex, telecomValue, contact, zipcode, address, addressDetail, agreedTermAt, agreedMarketingAt)
 VALUES
-('psam1017@naver.com', 'psam1017', '', NOW(), (NOW() + INTERVAL 90 DAY), 'psam-nick', 'psam-url', '박성민', '1996-10-17', 'M', 'CPK', '01077954671', '44332', '대구시 서구 여기로 10길 10', '20층(여기동)', NOW(), NOW()),
-('test1234@google.com', 'test1234', '', NOW(), (NOW() + INTERVAL 90 DAY), 'test-nick', 'test-url', '테스터', '1998-04-25', 'F', 'LG', '01012345678', '12378', '서울시 중구 저기로 2길 84', '3층 301호(저기동)', NOW(), NULL),
-('admin@google.com', 'admin', '', NOW(), (NOW() + INTERVAL 90 DAY), 'admin-nick', 'admin-url', '관리자', '2002-07-14', 'M', 'KT', '01744256982', '00154', '대전시 남구 거기로 21길 1', '우리집(거기동)', NOW(), NULL),
-('noname@ggomsu.com', 'noname', '', NOW(), (NOW() + INTERVAL 90 DAY), 'noname', '', '', '2000-01-01', 'M', 'LG', '', '', '', '', NOW(), NULL);
+('dummy@ggomsu.com', '더미', '', NOW(), (NOW() + INTERVAL 90000 DAY), '더미', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', NOW(), NULL),
+('dummy2@ggomsu.com', '더미2', '', NOW(), (NOW() + INTERVAL 90000 DAY), '더미2', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', NOW(), NULL),
+('noname@ggomsu.com', 'noname', '', NOW(), (NOW() + INTERVAL 90000 DAY), 'noname', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', NOW(), NULL);
+
+UPDATE members
+SET statusValue = "TMP"
+WHERE nickname = "noname";
 
 INSERT INTO articles(boardValue, nickname, title, content)
-VALUES('coding', 'psam-nick', '더미제목', '더미내용');
+VALUES	('coding', '더미', '코딩 더미 제목', '<p>이 게시글은 페이징 테스트를 위한 더미 게시글입니다.</p>'),
+		('game', '더미', '게임 더미 제목', '<p>이 게시글은 페이징 테스트를 위한 더미 게시글입니다.</p>'),
+		('free', '더미', '자유 더미 제목', '<p>이 게시글은 페이징 테스트를 위한 더미 게시글입니다.</p>');
 
 INSERT INTO articles(boardValue, nickname, title, content)
 SELECT boardValue, nickname, title, content FROM articles;
@@ -340,58 +361,65 @@ INSERT INTO articles(boardValue, nickname, title, content)
 SELECT boardValue, nickname, title, content FROM articles;
 
 UPDATE articles
-SET viewCount = 200
-WHERE articleIndex = 254;
-
+SET viewCount = 99999
+WHERE articleIndex = 886;
 UPDATE articles
-SET viewCount = 181
-WHERE articleIndex = 252;
+SET viewCount = 250
+WHERE articleIndex = 883;
+UPDATE articles
+SET viewCount = 2400
+WHERE articleIndex = 880;
+UPDATE articles
+SET viewCount = 22
+WHERE articleIndex = 877;
+UPDATE articles
+SET viewCount = 3000
+WHERE articleIndex = 874;
 
 INSERT INTO tags
 VALUES
-(250, 'JAVA'),
-(250, 'Spring'),
-(251, 'Java'),
-(251, 'Python'),
-(253, 'Java'),
-(253, 'C++');
+(886, 'JAVA'),
+(886, 'Spring'),
+(883, 'Java'),
+(883, 'Python'),
+(880, 'Java'),
+(880, 'Python'),
+(877, 'Java'),
+(877, 'C++'),
+(874, 'Python'),
+(874, 'Java');
 
 INSERT INTO comments(refIndex, articleIndex, nickname, content)
 VALUES
-(1, 255, 'psam-nick', '새로운 기념비적인 게시글입니다.'),
-(2, 255, 'test-nick', '과연 프로젝트 잘 될 수 있을까?'),
-(3, 255, 'admin-nick', '오늘 저녁은 돈까스입니다.'),
-(1, 255, 'test-nick', '말투 되게 아저씨같네.');
+(1, 886, '더미', '더미 댓글입니다.'),
+(2, 886, '더미2', '더미 댓글입니다.'),
+(3, 886, '더미', '더미 댓글입니다.'),
+(1, 886, '더미2', '더미 댓글입니다.');
 INSERT INTO comments(refIndex, articleIndex, nickname, content)
 VALUES
-(1, 255, 'psam-nick', '왜 시비임?'),
-(2, 255, 'admin-nick', '과연이 아니라 어떻게 하면이라고 해주세요.'),
-(7, 253, 'test-nick', '댓글253');
+(1, 886, '더미', '더미 댓글입니다.'),
+(2, 886, '더미2', '더미 댓글입니다.'),
+(7, 886, '더미', '더미 댓글입니다.');
 INSERT INTO comments(refIndex, articleIndex, nickname, content)
 VALUES
-(8, 252, 'admin-nick', '댓글252'),
-(9, 250, 'psam-nick', '댓글250'),
-(9, 250, 'psam-nick', '내 댓글에 단 대댓글'),
-(9, 250, 'test-nick', '내 댓글에 달린 남 대댓글');
-
-INSERT INTO articleAlarm(articleIndex, commentIndex, nickname)
-VALUES(255, 3, 'psam-nick'), (253, 7, 'psam-nick'), (252, 8, 'psam-nick');
-
-INSERT INTO commentAlarm(refIndex, commentIndex, nickname)
-VALUES(1, 4, 'psam-nick'), (2, 6, 'test-nick'), (9, 11, 'psam-nick');
+(8, 886, '더미2', '더미 댓글입니다.'),
+(9, 886, '더미', '더미 댓글입니다.'),
+(9, 886, '더미', '더미 댓글입니다.'),
+(9, 886, '더미2', '더미 댓글입니다.');
 
 INSERT INTO articleLike
 VALUES
-(254, 'test-nick'),
-(254, 'psam-nick'),
-(253, 'psam-nick'),
-(252, 'psam-nick'),
-(251, 'psam-nick');
+(886, '더미'),
+(886, '더미2');
 
 INSERT INTO commentLike
 VALUES
-(1, 'psam-nick'),
-(1, 'admin-nick'),
-(6, 'admin-nick'),
-(6, 'psam-nick'),
-(2, 'test-nick');
+(1, '더미'),
+(1, '더미2'),
+(6, '더미'),
+(6, '더미2'),
+(2, '더미2');
+
+UPDATE articles
+SET title = '더미 댓글이 있는 더미 게시글입니다.'
+WHERE articleIndex = 886;

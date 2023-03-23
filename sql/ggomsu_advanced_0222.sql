@@ -1,4 +1,5 @@
-SET GLOBAL event_scheduler = ON;
+SET GLOBAL event_scheduler = ON; # 이벤트 활성화
+SET GLOBAL LOG_BIN_TRUST_FUNCTION_CREATORS = 1; # 프로시저 권한 부여
 
 DROP PROCEDURE IF EXISTS insertComment; # 박성민
 DROP PROCEDURE IF EXISTS insertRefComment; # 박성민
@@ -6,6 +7,8 @@ DROP PROCEDURE IF EXISTS reviseWikiInfo; # 박성민
 DROP PROCEDURE IF EXISTS deleteAlarmListByNickname; # 박성민
 DROP PROCEDURE IF EXISTS checkPasswordRenew; # 박성민
 DROP PROCEDURE IF EXISTS checkTermExpired; # 박성민
+DROP PROCEDURE IF EXISTS insertArticle; # 박성민
+DROP PROCEDURE IF EXISTS increaseAbuseCount; # 이성호
 DROP EVENT IF EXISTS updateDormant; # 손하늘
 DROP EVENT IF EXISTS deleteOldAlarm; # 박성민
 DROP EVENT IF EXISTS deleteWithdrawn; # 박성민
@@ -91,6 +94,34 @@ BEGIN
 END $$
 DELIMITER ;
 
+# 게시글 삽입
+DELIMITER $$
+CREATE DEFINER=`psam1017`@`localhost` PROCEDURE `insertArticle`(
+	myBoardValue VARCHAR(10), 
+    myNickname VARCHAR(10), 
+    myTitle VARCHAR(100), 
+    myContent VARCHAR(10000))
+BEGIN
+	INSERT INTO articles(boardValue, nickname, title, content)
+	VALUES (myBoardValue, myNickname, myTitle, myContent);
+	SELECT MAX(articleIndex) FROM articles;
+END $$
+DELIMITER ;
+
+# 게시판 남용 건수 증가
+DELIMITER $$
+CREATE DEFINER=`psam1017`@`localhost` PROCEDURE `increaseAbuseCount`(reportedNickname VARCHAR(10))
+BEGIN
+	SET @ac = (SELECT abuseCount FROM members WHERE nickname = reportedNickname);
+	
+	IF @ac = 4 THEN
+		UPDATE members SET statusValue = 'SUS', abuseCount = 5 WHERE nickname = reportedNickname;
+	ELSE
+		UPDATE members SET abuseCount = abuseCount + 1 WHERE nickname = reportedNickname;
+	END IF;
+END $$
+DELIMITER ;
+
 
 
 
@@ -102,9 +133,10 @@ ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:00:00'
 DO
   UPDATE members 
   SET statusValue = 'DOR' 
-  WHERE 0 < TIMESTAMPDIFF(YEAR, signAt, NOW()); 
+  WHERE 0 < TIMESTAMPDIFF(YEAR, signAt, NOW())
+  AND statusValue != 'ADM'; 
 
-# delete alarm
+# delete old alarm
 CREATE EVENT IF NOT EXISTS `deleteOldAlarm` 
 ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:10:00'
 DO
@@ -118,7 +150,7 @@ CREATE EVENT IF NOT EXISTS `deleteWithdrawn`
 ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:20:00'
 DO
   DELETE FROM members
-  WHERE TIMESTAMPDIFF(DAY, signAt, NOW()) > 90
+  WHERE TIMESTAMPDIFF(DAY, signAt, NOW()) > 180
   AND statusValue = 'DEL';
 
 
