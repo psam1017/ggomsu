@@ -37,28 +37,26 @@ public class ProfileConfirm implements Action{
 		String statusValue = (String) session.getAttribute("statusValue");
 		String newNickname = req.getParameter("nickname");
 		String isChangeProfileImage = req.getParameter("isChangeProfileImage");
+		String statusURI = null;
+		
+		if(statusValue.equals("MEM") || statusValue.equals("SNS")) {
+			statusURI = "my";
+		}
+		else if (statusValue.equals("ADM")) {
+			statusURI = "admin";
+		}
 		
 		// 잘못된 접근일 때
 		if(!req.getMethod().equals("POST") || newNickname == null) {
-			if(statusValue.equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/profile?code=error");
-			}
-			else if (statusValue.equals("ADM")) {
-				forward.setPath(req.getContextPath() + "/admin/profile?code=error");
-			}
-			else {
-				forward.setPath(req.getContextPath() + "/error/error");
-			}
+			forward.setPath(req.getContextPath() + "/" + statusURI + "/profile?code=error");
 			forward.setForward(false);
-			
 			return forward;
 		}
 		
 		// 전송 받은 닉네임이 이전 닉네임과 다르면서 동시에 기존에 닉네임이 존재한다면...
 		if(!newNickname.equals(session.getAttribute("nickname")) && dao.checkNickname(newNickname)) {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/my/profile?code=duplicate");
-			
+			forward.setPath(req.getContextPath() + "/" + statusURI + "/profile?code=duplicate");
 			return forward;
 		}
 		
@@ -126,12 +124,7 @@ public class ProfileConfirm implements Action{
 					}
 				}
 			} catch (IOException e) {
-				if(statusValue.equals("MEM")) {
-					forward.setPath(req.getContextPath() + "/my/profile?code=big-size");
-				}
-				else if(statusValue.equals("ADM")) {
-					forward.setPath(req.getContextPath() + "/admin/profile?code=big-size");
-				}
+				forward.setPath(req.getContextPath() + "/" + statusURI + "/profile?code=big-size");
 				forward.setForward(false);
 				
 				return forward;
@@ -146,12 +139,7 @@ public class ProfileConfirm implements Action{
 		// 닉네임과 프로필 이미지를 모두 vo에 저장한 이후 dao로 업데이트
 		dao.updateProfile(vo);
 		
-		if(statusValue.equals("MEM")) {
-			forward.setPath(req.getContextPath() + "/my/profile?code=success");
-		}
-		else if(statusValue.equals("ADM")) {
-			forward.setPath(req.getContextPath() + "/admin/profile?code=success");
-		}
+		forward.setPath(req.getContextPath() + "/" + statusURI + "/profile?code=success");
 		forward.setForward(false);
 		
 		return forward;

@@ -21,8 +21,7 @@ public class LikeComment implements Action{
 		
 		// 파라미터 저장
 		String nickname = (String)session.getAttribute("nickname");
-//		String temp = (String)session.getAttribute("page");
-		String temp = (String)req.getAttribute("page");
+		String temp = (String)req.getParameter("page");
 		
 		// 변수 및 초기화
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
@@ -39,11 +38,11 @@ public class LikeComment implements Action{
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("startPage", startPage);
 		req.setAttribute("endPage", endPage);
+		req.setAttribute("realEndPage", realEndPage);
 		req.setAttribute("page", page);
 		req.setAttribute("commentLikeList", commentDAO.getCommentLikeList(nickname, (page - 1) * 10));
 		req.setAttribute("prevPage", prevPage);
 		req.setAttribute("nextPage", nextPage);
-//		session.setAttribute("page", page);
 		
 		forward.setForward(true);
 		forward.setPath("/views/my/LikeComment.jsp");

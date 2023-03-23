@@ -45,16 +45,16 @@ public class AlarmDAO {
 		return sqlSession.selectList("Alarm.findCommentAlarmIndexListByNickname", nickname);
 	}
 	
-	public void deleteArticleAlarm(int index) {
-		sqlSession.delete("Alarm.deleteArticleAlarm", index);
+	public void deleteArticleAlarm(int articleIndex) {
+		sqlSession.delete("Alarm.deleteArticleAlarm", articleIndex);
 	}
 	
-	public void deleteCommentAlarm(int index) {
-		sqlSession.delete("Alarm.deleteCommentAlarm", index);
+	public void deleteCommentAlarm(int commentIndex) {
+		sqlSession.delete("Alarm.deleteCommentAlarm", commentIndex);
 	}
 	
 	public List<AlarmMessageDTO> findAlarmListByNickname(String nickname){
-		return sqlSession.selectList("Alarm.findAlarmList", nickname);
+		return sqlSession.selectList("Alarm.findAlarmListByNickname", nickname);
 	}
 	
 	public void deleteAlarmListByNickname(String nickname) {

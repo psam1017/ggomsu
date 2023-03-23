@@ -3,6 +3,12 @@
 
 <!-- 작성자 : 박성민 -->
 <mapper namespace="Wiki">
+	<select id="getLatestRvs" parameterType="string" resultType="_int">
+		SELECT MAX(rvs)
+		FROM wikiInfo
+		WHERE subject = #{subject}
+		AND deletedAt IS NULL
+	</select>
 	<select id="getAllRvsBySubject" parameterType="string" resultType="wikiInfo">
 		SELECT WI.*, M.profileImageUrl
 		FROM wikiInfo AS WI, members AS M
@@ -68,19 +74,10 @@
 		SELECT COUNT(subject)
 		FROM wikiInfo
 		WHERE subject = #{subject}
-		AND rvs = 1
 	</select>
 	<insert id="confirmWikiAbuse" parameterType="map">
-		<choose>
-			<when test='"noname".equals(nickname)'>
-				INSERT INTO wikiAbuse(ip)
-				VALUES (#{ip})
-			</when>
-			<otherwise>
-				INSERT INTO wikiAbuse(nickname)
-				VALUES (#{nickname})
-			</otherwise>
-		</choose>
+		INSERT INTO wikiAbuse(nickname, ip)
+		VALUES (#{nickname}, #{ip})
 	</insert>
 	<select id="getAbuseInfo" parameterType="map" resultType="wikiAbuse">
 		SELECT * FROM wikiAbuse

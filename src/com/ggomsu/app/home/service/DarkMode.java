@@ -2,6 +2,7 @@ package com.ggomsu.app.home.service;
 
 import java.io.PrintWriter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,11 +27,19 @@ public class DarkMode implements Action {
 		
 		String email = (String)session.getAttribute("email");
 		boolean darkModeFlag = req.getParameter("darkModeFlag").equals("on") ? true : false;
+		Cookie cookie = null;
 		
-		dao.updateDarkMode(email, darkModeFlag);
+		if(email != null) {
+			dao.updateDarkMode(email, darkModeFlag);
+		}
+		
 		session.setAttribute("darkModeFlag", darkModeFlag);
 		
-		json.put("darkModeFlag", darkModeFlag);
+		cookie = new Cookie("darkModeFlag", darkModeFlag ? "on" : "off");
+		cookie.setMaxAge(60 * 60 * 24 * 7);
+		resp.addCookie(cookie);
+		
+		json.put("status", "ok");
 		out.print(json.toJSONString());
 		out.close();
 		

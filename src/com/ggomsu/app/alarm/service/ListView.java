@@ -38,12 +38,11 @@ public class ListView implements Action{
 			temp.put("original", message.getOriginal());
 			temp.put("nickname", message.getNickname());
 			temp.put("content", message.getContent());
-			temp.put("writtenAt", message.getWrittenAt());
+			temp.put("writtenAt", message.getWrittenAt().substring(0, message.getWrittenAt().indexOf(".")));
 			temp.put("articleIndex", message.getArticleIndex());
 			array.add(temp);
 		}
 		
-		json.put("size", messageList.size());
 		json.put("list", array);
 		out.print(json.toJSONString());
 		out.close();

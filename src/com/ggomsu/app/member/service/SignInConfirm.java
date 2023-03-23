@@ -1,5 +1,6 @@
 package com.ggomsu.app.member.service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,9 +25,26 @@ public class SignInConfirm implements Action {
 		
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
+		String rememberEmail = req.getParameter("rememberEmail");
 		boolean isSignInOk = false;
+		boolean isArticleRedirect = false;
 		
-		forward.setForward(false);
+		if(rememberEmail.equals("on")) {
+			Cookie emailCookie = new Cookie("email", email);
+			Cookie rememberEmailCookie = new Cookie("rememberEmail", "on");
+			emailCookie.setMaxAge(60 * 60 * 24 * 30);
+			rememberEmailCookie.setMaxAge(60 * 60 * 24 * 30);
+			resp.addCookie(emailCookie);
+			resp.addCookie(rememberEmailCookie);
+		}
+		else {
+			Cookie emailCookie = new Cookie("email", email);
+			Cookie rememberEmailCookie = new Cookie("rememberEmail", "on");
+			emailCookie.setMaxAge(0);
+			rememberEmailCookie.setMaxAge(0);
+			resp.addCookie(emailCookie);
+			resp.addCookie(rememberEmailCookie);
+		}
 		
 		if(!dao.checkEmail(email)) {
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=fail");
@@ -44,21 +62,17 @@ public class SignInConfirm implements Action {
 			return forward;
 		}
 		else {
-			// 게시판 정보를 저장 및 세션에서 삭제
-			String articleIndex = (String)session.getAttribute("articleIndex");
-			String boardValue = (String)session.getAttribute("boardValue");
-			String page = (String)session.getAttribute("page");
-			
+			String articleRedirect = (String) session.getAttribute("articleRedirect");
 			session.setAttribute("blindList", dao.getBlindList(nickname));
 			session.setAttribute("statusValue", statusValue);
 			session.setAttribute("darkModeFlag", vo.isDarkModeFlag());
 			session.setAttribute("alarmFlag", vo.isAlarmFlag());
+			session.setAttribute("profileImageUrl", vo.getProfileImageUrl());
 			
 			//회원상태가 MEM, ADM일 때는 필요한 session을 발급
 			if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
 				session.setAttribute("email", email);
 				session.setAttribute("nickname", nickname);
-				session.setAttribute("profileImageUrl", vo.getProfileImageUrl());
 				
 				// 로그인 날짜 갱신 -> 휴면계정 조회용
 				dao.updateSignAt(email);
@@ -74,7 +88,8 @@ public class SignInConfirm implements Action {
 					forward.setPath(req.getContextPath() + "/member/password/renew");
 				}
 				// 이전에 보던 페이지가 있는가?
-				else if(articleIndex != null || (boardValue != null && page != null)) {
+				else if(articleRedirect != null) {
+					isArticleRedirect = true;
 					forward.setPath(req.getContextPath() + "/member/sign-in/board");
 				}
 				else {
@@ -85,6 +100,7 @@ public class SignInConfirm implements Action {
 			else if(statusValue.equals("DEL") || statusValue.equals("SUS") || statusValue.equals("DOR")) {
 				session.setAttribute("invalidEmail", email);
 				session.setAttribute("invalidNickname", nickname);
+				session.setAttribute("originalStatusValue", "MEM"); // ADM은 이곳에 도달할 수 없다.
 				session.setAttribute("invalid", "true");
 				forward.setPath(req.getContextPath() + "/help/invalid");
 			}
@@ -93,6 +109,10 @@ public class SignInConfirm implements Action {
 		if(forward.getPath() == null) {
 			forward.setPath(req.getContextPath() + "/error/error");
 		}
+		if(!isArticleRedirect) {
+			session.removeAttribute("articleRedirect");
+		}
+		forward.setForward(false);
 		
 		return forward;
 	}

@@ -24,9 +24,10 @@ public class RestoreInvalid implements Action {
 		String authKey = (String)session.getAttribute("authKey");
 		String invalidEmail = (String)session.getAttribute("invalidEmail");
 		String statusValue = (String)session.getAttribute("statusValue");
+		String originalStatusValue = (String)session.getAttribute("originalStatusValue");
 		
 		if(memberKey.equals(authKey) && !statusValue.equals("SUS")) {
-			dao.restoreInvalid(invalidEmail);
+			dao.restoreInvalid(invalidEmail, originalStatusValue);
 			session.invalidate();
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=restore");

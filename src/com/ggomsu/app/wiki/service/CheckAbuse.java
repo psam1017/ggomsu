@@ -24,13 +24,11 @@ public class CheckAbuse implements Action {
 		String ip = req.getRemoteAddr();
 		String nickname = (String) req.getSession().getAttribute("nickname");
 		
-		// 비회원은 아닌지 확인
 		if(nickname == null) {
-			forward = new ActionForward();
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/wiki/no-member");
+			nickname = "noname";
 		}
-		else if(nickname.equals("noname")) { // 익명이라면 차단된 ip인지 확인
+		
+		if(nickname.equals("noname")) { // 익명이라면 차단된 ip인지 확인
 			isBlockedUser = dao.checkBlockedIp(ip);
 		}
 		else { // 회원이라면 차단된 닉네임인지 확인
@@ -42,11 +40,11 @@ public class CheckAbuse implements Action {
 			abuse = dao.getAbuseInfo(nickname, ip);
 			req.setAttribute("wikiAbuse", abuse);
 			forward = new ActionForward();
-			forward.setForward(true);
-			forward.setPath("/wiki/abuse");
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/wiki/abuse");
 		}
 		else { // 만약 유효한 접근이라면 경로는 client에서 설정.
-			forward = new ActionForward();
+			forward = new ActionForward(); // 또는 아예 forward = null;
 			forward.setForward(true);
 			forward.setPath(null);
 		}

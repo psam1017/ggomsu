@@ -5,7 +5,7 @@
 	<!-- article -->
 	<select id="getArticleReportList" resultType="articleReport">
 		SELECT * FROM articleReport
-		WHERE articleDeleteReason IS NOT NULL
+		WHERE articleDeleteReason IS NULL
 		ORDER BY articleReportIndex DESC
 		LIMIT 100
 	</select>
@@ -22,7 +22,7 @@
 	<!-- comment -->
 	<select id="getCommentReportList" resultType="commentReport">
 		SELECT * FROM commentReport
-		WHERE commentDeleteReason IS NOT NULL
+		WHERE commentDeleteReason IS NULL
 		ORDER BY commentReportIndex DESC
 		LIMIT 100
 	</select>
@@ -39,7 +39,7 @@
 	<!-- wiki -->
 	<select id="findWikiReportList" resultType="wikiReport">
 		SELECT * FROM wikiReport
-		WHERE wikiDeleteReason IS NOT NULL
+		WHERE wikiDeleteReason IS NULL
 		ORDER BY wikiReportIndex DESC
 		LIMIT 100
 	</select>
@@ -48,7 +48,7 @@
 		SET wikiDeleteReason = #{wikiDeleteReason}
 		WHERE (subject, rvs) = (#{subject}, #{rvs})
 	</update>
-	<delete id="deleteWikiReport" parameterType="_int">
+	<delete id="deleteWikiReport" parameterType="map">
 		DELETE FROM wikiReport
 		WHERE (subject, rvs) = (#{subject}, #{rvs})
 	</delete>

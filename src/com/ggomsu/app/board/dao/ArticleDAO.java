@@ -59,14 +59,14 @@ public class ArticleDAO {
 	}
 
 	public void doLike(String nickname, int articleIndex){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
+		Map<String, Object> hash = new HashMap<String, Object>();
 		hash.put("nickname", nickname);
 		hash.put("articleIndex", articleIndex);
 		sqlSession.update("Article.doLike",hash);
 	}
 
 	public void cancelLike(String nickname, int articleIndex){
-		HashMap<String, Object> hash = new HashMap<String, Object>();
+		Map<String, Object> hash = new HashMap<String, Object>();
 		hash.put("nickname", nickname);
 		hash.put("articleIndex", articleIndex);
 		sqlSession.update("Article.cancelLike",hash);
@@ -99,18 +99,29 @@ public class ArticleDAO {
 	}
 
 	public List<ArticleDTO> getArticleLikeList(String nickname, int page) {
-		HashMap<String, Object> hash = new HashMap<String, Object>();
+		Map<String, Object> hash = new HashMap<String, Object>();
 		hash.put("nickname", nickname);
 		hash.put("page", page);
-		return sqlSession.selectList("Article.getLikeList", hash);
+		return sqlSession.selectList("Article.getArticleLikeList", hash);
+	}
+	
+	public int findMyArticleHistoryTotal(String nickname) {
+		return sqlSession.selectOne("Article.findMyArticleHistoryTotal", nickname);
+	}
+	
+	public List<ArticleDTO> getArticleHistoryList(String nickname, int page) {
+		Map<String, Object> hash = new HashMap<String, Object>();
+		hash.put("nickname", nickname);
+		hash.put("page", page);
+		return sqlSession.selectList("Article.getArticleHistoryList", hash);
 	}
 	
 	// index 좋아요, 조회수 베스트
-	public List<ArticleDTO> findWeeklyMostLikedList(String boardValue) {
-		return sqlSession.selectList("Article.findWeeklyMostLikedList", boardValue);
+	public List<ArticleDTO> findYearlyMostLikedList(String boardValue) {
+		return sqlSession.selectList("Article.findYearlyMostLikedList", boardValue);
 	}
 	
-	public List<ArticleDTO> findWeeklyMostViewedList(String boardValue) {
-		return sqlSession.selectList("Article.findWeeklyMostViewedList", boardValue);
+	public List<ArticleDTO> findYearlyMostViewedList(String boardValue) {
+		return sqlSession.selectList("Article.findYearlyMostViewedList", boardValue);
 	}
 }

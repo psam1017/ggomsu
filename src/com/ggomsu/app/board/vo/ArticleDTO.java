@@ -11,6 +11,7 @@ public class ArticleDTO {
 	private String content;
 	private int viewCount;
 	private String writtenAt;
+	private String updatedAt;
 	private String deletedAt;
 	private String articleDeleteReason;
 	private int articleLikeCount;
@@ -74,6 +75,14 @@ public class ArticleDTO {
 
 	public void setWrittenAt(String writtenAt) {
 		this.writtenAt = writtenAt;
+	}
+
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public String getDeletedAt() {

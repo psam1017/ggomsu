@@ -19,11 +19,18 @@ public class WikiList implements Action {
 		WikiDAO dao = new WikiDAO();
 		String subject = req.getParameter("subject");
 		
-		List<WikiInfoDTO> infoList = dao.getAllRvsBySubject(subject);
-		req.setAttribute("infoList", infoList);
-		
-		forward.setForward(true);
-		forward.setPath("/views/wiki/List.jsp");
+		if(dao.checkExistBySubject(subject)) {
+			List<WikiInfoDTO> infoList = dao.getAllRvsBySubject(subject);
+			req.setAttribute("infoList", infoList);
+			req.setAttribute("subject", subject);
+			
+			forward.setForward(true);
+			forward.setPath("/views/wiki/List.jsp");
+		}
+		else {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/wiki/not-avail");
+		}
 		
 		return forward;
 	}

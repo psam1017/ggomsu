@@ -31,7 +31,7 @@ public class CommentList implements Action {
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		String nickname = (String)session.getAttribute("nickname");
 		List<String> blindList = (List<String>)session.getAttribute("blindList");
-		boolean alarmFlag = (boolean) session.getAttribute("alarmFlag");
+		boolean alarmFlag = session.getAttribute("alarmFlag") != null ? (boolean) session.getAttribute("alarmFlag") : false;
 		
 		List<CommentDTO> commentList = commentDAO.getCommentList(articleIndex, blindList, nickname);
 		
@@ -48,7 +48,8 @@ public class CommentList implements Action {
 			object.put("articleIndex", comment.getArticleIndex());
 			object.put("nickname", comment.getNickname());
 			object.put("content", comment.getContent());
-			object.put("writtenAt", comment.getWrittenAt());
+			String writtenAt = comment.getWrittenAt().substring(0, comment.getWrittenAt().indexOf("."));
+			object.put("writtenAt", writtenAt);
 			object.put("deletedAt", comment.getDeletedAt());
 			object.put("commentDeleteReason", comment.getCommentDeleteReason());
 			object.put("commentLikeCount", comment.getCommentLikeCount());

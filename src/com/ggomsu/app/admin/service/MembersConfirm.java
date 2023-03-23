@@ -15,10 +15,10 @@ public class MembersConfirm implements Action{
 		AdminDAO dao = new AdminDAO();
 		ActionForward forward = new ActionForward();
 		
-		String memberNickname = (String)req.getParameter("memberNickname");
-		String memberStatus = (String)req.getParameter("memberStatus");
+		String nickname = (String)req.getParameter("nickname");
+		String statusValue = (String)req.getParameter("statusValue");
 		
-		dao.updateMemberStatus(memberNickname, memberStatus);
+		dao.updateMemberStatus(nickname, statusValue);
 		
 		forward.setForward(false);
 		forward.setPath(req.getContextPath() + "/admin/members?code=success");

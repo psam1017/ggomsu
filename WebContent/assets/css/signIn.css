@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+/* .tab_menu .tab_menu_list{display: flex} */
+.tab_menu .tab_menu_list li{float: left;}
+.tab_menu .tab_menu_cont{display:none;}
+.tab_menu .tab_menu_list li a.active{font-weight:bold; color:#0061f2;}
+.tab_menu .tab_menu_cont.active {background-color:#f2f6fc; display:block;}
+#memberCapchaContainer{background-color:#f2f6fc;}

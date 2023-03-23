@@ -1,5 +1,6 @@
 package com.ggomsu.app.wiki.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,33 +27,48 @@ public class View implements Action {
 		ActionForward forward = new ActionForward();
 		
 		// parameter 저장
+		String statusValue = (String) req.getSession().getAttribute("statusValue");
 		String subject = req.getParameter("subject");
-		int rvs = Integer.parseInt(req.getParameter("rvs"));
 		
-		// 주제가 있는지 먼저 검색 COUNT(1) -> 없으면 no-subject, 있으면 계속 진행
-		// /wiki/no-subject
+		if(!dao.checkExistBySubject(subject)) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/wiki/no-subject");
+			return forward;
+		}
+		
+		int latestRvs = dao.getLatestRvs(subject);
+		int rvs = req.getParameter("rvs") != null ? Integer.parseInt(req.getParameter("rvs")) : latestRvs;
 		
 		// 작성정보 가져오기
 		info = dao.findWikiInfo(subject, rvs);
 		
-		// 오용으로 인해 삭제된 버전일 때
-		if(info.getDeletedAt() != null) {
+		// 삭제되거나 존재하지 않는다면
+		if(info == null || info.getDeletedAt() != null) {
 			forward.setForward(true);
-			forward.setPath("/views/wiki/Deleted.jsp");
+			forward.setPath("/views/wiki/NotAvail.jsp");
 		}
 		// 정상적으로 볼 수 있는 버전일 때
 		else {
 			// 콘텐츠 가져오기
 			List<WikiContentVO> pastList = new LinkedList<>();
 			pastList.addAll(dao.getContentPast(subject, rvs));
-			List<WikiContentVO> currentList = (LinkedList<WikiContentVO>)dao.getContentOne(subject, rvs);
+			List<WikiContentVO> currentList = (ArrayList<WikiContentVO>)dao.getContentOne(subject, rvs);
 			wikiHelper.setContentFromPast(currentList, pastList);
 			
-			req.setAttribute("wikiInfo", info);
-			req.setAttribute("wikiContents", currentList);
+			String fullContents = "";
 			
-			req.setAttribute("subject", subject);
-			req.setAttribute("rvs", rvs);
+			for(WikiContentVO line : currentList) {
+				fullContents += line.getContent();
+			}
+			
+			if(statusValue == null || statusValue.equals("TMP")) {
+				req.setAttribute("remoteAddr", req.getRemoteAddr());
+			}
+			if(latestRvs == rvs) {
+				req.setAttribute("isLatestRvs", true);
+			}
+			req.setAttribute("wikiInfo", info);
+			req.setAttribute("fullContents", fullContents);
 			
 			forward.setForward(true);
 			forward.setPath("/views/wiki/View.jsp");

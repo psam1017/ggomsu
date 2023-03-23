@@ -21,17 +21,27 @@ public class ArticleLike implements Action {
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		String nickname = req.getParameter("nickname");
+		String nickname = (String) req.getSession().getAttribute("nickname");
+		String statusValue = (String) req.getSession().getAttribute("statusValue");
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		
-		if(articleDAO.checkLiked(nickname, articleIndex)) {
-			articleDAO.cancelLike(nickname, articleIndex);
-			json.put("like", "do");
+		if(statusValue == null || statusValue.equals("TMP")) {
+			json.put("status", "tmp");
+		}
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("SNS")) {
+			if(articleDAO.checkLiked(nickname, articleIndex)) {
+				articleDAO.cancelLike(nickname, articleIndex);
+				json.put("status", "cancel");
+			}
+			else {
+				articleDAO.doLike(nickname, articleIndex);
+				json.put("status", "do");
+			}
 		}
 		else {
-			articleDAO.doLike(nickname, articleIndex);
-			json.put("like", "cancel");
+			json.put("status", "not-ok");
 		}
+		
 		
 		out.print(json.toJSONString());
 		out.close();

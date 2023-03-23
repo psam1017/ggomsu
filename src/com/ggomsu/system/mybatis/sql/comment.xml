@@ -13,14 +13,14 @@
 		LEFT OUTER JOIN members as M
 		ON C.nickname = M.nickname
 		WHERE articleIndex = #{articleIndex} 
-		<if test="blindList != null">
-			AND nickname NOT IN 
+		<if test="blindList != null and blindList.size gt 0">
+			AND C.nickname NOT IN 
 			<foreach item="blindMember" collection="blindList" separator="," open="(" close=")">
 				#{blindMember}
 			</foreach>
 		</if>
-		GROUP BY commentIndex
-		ORDER BY refIndex ASC, commentIndex ASC
+		GROUP BY C.commentIndex
+		ORDER BY C.refIndex ASC, C.commentIndex ASC
 	</select>
 	<select id ="doInsertCommentProcedure" statementType="CALLABLE" parameterType="comment" resultType="comment">
 		CALL insertComment(#{articleIndex}, #{nickname}, #{content})
@@ -54,16 +54,28 @@
 		SELECT COUNT(1) FROM commentLike WHERE nickname = #{nickname};
 	</select>
 	<select id="getCommentLikeList" parameterType="map" resultType="comment">
-		SELECT C.*, COUNT(CL.commentIndex) AS commentLikeCount, M.profileImageUrl
+		SELECT C.*, COUNT(CL.commentIndex) AS commentLikeCount
 		FROM comments AS C
 		LEFT OUTER JOIN commentLike AS CL
 		ON C.commentIndex = CL.commentIndex
-		LEFT OUTER JOIN members AS M
-		ON C.nickname = M.nickname
 		WHERE C.commentIndex IN (SELECT commentIndex FROM commentLike WHERE nickname = #{nickname})
+		AND C.deletedAt IS NULL
 		GROUP BY commentIndex
 		ORDER BY commentIndex DESC
-		LIMIT 10 OFFSET ${page}
+		LIMIT 10 OFFSET #{page}
+	</select>
+	<select id="findMyCommentHistoryTotal" parameterType="string" resultType="_int">
+		SELECT COUNT(1) FROM comments WHERE nickname = #{nickname};
+	</select>
+	<select id="getCommentHistoryList" parameterType="map" resultType="comment">
+		SELECT C.*, COUNT(CL.commentIndex) AS commentLikeCount
+		FROM comments AS C
+		LEFT OUTER JOIN commentLike AS CL
+		ON C.commentIndex = CL.commentIndex
+		WHERE C.nickname = #{nickname}
+		GROUP BY commentIndex
+		ORDER BY commentIndex DESC
+		LIMIT 10 OFFSET #{page}
 	</select>
 	
 	<!-- 박성민, 이성호 : 좋아요 체크 -->

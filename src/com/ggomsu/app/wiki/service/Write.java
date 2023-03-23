@@ -17,6 +17,11 @@ public class Write implements Action {
 			forward.setPath("/views/wiki/Write.jsp");
 		}
 		
+		String statusValue = (String) req.getSession().getAttribute("statusValue");
+		if(statusValue == null || statusValue.equals("TMP")) {
+			req.setAttribute("remoteAddr", req.getRemoteAddr());
+		}
+		
 		return forward;
 	}
 

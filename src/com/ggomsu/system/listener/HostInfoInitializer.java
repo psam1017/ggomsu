@@ -13,9 +13,9 @@ public class HostInfoInitializer implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0)  { ; }
 
     public void contextInitialized(ServletContextEvent sce)  {
-    	String host = sce.getServletContext().getInitParameter("host");
+    	String host = sce.getServletContext().getInitParameter("mailHost");
     	String email = sce.getServletContext().getInitParameter("email");
-    	String password = sce.getServletContext().getInitParameter("password");
+    	String password = sce.getServletContext().getInitParameter("mailPassword");
     	
     	new HostInfo(host, email, password);
     }

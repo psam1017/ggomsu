@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.ggomsu.app.board.dao.ArticleDAO;
@@ -20,6 +21,7 @@ public class ArticleView implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		JSONArray array = new JSONArray();
 		JSONObject json = new JSONObject();
 		ArticleDAO articleDAO = new ArticleDAO();
 		BoardHelper boardHelper = new BoardHelper();
@@ -28,23 +30,20 @@ public class ArticleView implements Action{
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		ArticleDTO article = articleDAO.findArticle(articleIndex);
 		String[] tagArray = boardHelper.setTagListForOne(article);
+		array.add(tagArray);
 		
 		if(article.getDeletedAt() == null) {
 			json.put("status", "ok");
 			json.put("articleIndex", articleIndex);
-			json.put("boardValue", article.getBoardValue());
 			json.put("nickname", article.getNickname());
-			json.put("profileImageUrl", article.getProfileImageUrl());
+			json.put("writtenAt", article.getWrittenAt());
 			json.put("title", article.getTitle());
 			json.put("content", article.getContent());
-			json.put("viewCount", article.getViewCount());
-			json.put("writtenAt", article.getWrittenAt());
-			json.put("articleLikeCount", article.getArticleLikeCount());
-			json.put("tagArray", tagArray);
 		}
 		else {
 			json.put("status", "not-ok");
 		}
+		
 		out.print(json.toJSONString());
 		out.close();
 		

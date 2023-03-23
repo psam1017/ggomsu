@@ -70,8 +70,11 @@ public class MemberDAO {
 	}
 	
 	// 로그인 불가능 관련 -> HelpController 참고.
-	public void restoreInvalid(String email) {
-		sqlSession.update("Member.restoreInvalid", email);
+	public void restoreInvalid(String email, String originalStatusValue) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("originalStatusValue", originalStatusValue);
+		sqlSession.update("Member.restoreInvalid", map);
 	}
 	
 	public String findLostEmail(MemberVO vo) {
@@ -137,7 +140,44 @@ public class MemberDAO {
 		sqlSession.update("Member.increaseAbuseCount", nickname);
 	}
 	
-	public void snsSignUp(MemberSnsVO vo) {
-		sqlSession.insert("Member.snsSignUp", vo);
+	public boolean checkSnsByKey(String email, String snsKey) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("snsKey", snsKey);
+		return (Integer)(sqlSession.selectOne("Member.checkSnsByKey", map)) == 1;
+	}
+	
+	public boolean checkSnsByType(String email, String type) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("type", type);
+		return (Integer)(sqlSession.selectOne("Member.checkSnsByType", map)) == 1;
+	}
+	
+	public void deleteSnsKeyByType(String email, String type) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("type", type);
+		sqlSession.delete("Member.deleteSnsKeyByType", map);
+	}
+	
+	public void signUpWithSns(String email, String nickname, String agreedMarketingAt) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("nickname", nickname);
+		map.put("agreedMarketingAt", agreedMarketingAt);
+		sqlSession.insert("Member.signUpWithSns", map);
+	}
+	
+	public void insertSnsKey(String email, String snsKey, String type) {
+		Map<String, String> map = new HashMap<>();
+		map.put("email", email);
+		map.put("snsKey", snsKey);
+		map.put("type", type);
+		sqlSession.insert("Member.insertSnsKey", map);
+	}
+	
+	public void integrateAccount(MemberVO memberVO) {
+		sqlSession.insert("Member.integrateAccount", memberVO);
 	}
 }

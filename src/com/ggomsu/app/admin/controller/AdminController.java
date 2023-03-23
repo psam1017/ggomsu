@@ -41,8 +41,12 @@ public class AdminController extends HttpServlet{
 		else if(command.equals("/admin/password/confirm")) { forward = new PasswordConfirm().execute(req, resp); }
 		else if(command.equals("/admin/like/article")) { forward = new LikeArticle().execute(req, resp); }
 		else if(command.equals("/admin/like/comment")) { forward = new LikeComment().execute(req, resp); }
+		else if(command.equals("/admin/history/article")) { forward = new HistoryArticle().execute(req, resp); }
+		else if(command.equals("/admin/history/comment")) { forward = new HistoryComment().execute(req, resp); }
 		else if(command.equals("/admin/config")) { forward = new Config().execute(req, resp); }
 		else if(command.equals("/admin/config/confirm")) { forward = new ConfigConfirm().execute(req, resp); }
+		else if(command.equals("/admin/link")) { forward = new Link().execute(req, resp); }
+		else if(command.equals("/admin/link/cancel")) { forward = new LinkCancel().execute(req, resp); }
 		// report
 		else if(command.equals("/admin/article/report")) { forward = new ArticleReport().execute(req, resp); }
 		else if(command.equals("/admin/article/confirm")) { forward = new ArticleConfirm().execute(req, resp); }
@@ -85,6 +89,7 @@ public class AdminController extends HttpServlet{
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 
 		// forward or redirect

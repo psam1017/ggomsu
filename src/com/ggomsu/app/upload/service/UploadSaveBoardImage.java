@@ -20,8 +20,6 @@ public class UploadSaveBoardImage implements Action {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
 		
 		// cos, json-simple jar 필요
 		JSONObject json = new JSONObject();

@@ -72,9 +72,9 @@
 	</update>
 	
 	<!-- help : 로그인 불가능 상태 관련 -->
-	<update id="restoreInvalid" parameterType="string"> 
+	<update id="restoreInvalid" parameterType="map"> 
 	  UPDATE members 
-	  SET statusValue = 'MEM'
+	  SET statusValue = #{originalStatusValue}
 	  WHERE email = #{email}
 	</update>
 	<select id="findLostEmail" parameterType="member" resultType="string">
@@ -162,20 +162,47 @@
 		WHERE email = #{email}
 	</update>
 	
-	<!-- 이성호 : admin, sns에서 사용  -->
+	<!-- 이성호 : admin에서 사용  -->
 	<update id="increaseAbuseCount" parameterType="string" statementType="CALLABLE">
 		CALL increaseAbuseCount(#{nickname})
 	</update>
 	<select id="getAllMember" resultType="member">
-		SELECT nickname, name, statusValue, abuseCount 
-		FROM members
-		WHERE statusValue = 'MEM'
-		ORDER BY statusValue
+		SELECT * FROM members
 	</select>
-	<insert id="snsSignUp" parameterType="memberSns">
-		INSERT INTO memberSNS
-		(email, accessToken)
-		VALUES
-		(#{email}, #{accessToken}) 
+	
+	<!-- 박성민 : sns 회원가입, 로그인 처리 -->
+	<select id="checkSnsByKey" parameterType="map" resultType="_int">
+		SELECT COUNT(email)
+		FROM memberSns
+		WHERE (email, snsKey) = (#{email}, #{snsKey})
+	</select>
+	<select id="checkSnsByType" parameterType="map" resultType="_int">
+		SELECT COUNT(email)
+		FROM memberSns
+		WHERE (email, `type`) = (#{email}, #{type})
+	</select>
+	<delete id="deleteSnsKeyByType" parameterType="map">
+		DELETE FROM memberSns
+		WHERE (email, `type`) = (#{email}, #{type})
+	</delete>
+	<insert id="signUpWithSns" parameterType="map">
+		INSERT INTO members(email, nickname, statusValue, agreedMarketingAt)
+		<choose>
+			<when test='"agree".equals(agreedMarketingAt)'>
+			VALUES(#{email}, #{nickname}, 'SNS', NOW())
+			</when>
+			<otherwise>
+			VALUES(#{email}, #{nickname}, 'SNS', NULL)
+			</otherwise>
+		</choose>
+	</insert>
+	<insert id="insertSnsKey" parameterType="map">
+		INSERT INTO memberSns
+		VALUES(#{email}, #{snsKey}, #{type})
+	</insert>
+	<insert id="integrateAccount" parameterType="member">
+		UPDATE members
+		SET password = #{password}, salt = #{salt}, name = #{name}, birthDate = #{birthDate}, sex = #{sex}, telecomValue = #{telecomValue}, contact = #{contact}, zipcode = #{zipcode}, address = #{address}, statusValue = 'MEM'
+		WHERE email = #{email}
 	</insert>
 </mapper>

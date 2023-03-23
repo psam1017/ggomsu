@@ -37,7 +37,7 @@ public class EmailConfirm implements Action{
 			forward.setPath(req.getContextPath() + "/help/email/result");
 		}
 		else {
-			forward.setPath(req.getContextPath() + "/help/email/result?code=fail");
+			forward.setPath(req.getContextPath() + "/help/email/find?code=fail");
 		}
 		forward.setForward(false);
 		return forward;

@@ -1,5 +1,6 @@
 package com.ggomsu.app.board.service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,28 +29,64 @@ public class ArticleView implements Action {
 		
 		// session
 		String statusValue = (String)session.getAttribute("statusValue");
-		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("TMP"))) {
+		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("TMP") || statusValue.equals("SNS"))) {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/article/no-member");
+			forward.setPath(req.getContextPath() + "/member/sign-in?code=no-member");
 			return forward;
 		}
 		String nickname = (String)session.getAttribute("nickname");
-		boolean alarmFlag = (boolean) session.getAttribute("alarmFlag");
+		boolean alarmFlag = session.getAttribute("alarmFlag") != null ? (boolean) session.getAttribute("alarmFlag") : false;
 		
 		// request
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
-		String page = (String)req.getParameter("page");
-		String criteria = (String)req.getParameter("criteria");
-		String category = (String)req.getParameter("category");
-		String period = (String)req.getParameter("period");
-		String search = (String)req.getParameter("search");
+		
+		// 이전 페이지가 article list일 때만 page를 저장
+		String page = null;
+		boolean isFromList = false;
+		
+		String referer = req.getHeader("referer");
+		if(referer != null) {
+			// article에서 넘어온 것인지 판단하여 referrer의 servletPath로 가공
+			int articleURIIndex = referer.indexOf("/article");
+			int paramIndex = referer.indexOf("?");
+			
+			if(articleURIIndex != -1 && paramIndex != -1) {
+				String command = referer.substring(articleURIIndex, paramIndex);
+				if(command.equals("/article/list")) {
+					page = String.valueOf(session.getAttribute("page"));
+					isFromList = true;
+				}
+			}
+		}
+		
+		if(!isFromList) {
+			Cookie[] cookies = {new Cookie("criteria", null), new Cookie("category", null), 
+					new Cookie("period", null), new Cookie("search", null)};
+			for(Cookie c : cookies) {
+				c.setMaxAge(0);
+				resp.addCookie(c);
+			}
+		}
 		
 		ArticleDTO articleDTO = articleDAO.findArticle(articleIndex);
 		boardHelper.setTagListForOne(articleDTO);
 		String boardValue = articleDTO.getBoardValue();
 		String boardText = boardDAO.findBoardText(boardValue);
 		
-		if(articleDTO.getDeletedAt() != null) {
+		// 삭제된 게시글, 생성되지 않은 게시글이라면 볼 수 없음
+		// 생성되지 않은 게시글 -> error로 보낼 수도 있지만 이번에는 portfolio로 보내기로...
+		if(articleDTO.getDeletedAt() != null || articleDTO.getWrittenAt() == null) {
+			if(articleDTO.getBoardValue() != null) {
+				req.setAttribute("boardValue", articleDTO.getBoardValue());
+			}
+			else {
+				req.setAttribute("boardValue", "portfolio");
+			}
+			
+			forward.setPath(req.getContextPath() + "/article/deleted");
+			forward.setForward(false);
+		}
+		else {
 			// 게시글 정보 반환
 			req.setAttribute("article", articleDTO);
 			req.setAttribute("isArticleLike", articleDAO.checkLiked(nickname, articleIndex));
@@ -58,10 +95,6 @@ public class ArticleView implements Action {
 			req.setAttribute("page", page);
 			req.setAttribute("boardValue", boardValue);
 			req.setAttribute("boardText", boardText);
-			req.setAttribute("criteria", criteria);
-			req.setAttribute("category", category);
-			req.setAttribute("period", period);
-			req.setAttribute("search", search);
 			
 			// 쿠키에 boardValue가 없거나 다르다면 저장
 			boardHelper.setBoardCookie(req, resp, boardValue);
@@ -80,18 +113,6 @@ public class ArticleView implements Action {
 			
 			forward.setForward(true);
 			forward.setPath("/views/board/ArticleView.jsp");
-		}
-		// 삭제된 게시글이라면 볼 수 없음
-		else {
-			session.setAttribute("page", page);
-			session.setAttribute("boardValue", boardValue);
-			session.setAttribute("criteria", criteria);
-			session.setAttribute("category", category);
-			session.setAttribute("period", period);
-			session.setAttribute("search", search);
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/article/deleted");
 		}
 		return forward;
 	}

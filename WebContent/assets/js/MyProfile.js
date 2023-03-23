@@ -12,7 +12,7 @@ let nicknameRegExp = /^[가-힣0-9]+$/;
 
 checkNickname(nickname.value);
 
-nickname.addEventListener("blur", function(){
+nickname.addEventListener("keyup", function(){
 	checkNickname(this.value);
 });
 

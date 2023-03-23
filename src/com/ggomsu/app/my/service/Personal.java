@@ -14,15 +14,21 @@ public class Personal implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
-		MemberDAO dao = new MemberDAO();
 		ActionForward forward = new ActionForward();
-		
-		String email = (String)req.getSession().getAttribute("email");
-		req.setAttribute("member", dao.getMemberInfo(email));
-		
-		forward.setForward(true);
-		forward.setPath("/views/my/Personal.jsp");
-		
-		return forward;
+		if(req.getSession().getAttribute("statusValue").equals("SNS")) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/member/permit?code=mem");
+			return forward;
+		}
+		else {
+			MemberDAO dao = new MemberDAO();
+			
+			String email = (String)req.getSession().getAttribute("email");
+			req.setAttribute("member", dao.getMemberInfo(email));
+			
+			forward.setForward(true);
+			forward.setPath("/views/my/Personal.jsp");
+			return forward;
+		}
 	}
 }

@@ -38,13 +38,17 @@ public class WriteConfirm implements Action {
 		// ★member에 있다면 nickname 저장, 아니라면 ip 저장으로 변경
 		if(dao.checkExistBySubject(subject)) {
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/wiki/wiki-duplicate");
+			forward.setPath(req.getContextPath() + "/wiki/home?code=duplicate");
 		}
 		else {
+			if(nickname == null) {
+				nickname = "noname";
+			}
+			
 			info.setSubject(subject);
 			info.setRvs(rvs);
 			info.setNickname(nickname);
-			info.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
+			info.setIp(nickname.equals("noname") ? req.getRemoteAddr() : "");
 			dao.insertWikiInfo(info);
 			
 			// 위키 콘텐츠 저장

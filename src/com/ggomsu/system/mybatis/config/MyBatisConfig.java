@@ -21,7 +21,6 @@ public class MyBatisConfig {
 			sqlSession_f = new SqlSessionFactoryBuilder().build(reader);
 			reader.close();
 		} catch(IOException e) {
-			e.printStackTrace();
 			throw new RuntimeException("초기화 문제 발생. MyBatisConfig.java");
 		}
 	}

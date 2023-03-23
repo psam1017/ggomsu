@@ -20,7 +20,7 @@ eachContact.forEach(element => {
 	});
 });
 
-eachContact[2].addEventListener("blur", function(){
+eachContact[2].addEventListener("keyup", function(){
 	concatContact();
 	checkContact(contact.value);
 });

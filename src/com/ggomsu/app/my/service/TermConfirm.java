@@ -21,14 +21,8 @@ public class TermConfirm implements Action{
 		
 		// 잘못된 접근일 때
 		if(!req.getMethod().equals("POST")) {
-			if(req.getSession().getAttribute("statusValue").equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/term?code=error");
-			}
-			else {
-				forward.setPath(req.getContextPath() + "/error/error");
-			}
+			forward.setPath(req.getContextPath() + "/my/term?code=error");
 			forward.setForward(false);
-			
 			return forward;
 		}
 		

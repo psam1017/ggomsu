@@ -10,7 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggomsu.app.wiki.service.*;
+import com.ggomsu.app.wiki.service.Abuse;
+import com.ggomsu.app.wiki.service.CheckSubject;
+import com.ggomsu.app.wiki.service.Home;
+import com.ggomsu.app.wiki.service.NoSubject;
+import com.ggomsu.app.wiki.service.NotAvail;
+import com.ggomsu.app.wiki.service.Revise;
+import com.ggomsu.app.wiki.service.ReviseConfirm;
+import com.ggomsu.app.wiki.service.View;
+import com.ggomsu.app.wiki.service.WikiList;
+import com.ggomsu.app.wiki.service.Write;
+import com.ggomsu.app.wiki.service.WriteConfirm;
 import com.ggomsu.system.action.ActionForward;
 
 // 작성자 : 박성민
@@ -24,14 +34,14 @@ public class WikiController extends HttpServlet {
 		
 		if(command.equals("/wiki") || command.equals("/wiki/home")) { forward = new Home().execute(req, resp); }
 		else if(command.equals("/wiki/view")) { forward = new View().execute(req, resp); }
+		else if(command.equals("/wiki/not-avail")) { forward = new NotAvail().execute(req, resp); }
 		else if(command.equals("/wiki/list")) { forward = new WikiList().execute(req, resp); }
 		else if(command.equals("/wiki/write")) { forward = new Write().execute(req, resp); }
+		else if(command.equals("/wiki/check/subject")) { forward = new CheckSubject().execute(req, resp); }
 		else if(command.equals("/wiki/write/confirm")) { forward = new WriteConfirm().execute(req, resp); }
 		else if(command.equals("/wiki/revise")) { forward = new Revise().execute(req, resp); }
 		else if(command.equals("/wiki/revise/confirm")) { forward = new ReviseConfirm().execute(req, resp); }
 		else if(command.equals("/wiki/abuse")) { forward = new Abuse().execute(req, resp); }
-		else if(command.equals("/wiki/duplicate")) { forward = new Duplicate().execute(req, resp); }
-		else if(command.equals("/wiki/no-member")) { forward = new NoMember().execute(req, resp); }
 		else if(command.equals("/wiki/no-subject")) { forward = new NoSubject().execute(req, resp); }
 		else { 
 			forward = new ActionForward();
@@ -59,6 +69,7 @@ public class WikiController extends HttpServlet {
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 
 		// forward or redirect

@@ -17,10 +17,15 @@ public class PasswordAuth implements Action {
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
 		ActionForward forward = new ActionForward();
+		forward.setForward(false);
 		
 		if(!req.getMethod().equals("POST")) {
-			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error");
+			return forward;
+		}
+		if(req.getSession().getAttribute("statusValue").equals("SNS")) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/member/permit?code=mem");
 			return forward;
 		}
 		
@@ -36,6 +41,13 @@ public class PasswordAuth implements Action {
 		String email = (String) session.getAttribute("email");
 		String inserted = req.getParameter("password");
 		String statusValue = (String) session.getAttribute("statusValue");
+		String statusURI = null;
+		if(statusValue.equals("MEM")) {
+			statusURI = "my";
+		}
+		else if(statusValue.equals("ADM")) {
+			statusURI = "admin";
+		}
 		
 		// 초기화
 		vo = dao.getMemberInfo(email);
@@ -45,22 +57,10 @@ public class PasswordAuth implements Action {
 		// 비밀번호 일치 검사
 		if(encryptionHelper.compare(inserted, password, salt)) {
 			session.setAttribute("myPasswordAuth", "success");
-			forward.setForward(false);
-			if(statusValue.equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/password/form");
-			}
-			else if(statusValue.equals("ADM")) {
-				forward.setPath(req.getContextPath() + "/admin/password/form");
-			}
+			forward.setPath(req.getContextPath() + "/" + statusURI + "/password/form");
 		}
 		else {
-			forward.setForward(false);
-			if(statusValue.equals("MEM")) {
-				forward.setPath(req.getContextPath() + "/my/password/check?code=fail");
-			}
-			else if(statusValue.equals("ADM")) {
-				forward.setPath(req.getContextPath() + "/admin/password/check?code=fail");
-			}
+			forward.setPath(req.getContextPath() + "/" + statusURI + "/password/check?code=fail");
 		}
 		return forward;
 	}

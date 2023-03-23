@@ -58,11 +58,13 @@ public class WikiDAO {
 	}
 	
 	public boolean checkBlockedIp(String ip) {
-		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedIp", ip)) == 1;
+		return (int)(sqlSession.selectOne("Wiki.checkBlockedIp", ip)) == 1;
+//		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedIp", ip)) == 1;
 	}
 	
 	public boolean checkBlockedNickname(String nickname) {
-		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedNickname", nickname)) == 1;
+		return (int)(sqlSession.selectOne("Wiki.checkBlockedNickname", nickname)) == 1;
+//		return Integer.parseInt(sqlSession.selectOne("Wiki.checkBlockedNickname", nickname)) == 1;
 	}
 	
 	public void confirmWikiAbuse(String nickname, String ip) {
@@ -87,10 +89,15 @@ public class WikiDAO {
 	}
 	
 	public boolean checkExistBySubject(String subject) {
-		return Integer.parseInt(sqlSession.selectOne("Wiki.checkExistBySubject", subject)) == 1;
+//		return Integer.parseInt(sqlSession.selectOne("Wiki.checkExistBySubject", subject)) == 1;
+		return (int)(sqlSession.selectOne("Wiki.checkExistBySubject", subject)) > 0;
 	}
 	
 	public int reviseWikiInfo(WikiInfoDTO info) {
 		return sqlSession.selectOne("Wiki.reviseWikiInfo", info);
+	}
+	
+	public int getLatestRvs(String subject) {
+		return (int)(sqlSession.selectOne("Wiki.getLatestRvs", subject));
 	}
 }
