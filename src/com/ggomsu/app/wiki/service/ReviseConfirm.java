@@ -2,7 +2,6 @@ package com.ggomsu.app.wiki.service;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;

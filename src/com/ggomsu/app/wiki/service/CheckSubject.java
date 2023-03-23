@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import com.ggomsu.app.member.dao.MemberDAO;
 import com.ggomsu.app.wiki.dao.WikiDAO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;

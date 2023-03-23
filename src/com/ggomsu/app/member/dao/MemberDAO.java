@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.ggomsu.app.member.vo.MemberSnsVO;
 import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.mybatis.config.MyBatisConfig;
 
