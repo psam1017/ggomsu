@@ -82,8 +82,6 @@
     	
     	const btnSubmit = document.querySelector('input[name="writing"]');
     	const formWrite = document.querySelector('form[name="writeArticle"]');
-    	console.log(btnSubmit);
-    	console.log(formWrite);
     	btnSubmit.addEventListener("click",function() {
     		formWrite.submit();
     	})

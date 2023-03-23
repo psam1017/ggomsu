@@ -36,7 +36,6 @@ public class ArticleViewShort implements Action{
 		
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(responseBody);
-		
 		out.print(obj.toJSONString());
 		out.close();
 		

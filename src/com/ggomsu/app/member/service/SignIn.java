@@ -17,7 +17,6 @@ public class SignIn implements Action{
 
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
-		session.removeAttribute("articleForward");
 		
 		// article 조회 중이었다면 session에 여부를 저장
 		// 로그인을 완료하면 다시 조회화면으로 이동
@@ -33,7 +32,10 @@ public class SignIn implements Action{
 				command = referer.substring(articleURIIndex, paramIndex);
 				
 				if(command.equals("/article/list")) {
-					session.setAttribute("articleForward", "list");
+					session.setAttribute("articleRedirect", "list");
+				}
+				else if(!command.equals("/member/sign-in")) {
+					session.removeAttribute("articleRedirect");
 				}
 			}
 		}
@@ -64,9 +66,7 @@ public class SignIn implements Action{
 			}
 			
 			// 네이버 로그인으로 연결되는 url을 받아와서 req에 담는다.
-			LoginHelper loginHelper = new LoginHelper();
-			String naverAuthUrl = loginHelper.getAuthorizationUrl(session);
-			req.setAttribute("url", naverAuthUrl);
+			req.setAttribute("url", new LoginHelper().getAuthorizationUrl(session));
 			
 			forward.setForward(true);
 			forward.setPath("/views/member/SignIn.jsp");

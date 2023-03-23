@@ -35,7 +35,7 @@ public class CommentConfirm implements Action{
 		if(statusValue == null || statusValue.equals("TMP")) {
 			json.put("status", "tmp");
 		}
-		else if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("SNS")) {
 			// 댓글 신고 제출
 			vo.setNickname(nickname);
 			vo.setCommentIndex(commentIndex);

@@ -10,7 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ggomsu.app.member.naver.Capcha;
+import com.ggomsu.app.member.naver.CapchaAuth;
+import com.ggomsu.app.member.naver.Integration;
+import com.ggomsu.app.member.naver.IntegrationConfirm;
 import com.ggomsu.app.member.naver.NaverConfirm;
+import com.ggomsu.app.member.naver.Permit;
+import com.ggomsu.app.member.naver.PermitConfirm;
+import com.ggomsu.app.member.naver.SnsConfirm;
+import com.ggomsu.app.member.naver.SnsForm;
 import com.ggomsu.app.member.service.CheckAuth;
 import com.ggomsu.app.member.service.CheckContact;
 import com.ggomsu.app.member.service.CheckEmail;
@@ -22,8 +30,6 @@ import com.ggomsu.app.member.service.SignInConfirm;
 import com.ggomsu.app.member.service.SignOut;
 import com.ggomsu.app.member.service.SignUp;
 import com.ggomsu.app.member.service.SignUpConfirm;
-import com.ggomsu.app.member.service.SnsConfirm;
-import com.ggomsu.app.member.service.SnsNickname;
 import com.ggomsu.app.member.service.TermConfirm;
 import com.ggomsu.app.member.service.TermExpired;
 import com.ggomsu.app.member.service.Welcome;
@@ -47,14 +53,17 @@ public class MemberController extends HttpServlet {
 		else if(command.equals("/member/check/auth")) { forward = new CheckAuth().execute(req, resp); }
 		else if(command.equals("/member/sign-up/confirm")) { forward = new SignUpConfirm().execute(req, resp); }
 		else if(command.equals("/member/welcome")) { forward = new Welcome().execute(req, resp); }
-		// 네이버 로그인 API 구현
+		// 네이버 로그인 API, 통합회원 기능 구현
 		else if(command.equals("/member/naver/confirm")) { forward = new NaverConfirm().execute(req, resp); }
-		else if(command.equals("/member/sns/form")) { forward = new SnsNickname().execute(req, resp); }
+		else if(command.equals("/member/sns/form")) { forward = new SnsForm().execute(req, resp); }
 		else if(command.equals("/member/sns/confirm")) { forward = new SnsConfirm().execute(req, resp); }
+		else if(command.equals("/member/integration")) { forward = new Integration().execute(req, resp); }
+		else if(command.equals("/member/integration/confirm")) { forward = new IntegrationConfirm().execute(req, resp); }
+		else if(command.equals("/member/permit")) { forward = new Permit().execute(req, resp); }
+		else if(command.equals("/member/permit/confirm")) { forward = new PermitConfirm().execute(req, resp); }
 		// 네이버 캡차 API 구현
-		else if(command.equals("/member/capcha")) { forward = new NaverConfirm().execute(req, resp); }
-		else if(command.equals("/member/capcha/form")) { forward = new SnsNickname().execute(req, resp); }
-		else if(command.equals("/member/capcha/auth")) { forward = new SnsConfirm().execute(req, resp); }
+		else if(command.equals("/member/capcha")) { forward = new Capcha().execute(req, resp); }
+		else if(command.equals("/member/capcha/confirm")) { forward = new CapchaAuth().execute(req, resp); }
 		// 로그인, 로그아웃
 		else if(command.equals("/member/sign-in")) { forward = new SignIn().execute(req, resp); }
 		else if(command.equals("/member/sign-in/confirm")) { forward = new SignInConfirm().execute(req, resp); }
@@ -96,6 +105,7 @@ public class MemberController extends HttpServlet {
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 		
 		if(forward != null) {

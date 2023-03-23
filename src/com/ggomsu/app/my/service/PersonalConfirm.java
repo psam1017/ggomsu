@@ -25,6 +25,12 @@ public class PersonalConfirm implements Action{
 		String statusValue = (String)session.getAttribute("statusValue");
 		String statusURI = null;
 		
+		if(session.getAttribute("statusValue").equals("SNS")) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/member/permit?code=mem");
+			return forward;
+		}
+		
 		if(statusValue.equals("MEM")) {
 			statusURI = "my";
 		}

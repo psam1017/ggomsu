@@ -6,7 +6,17 @@ $(document).ready(function() {
 	let path = "";
 	
 	const contentForm = document.getElementById("contentForm");
+	const subject = document.getElementById("subject");
+	const subjectResult = document.getElementById("subjectResult");
 	const submitBtn = document.getElementById("submitBtn");
+	
+	let isExist = false;
+	
+	if(subject != null){
+		subject.addEventListener("keyup", function(){
+			checkSubject(contentForm.subject.value);
+		});
+	}
 	
 	submitBtn.addEventListener("click", function(e){
 		e.preventDefault();
@@ -62,16 +72,17 @@ $(document).ready(function() {
 			},
 			// 0315 추가. 길이 제한
 			onChange : function(contents){
-				const maxlength = 10000;
-				
-//				// back tick 제한 -> JSTL을 사용하여 백틱 제한은 사라짐.
-//				if(contents.lastIndexOf("`") != -1){
-//					noteEditable.innerHTML = noteEditable.innerHTML.replace(/`/g, "");
-//					alert("백틱( ` )은 사용할 수 없습니다.");
-//				}
-				if(contents.length > maxlength)  {
-					noteEditable.innerHTML = noteEditable.innerHTML.substr(0, maxlength - 100);
-					alert("본문은 코드를 포함하여 9900자 내외로 제한됩니다.");
+				if(type == "boardWrite" || type == "boardUpdate"){
+					const maxlength = 10000;
+					const contentLengthViewer = document.getElementById("contentLengthViewer");
+					
+					if(contentLengthViewer != null){
+						contentLengthViewer.innerText = contents.length;
+					}
+					if(contents.length > maxlength)  {
+						noteEditable.innerHTML = noteEditable.innerHTML.substr(0, maxlength - 100);
+						alert("본문은 코드를 포함하여 9900자 내외로 제한됩니다.");
+					}
 				}
 			}
 		}
@@ -111,13 +122,13 @@ $(document).ready(function() {
 		}
 		else if(type === "wikiWrite"){
 			contentForm.action = contextPath + "/wiki/write/confirm";
-			contentForm.title.name = "subject";
+			contentForm.title.name = "subject"; // 불필요한 명령. but 수정될 가능성이 높고 리소스 사용이 적으므로 보존
 			contentForm.content.name = "contents";
 			path = "/wiki";
 		}
 		else if(type === "wikiRevise"){
 			contentForm.action = contextPath + "/wiki/revise/confirm";
-			contentForm.title.name = "subject";
+			contentForm.title.name = "subject"; // 불필요한 명령. but 수정될 가능성이 높고 리소스 사용이 적으므로 보존
 			contentForm.content.name = "contents";
 			path = "/wiki";
 		}
@@ -164,20 +175,78 @@ $(document).ready(function() {
 	
 	// 0316 추가. 빈 값 불허용
 	function contentFormSubmit(){
+		if(type == "boardWrite" || type == "boardUpdate"){
+			let title = contentForm.title.value;
+			let content = contentForm.content.value;
+			
+			if(title.replace(/ /g, "") == ""){
+				alert("제목이 비어있습니다.");
+				return;
+			}
+			
+			if(content.replace(/ /g, "") == "" || content == "<p><br></p>"){
+				alert("내용이 비어있습니다.");
+				return;
+			}
+		}
+		else if(type == "wikiWrite" || type == "wikiRevise"){
+			const ip = document.getElementById("ip");
+			let subject = contentForm.subject.value;
+			let contents = contentForm.contents.value;
+			
+			if(subject.replace(/ /g, "") == ""){
+				alert("제목이 비어있습니다.");
+				return;
+			}
+			
+			if(contents.replace(/ /g, "") == "" || contents == "<p><br></p>"){
+				alert("내용이 비어있습니다.");
+				return;
+			}
+			
+			if(ip != null && ip.checked == false){
+				alert("IP 수집에 동의해주십시오.");
+				return;
+			}
+			
+			if(type == "wikiWrite"){
+				checkSubject(subject);
+				
+				if(isExist){
+					alert("이미 생성된 주제입니다.\n내용을 복사하신 후 검색해보세요.");
+					return;
+				}
+			}
+		}
+		contentForm.submit();
+	}
+	
+	function checkSubject(subject){
 		
-		let title = contentForm.title.value;
-		let content = contentForm.content.value;
-		
-		if(title.replace(/ /g, "") == ""){
-			alert("제목이 비어있습니다.");
+		if(subjectResult == null){
+			alert("오류가 발생했습니다.\n새로고침 후 다시 시도해주세요.");
 			return;
 		}
 		
-	    if(content.replace(/ /g, "") == "" || content == "<p><br></p>"){
-	    	alert("내용이 비어있습니다.");
-	    	return;
+	    let xhr = new XMLHttpRequest();
+	    let requestURL = contextPath + "/wiki/check/subject";
+
+	    xhr.open("post", requestURL, true);
+	    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	    xhr.send("subject=" + subject);
+
+	    xhr.onreadystatechange = function(){
+	        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+	        	let json = JSON.parse(xhr.responseText);
+	            if(json.status == "exist"){
+	            	subjectResult.innerText = "이미 생성된 주제입니다.";
+	            	isExist = true;
+	            }
+	            else{
+	            	subjectResult.innerText = "생성할 수 있는 주제입니다.";
+	            	isExist = false;
+	            }
+	        }
 	    }
-	    
-	    contentForm.submit();
 	}
 });

@@ -13,8 +13,8 @@ public class NaverInfoInitializer implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0)  { ; }
 
     public void contextInitialized(ServletContextEvent sce)  {
-    	String clientId = sce.getServletContext().getInitParameter("clientId");
-    	String clientSecret = sce.getServletContext().getInitParameter("clientSecret");
+    	String clientId = sce.getServletContext().getInitParameter("naverClientId");
+    	String clientSecret = sce.getServletContext().getInitParameter("naverClientSecret");
     	
     	new NaverInfo(clientId, clientSecret);
     }

@@ -28,7 +28,7 @@ public class CommentDeleteConfirm implements Action {
 		if(statusValue == null || statusValue.equals("TMP")) {
 			json.put("status", "tmp");
 		}
-		else if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("SNS")) {
 			if(dao.getCommentOne(commentIndex).getNickname().equals(nickname)) {
 				dao.deleteCommentByCommentIndex(commentIndex);
 				json.put("status", "ok");

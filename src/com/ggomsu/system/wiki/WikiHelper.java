@@ -19,19 +19,22 @@ public class WikiHelper {
 	// 		방법3 : 정규표현식("(\r\n|\r|\n|\n\r)")으로 개행문자 식별하기
 	// issue3 : contentArray만큼 INSERT하기 -> 동적 쿼리 사용
 	// 참고로 : content가 null이 아닌 항목은 모두 R == PR, RI == PRI이다.
+	
+	// -> Summernote를 사용하면서 구분자는 <p>로 변경
 	public List<WikiContentVO> paragraphToList(String subject, int rvs, String contentText){
 		
 		List<WikiContentVO> contents = new ArrayList<>();
-		String[] contentArray = contentText.split(System.getProperty("line.separator"), -1); 
+		// String[] contentArray = contentText.split(System.getProperty("line.separator"), -1); 
+		String[] contentArray = contentText.split("<p>"); 
 		
-		for(int i = 1; i <= contentArray.length; i++) {
+		for(int i = 2; i <= contentArray.length; i++) {
 			WikiContentVO contentVO = new WikiContentVO();
 			contentVO.setSubject(subject);
 			contentVO.setRvs(rvs);
-			contentVO.setRvsIndex(i);
+			contentVO.setRvsIndex(i - 1);
 			contentVO.setPreRvs(rvs);
-			contentVO.setPreRvsIndex(i);
-			contentVO.setContent(contentArray[i - 1]);
+			contentVO.setPreRvsIndex(i - 1);
+			contentVO.setContent("<p>" + contentArray[i - 1]);
 			contents.add(contentVO);
 		}
 		

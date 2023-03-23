@@ -23,7 +23,7 @@ public class MyController extends HttpServlet {
 		
 		// my page는 정상회원만 사용할 수 있다.
 		String statusValue = (String) req.getSession().getAttribute("statusValue");
-		if(statusValue == null || !statusValue.equals("MEM")) {
+		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("SNS"))) {
 			forward = new ActionForward();
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error?code=no-member");
@@ -49,12 +49,13 @@ public class MyController extends HttpServlet {
 		// 약관
 		else if(command.equals("/my/term")) { forward = new Term().execute(req, resp); }
 		else if(command.equals("/my/term/confirm")) { forward = new TermConfirm().execute(req, resp); }
-		// 블라인드
+		// 환경 설정
 		else if(command.equals("/my/blind")) { forward = new Blind().execute(req, resp); }
 		else if(command.equals("/my/blind/confirm")) { forward = new BlindConfirm().execute(req, resp); }
-		// 설정
 		else if(command.equals("/my/config")) { forward = new Config().execute(req, resp); }
 		else if(command.equals("/my/config/confirm")) { forward = new ConfigConfirm().execute(req, resp); }
+		else if(command.equals("/my/link")) { forward = new Link().execute(req, resp); }
+		else if(command.equals("/my/link/cancel")) { forward = new LinkCancel().execute(req, resp); }
 		// 회원탈퇴
 		else if(command.equals("/my/withdraw")) { forward = new Withdraw().execute(req, resp); }
 		else if(command.equals("/my/withdraw/confirm")) { forward = new WithdrawConfirm().execute(req, resp); }

@@ -31,7 +31,7 @@ public class CommentList implements Action {
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));
 		String nickname = (String)session.getAttribute("nickname");
 		List<String> blindList = (List<String>)session.getAttribute("blindList");
-		boolean alarmFlag = (boolean) session.getAttribute("alarmFlag");
+		boolean alarmFlag = session.getAttribute("alarmFlag") != null ? (boolean) session.getAttribute("alarmFlag") : false;
 		
 		List<CommentDTO> commentList = commentDAO.getCommentList(articleIndex, blindList, nickname);
 		

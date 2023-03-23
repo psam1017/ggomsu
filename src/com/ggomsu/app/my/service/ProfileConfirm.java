@@ -39,7 +39,7 @@ public class ProfileConfirm implements Action{
 		String isChangeProfileImage = req.getParameter("isChangeProfileImage");
 		String statusURI = null;
 		
-		if(statusValue.equals("MEM")) {
+		if(statusValue.equals("MEM") || statusValue.equals("SNS")) {
 			statusURI = "my";
 		}
 		else if (statusValue.equals("ADM")) {

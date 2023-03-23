@@ -1,7 +1,7 @@
 package com.ggomsu.app.admin.service;
 
 import java.io.PrintWriter;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,30 +34,31 @@ public class WikiView implements Action{
 		
 		info = dao.findWikiInfo(subject, rvs);
 		
-		if(info.getDeletedAt() == null) {
+		if(info == null) {
+			json.put("status", "not-ok");
+		}
+		else if(info.getDeletedAt() == null) {
 			
-			List<WikiContentVO> pastList = new LinkedList<>();
+			List<WikiContentVO> pastList = new ArrayList<>();
 			pastList.addAll(dao.getContentPast(subject, rvs));
-			List<WikiContentVO> currentList = (LinkedList<WikiContentVO>)dao.getContentOne(subject, rvs);
+			List<WikiContentVO> currentList = (ArrayList<WikiContentVO>)dao.getContentOne(subject, rvs);
 			wikiHelper.setContentFromPast(currentList, pastList);
-			int length = currentList.size();
-			String[] array = new String[length];
 			
-			for(int i = 0; i < array.length; i++) {
-				array[i] = currentList.get(i).getContent();
+			String fullContents = "";
+			
+			for(WikiContentVO line : currentList) {
+				fullContents += line.getContent();
 			}
 			
 			json.put("status", "ok");
 			json.put("subject", subject);
 			json.put("rvs", rvs);
-			json.put("nickname", info.getNickname());
-			json.put("profileImageUrl", info.getProfileImageUrl());
-			json.put("ip", info.getIp());
+			json.put("writer", info.getNickname().equals("noname") ? info.getIp() : info.getNickname());
 			json.put("revisedAt", info.getRevisedAt());
-			json.put("array", array);
+			json.put("content", fullContents);
 		}
 		else {
-			json.put("status", "not-ok");
+			json.put("status", "deleted");
 		}
 		out.print(json.toJSONString());
 		out.close();

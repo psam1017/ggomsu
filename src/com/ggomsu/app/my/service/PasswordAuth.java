@@ -23,6 +23,11 @@ public class PasswordAuth implements Action {
 			forward.setPath(req.getContextPath() + "/error/error");
 			return forward;
 		}
+		if(req.getSession().getAttribute("statusValue").equals("SNS")) {
+			forward.setForward(false);
+			forward.setPath(req.getContextPath() + "/member/permit?code=mem");
+			return forward;
+		}
 		
 		// java 객체
 		MemberVO vo;

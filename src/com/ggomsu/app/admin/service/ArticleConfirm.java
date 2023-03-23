@@ -24,7 +24,10 @@ public class ArticleConfirm implements Action {
 		String nickname = articleDAO.findArticle(articleIndex).getNickname(); // 신고 받은 게시글의 주인
 		String articleDeleteReason = req.getParameter("articleDeleteReason"); // admin이 제출하는 삭제 처리 사유
 		
-		if (articleDeleteReason == null || articleDeleteReason.equals("off")) {
+		if (articleDeleteReason == null) {
+			forward.setPath(req.getContextPath() + "/admin/article/report?code=error");
+		}
+		else if(articleDeleteReason.equals("off")) {
 			// 신고 대상에 해당하지 않으므로 신고 건 자체를 삭제
 			adminDAO.deleteArticleReport(articleIndex);	
 			forward.setPath(req.getContextPath() + "/admin/article/report?code=keep");

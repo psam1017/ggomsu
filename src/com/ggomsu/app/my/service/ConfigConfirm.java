@@ -35,7 +35,7 @@ public class ConfigConfirm implements Action{
 		boolean alarmFlag = alarmFlagText != null && alarmFlagText.equals("on") ? true : false;
 		boolean darkModeFlag = darkModeFlagText != null && req.getParameter("darkModeFlag").equals("on") ? true : false;
 		
-		if(statusValue.equals("MEM")) {
+		if(statusValue.equals("MEM") || statusValue.equals("SNS")) {
 			statusURI = "my";
 		}
 		else if (statusValue.equals("ADM")) {

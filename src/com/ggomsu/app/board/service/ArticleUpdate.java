@@ -21,7 +21,7 @@ public class ArticleUpdate implements Action{
 		String statusValue = (String) session.getAttribute("statusValue");
 		String nickname = (String) session.getAttribute("nickname");
 		
-		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM"))) {
+		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("SNS"))) {
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error");
 			return forward;

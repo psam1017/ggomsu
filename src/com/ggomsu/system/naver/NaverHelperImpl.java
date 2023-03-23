@@ -15,8 +15,10 @@ public class NaverHelperImpl implements NaverHelper {
 		HttpURLConnection con = connect(apiUrl);
 		try {
 			con.setRequestMethod("GET");
-			for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
-				con.setRequestProperty(header.getKey(), header.getValue());
+			if(requestHeaders != null && requestHeaders.size() > 0) {
+				for(Map.Entry<String, String> header : requestHeaders.entrySet()) {
+					con.setRequestProperty(header.getKey(), header.getValue());
+				}
 			}
 			int responseCode = con.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) { // 정상
@@ -31,12 +33,14 @@ public class NaverHelperImpl implements NaverHelper {
 		}
 	}
 	
-	protected HttpURLConnection connect(String apiUrl) throws Exception{
+	@Override
+	public HttpURLConnection connect(String apiUrl) throws Exception{
 		URL url = new URL(apiUrl);
 		return (HttpURLConnection)url.openConnection();
 	}
 	
-	protected String readBody(InputStream body) {
+	@Override
+	public String readBody(InputStream body) {
 		InputStreamReader streamReader = new InputStreamReader(body);
 		
 		try (BufferedReader lineReader = new BufferedReader(streamReader)) {

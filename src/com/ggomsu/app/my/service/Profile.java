@@ -13,11 +13,10 @@ public class Profile implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
-		// profile 목록 : email(조회만 가능), nickname, profile image
+		// profile 목록 : nickname, profile image
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
 		forward.setPath("/views/my/Profile.jsp");
-		
 		return forward;
 	}
 }

@@ -29,13 +29,13 @@ public class ArticleView implements Action {
 		
 		// session
 		String statusValue = (String)session.getAttribute("statusValue");
-		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("TMP"))) {
+		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("TMP") || statusValue.equals("SNS"))) {
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=no-member");
 			return forward;
 		}
 		String nickname = (String)session.getAttribute("nickname");
-		boolean alarmFlag = (boolean) session.getAttribute("alarmFlag");
+		boolean alarmFlag = session.getAttribute("alarmFlag") != null ? (boolean) session.getAttribute("alarmFlag") : false;
 		
 		// request
 		int articleIndex = Integer.parseInt(req.getParameter("articleIndex"));

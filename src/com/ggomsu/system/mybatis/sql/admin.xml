@@ -48,7 +48,7 @@
 		SET wikiDeleteReason = #{wikiDeleteReason}
 		WHERE (subject, rvs) = (#{subject}, #{rvs})
 	</update>
-	<delete id="deleteWikiReport" parameterType="_int">
+	<delete id="deleteWikiReport" parameterType="map">
 		DELETE FROM wikiReport
 		WHERE (subject, rvs) = (#{subject}, #{rvs})
 	</delete>

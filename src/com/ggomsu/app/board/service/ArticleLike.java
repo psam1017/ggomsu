@@ -28,7 +28,7 @@ public class ArticleLike implements Action {
 		if(statusValue == null || statusValue.equals("TMP")) {
 			json.put("status", "tmp");
 		}
-		else if(statusValue.equals("MEM") || statusValue.equals("ADM")) {
+		else if(statusValue.equals("MEM") || statusValue.equals("ADM") || statusValue.equals("SNS")) {
 			if(articleDAO.checkLiked(nickname, articleIndex)) {
 				articleDAO.cancelLike(nickname, articleIndex);
 				json.put("status", "cancel");

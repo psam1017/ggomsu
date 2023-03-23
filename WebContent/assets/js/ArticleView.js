@@ -369,7 +369,43 @@ function showCommentList(commentList){
 	}
 }
 
+// 0320 단축 URL 기능 추가
+const shortUrlButton = document.getElementById("shortUrlButton");
+const shortUrlText = document.getElementById("shortUrlText");
+let isShortOk = false;
 
+shortUrlButton.addEventListener("click", function(e){
+	e.preventDefault();
+	viewShort(articleIndex);
+});
+
+function viewShort(articleIndex){
+	
+	if(isShortOk){
+		alert("단축 URL이 이미 생성되었습니다.");
+		return;
+	}
+	
+    let xhr = new XMLHttpRequest();
+    let requestURL = contextPath + "/article/view/short";
+
+    xhr.open("post", requestURL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("originalUrl=" + document.location.href);
+    
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+        	let json = JSON.parse(xhr.responseText);
+        	if(json.message == "ok"){
+        		shortUrlText.innerText = json.result.url;
+        		isShortOk = true;
+        	}
+        	else{
+        		alert("url을 생성하지 못 했습니다.\n관리자에게 문의해주세요.");
+        	}
+        }
+    }
+}
 
 // window.onload 끝
 }

@@ -44,11 +44,21 @@ public class CapchaHelper extends NaverHelperImpl {
 		String contextRoot = req.getServletContext().getRealPath("/");
 		String fileRoot = contextRoot + "\\uploads\\" + category + "\\";
 		
+		// 파일이 10개가 넘으면 비우기
 		File dir = new File(fileRoot);
+		if(dir.exists() && dir.isDirectory()) {
+			File[] files = dir.listFiles();
+			if(files.length > 10) {
+				for(File f : files){
+					f.delete();
+				}
+			}
+		}
+		
 		if (!dir.exists() ) {
 			dir.mkdirs();
 		}
-		  
+		
 		// 랜덤한 이름으로  파일 생성
 		String filename = String.valueOf(UUID.randomUUID()) + ".jpg";
 		

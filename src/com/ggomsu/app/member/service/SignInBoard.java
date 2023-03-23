@@ -17,18 +17,18 @@ public class SignInBoard implements Action{
 		ActionForward forward = new ActionForward();
 		HttpSession session = req.getSession();
 		
-		String articleForward = (String) session.getAttribute("articleForward");
+		String articleRedirect = (String) session.getAttribute("articleRedirect");
 		String boardValue = (String) session.getAttribute("boardValue");
-		String page = (String) session.getAttribute("page");
+		String page = String.valueOf(session.getAttribute("page"));
 		
 		// '/article/list'에서부터 접근한 경로이기 때문에 boardValue와 page가 없을 수 없다.
-		if(articleForward.equals("list")) {
+		if(articleRedirect.equals("list")) {
 			forward.setPath(req.getContextPath() + "/article/list?boardValue=" + boardValue + "&page=" + page);
 		}
 		else {
 			forward.setPath(req.getContextPath() + "/error/error");
 		}
-		session.removeAttribute("articleForward");
+		session.removeAttribute("articleRedirect");
 		forward.setForward(false);
 		
 		return forward;

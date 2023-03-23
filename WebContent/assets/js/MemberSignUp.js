@@ -46,7 +46,7 @@ const memberKey = document.getElementById("memberKey");
 
 let isAuthValid = false;
 
-email.addEventListener("blur", function(){
+email.addEventListener("keyup", function(){
     checkEmail(this.value);
 });
 
@@ -58,11 +58,11 @@ passwordCheck.addEventListener("keyup", function(){
 	checkPasswordCheck(password.value, passwordCheck.value);
 });
 
-nickname.addEventListener("blur", function(){
+nickname.addEventListener("keyup", function(){
 	checkNickname(this.value);
 });
 
-memberName.addEventListener("blur", function(){
+memberName.addEventListener("keyup", function(){
 	checkName(this.value);
 });
 
@@ -72,7 +72,7 @@ eachContact.forEach(element => {
 	});
 });
 
-eachContact[2].addEventListener("blur", function(){
+eachContact[2].addEventListener("keyup", function(){
 	concatContact();
 	checkContact(contact.value);
 });

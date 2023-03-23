@@ -1,7 +1,5 @@
 package com.ggomsu.system.naver;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
@@ -35,8 +33,6 @@ public class LoginHelper extends NaverHelperImpl {
     /* 네이버아이디로 Callback 처리 및  AccessToken 획득 Method */
     public String getAccessToken(HttpSession session, String code, String state) throws Exception{
 
-    	String accessToken = null;
-    	
         String apiURL = null;
         apiURL = NaverInfo.ACCESS_TOKEN_END_POINT
         			+ "?grant_type=authorization_code"
@@ -50,25 +46,18 @@ public class LoginHelper extends NaverHelperImpl {
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("GET");
         int responseCode = con.getResponseCode();
-        BufferedReader br;
+        String responseBody;
+        
         if(responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-          br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        	responseBody = readBody(con.getInputStream());
         }
         else {  // 에러 발생
-          br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+        	responseBody = readBody(con.getErrorStream());
         }
-        String inputLine;
-        StringBuffer res = new StringBuffer();
-        while ((inputLine = br.readLine()) != null) {
-          res.append(inputLine);
-        }
-        br.close();
-		if (responseCode == HttpURLConnection.HTTP_OK) { // 정상
-	        JSONParser parser = new JSONParser();
-	        JSONObject obj = (JSONObject) parser.parse(readBody(con.getInputStream()));
-			accessToken = (String) obj.get("access_token");
-		}
         
-    	return accessToken;
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(responseBody);
+        
+    	return (String) json.get("access_token");
     }
 }

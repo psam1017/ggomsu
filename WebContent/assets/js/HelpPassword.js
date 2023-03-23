@@ -16,7 +16,7 @@ let emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA
 const sendMailButton = document.getElementById("sendMailButton");
 let isAuthValid = false;
 
-email.addEventListener("blur", function(){
+email.addEventListener("keyup", function(){
     checkEmail(this.value);
 });
 

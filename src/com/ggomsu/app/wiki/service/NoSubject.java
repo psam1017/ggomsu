@@ -14,7 +14,6 @@ public class NoSubject implements Action {
 		ActionForward forward = new ActionForward();
 		forward.setForward(true);
 		forward.setPath("/views/wiki/NoSubject.jsp");
-		
 		return forward;
 	}
 }

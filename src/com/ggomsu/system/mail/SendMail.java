@@ -83,7 +83,7 @@ public class SendMail implements Action {
 			msg.setContent(emailContent, "text/html; charset=UTF-8;");
 			
 			Transport.send(msg);
-			
+		
 			// 성공. 세션에 인증키를 저장 후 사용자가 인증키를 올바르게 입력했는지 비교
 			memberSession.setAttribute("authKey", authKey);
 			memberSession.setAttribute("tempEmail", memberEmail);

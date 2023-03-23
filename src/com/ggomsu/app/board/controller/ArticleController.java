@@ -67,6 +67,7 @@ public class ArticleController extends HttpServlet {
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
+			e.printStackTrace();
 		}
 		
 		if(forward != null) {

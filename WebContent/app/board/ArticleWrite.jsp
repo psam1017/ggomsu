@@ -73,5 +73,5 @@
       <input type="file" accept=".jpg , .png , .gif " name="fileValue" multiple onchange="alert(this.value)" />
     </form>
   </body>
-  <script> let contextPath = "${pageContext.request.contextPath}"; console.log(contextPath);</script>
+  <script> let contextPath = "${pageContext.request.contextPath}"; </script>
 </html>
