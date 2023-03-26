@@ -1,4 +1,4 @@
-# ggomsu
+# 꼼수닷컴
    
    
 **[>>꼼수닷컴 바로가기](https://ggomsu.com)**
