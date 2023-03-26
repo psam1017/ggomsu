@@ -13,6 +13,7 @@ import com.ggomsu.app.member.vo.MemberVO;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.upload.ProfileImageRenamePolicy;
+import com.ggomsu.system.upload.UploadHelper;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 
@@ -28,6 +29,7 @@ public class ProfileConfirm implements Action{
 		// 자바 객체 생성
 		MemberVO vo = new MemberVO();
 		MemberDAO dao = new MemberDAO();
+		UploadHelper uploadHelper = new UploadHelper();
 		HttpSession session = req.getSession();
 		
 		// parameter 저장
@@ -74,6 +76,8 @@ public class ProfileConfirm implements Action{
 		if(!file.exists()) {
 			file.mkdirs();
 		}
+		
+		uploadHelper.deleteOldFile(file);
 		
 		// sql에 필요한 정보를 vo에 저장
 		vo.setEmail(email);
