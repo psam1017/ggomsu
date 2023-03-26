@@ -42,7 +42,7 @@ public class ArticleWriteConfirm implements Action {
 		}
 		
 		// 공지사항은 관리자가 아니면 입력해서는 안 된다. 한 번 더 점검
-		if(boardValue.equals("notice") && !statusValue.equals("ADM")) {
+		if(boardValue.equals("portfolio") && !statusValue.equals("ADM")) {
 			forward.setForward(false);
 			forward.setPath(req.getContextPath() + "/error/error");
 			return forward;
