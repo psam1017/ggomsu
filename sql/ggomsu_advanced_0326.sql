@@ -12,6 +12,8 @@ DROP PROCEDURE IF EXISTS increaseAbuseCount; # 이성호
 DROP EVENT IF EXISTS updateDormant; # 손하늘
 DROP EVENT IF EXISTS deleteOldAlarm; # 박성민
 DROP EVENT IF EXISTS deleteWithdrawn; # 박성민
+DROP EVENT IF EXISTS deleteAprilMember; # 박성민
+DROP EVENT IF EXISTS deleteAprilWiki; # 박성민
 
 ######프로시저######
 # 댓글 삽입
@@ -129,7 +131,7 @@ DELIMITER ;
 ######이벤트######
 # check dormant
 CREATE EVENT IF NOT EXISTS `updateDormant` 
-ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:00:00'
+ON SCHEDULE EVERY '1' DAY STARTS '2023-04-01 03:00:00'
 DO
   UPDATE members 
   SET statusValue = 'DOR' 
@@ -138,7 +140,7 @@ DO
 
 # delete old alarm
 CREATE EVENT IF NOT EXISTS `deleteOldAlarm` 
-ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:10:00'
+ON SCHEDULE EVERY '1' DAY STARTS '2023-04-01 03:10:00'
 DO
   DELETE FROM articleAlarm
   WHERE TIMESTAMPDIFF(DAY, articleAlarmAt, NOW()) > 21;
@@ -147,12 +149,25 @@ DO
   
 # delete withdrawn
 CREATE EVENT IF NOT EXISTS `deleteWithdrawn` 
-ON SCHEDULE EVERY '1' DAY STARTS '2023-02-01 03:20:00'
+ON SCHEDULE EVERY '1' DAY STARTS '2023-04-01 03:20:00'
 DO
   DELETE FROM members
   WHERE TIMESTAMPDIFF(DAY, signAt, NOW()) > 180
   AND statusValue = 'DEL';
 
+# delete old member
+CREATE EVENT IF NOT EXISTS `deleteAprilMember` 
+ON SCHEDULE EVERY '1' DAY STARTS '2023-04-01 00:30:00'
+DO
+  DELETE FROM members
+  WHERE createdAt > '2023-04-01 00:00:00';
+
+# delete old wiki
+CREATE EVENT IF NOT EXISTS `deleteAprilWiki` 
+ON SCHEDULE EVERY '1' DAY STARTS '2023-04-01 00:40:00'
+DO
+  DELETE FROM wikiInfo
+  WHERE revisedAt > '2023-04-01 00:00:00';
 
 
 

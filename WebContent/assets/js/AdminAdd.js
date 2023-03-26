@@ -67,12 +67,9 @@ memberName.addEventListener("keyup", function(){
 eachContact.forEach(element => {
 	element.addEventListener("keyup", function(){
 		this.value = contactOnlyNumber(this.value);
+		concatContact();
+		checkContact(contact.value);
 	});
-});
-
-eachContact[2].addEventListener("keyup", function(){
-	concatContact();
-	checkContact(contact.value);
 });
 
 email.addEventListener("change", function(){

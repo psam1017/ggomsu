@@ -18,16 +18,28 @@ public class CheckContact implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		
+		String email = (String) req.getSession().getAttribute("email");
 		String contact = req.getParameter("contact");
 		MemberDAO dao = new MemberDAO();
 		JSONObject json = new JSONObject();
 		PrintWriter out = resp.getWriter();
 		
-		if(dao.checkContact(contact)) {
-			json.put("contactStatus", "not-ok");
+		if(email == null) {
+			if(dao.checkContact(contact)) {
+				json.put("contactStatus", "not-ok");
+			}
+			else {
+				json.put("contactStatus", "ok");
+			}
 		}
 		else {
-			json.put("contactStatus", "ok");
+			String myContact = dao.getMemberInfo(email).getContact();
+			if(!contact.equals(myContact) && dao.checkContact(contact)) {
+				json.put("contactStatus", "not-ok");
+			}
+			else {
+				json.put("contactStatus", "ok");
+			}
 		}
 		
 		out.print(json.toJSONString());

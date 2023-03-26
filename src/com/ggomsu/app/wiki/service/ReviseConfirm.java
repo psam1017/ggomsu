@@ -36,7 +36,7 @@ public class ReviseConfirm implements Action {
 		// 위키 작성 정보를 저장하면서 rvs를 얻어온다.
 		info.setSubject(subject);
 		info.setNickname(nickname);
-		info.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
+		info.setIp(nickname.equals("noname") ? req.getRemoteAddr() : "");
 		
 		// 프로시저 호출 : 새로운 info를 INSERT하고, 새롭게 개정된 버전의 rvs를 가져온다.
 		int rvs = dao.reviseWikiInfo(info);

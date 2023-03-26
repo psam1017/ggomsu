@@ -82,7 +82,7 @@ public class ArticleDAO {
 	}
 	
 	public void deleteArticle(int articleIndex) {
-		sqlSession.delete("Article.deleteArticle", articleIndex);
+		sqlSession.update("Article.deleteArticle", articleIndex);
 	}
 	
 	// 신고 받은 게시글을 삭제 처리하고 사유를 명시

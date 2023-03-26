@@ -28,7 +28,9 @@ public class PasswordConfirm implements Action{
     	vo.setEmail((String)session.getAttribute("email"));
 		String inserted = req.getParameter("password");
 		String statusValue = (String)session.getAttribute("statusValue");
+		String myPasswordAuth = (String)session.getAttribute("myPasswordAuth");
 		String statusURI = null;
+		
 		if(statusValue.equals("MEM")) {
 			statusURI = "my";
 		}
@@ -36,9 +38,8 @@ public class PasswordConfirm implements Action{
 			statusURI = "admin";
 		}
 		
-		
 		// 잘못된 접근일 때
-		if(!req.getMethod().equals("POST") || !((String)session.getAttribute("myPasswordAuth")).equals("success")) {
+		if(!req.getMethod().equals("POST") || myPasswordAuth == null) {
 			session.removeAttribute("myPasswordAuth");
 			forward.setPath(req.getContextPath() + "/" + statusURI + "/password/check?code=error");
 			forward.setForward(false);

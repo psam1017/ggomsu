@@ -26,7 +26,7 @@ public class DarkModeFilter implements Filter {
 		HttpSession session = req.getSession();
 		Cookie[] cookies = req.getCookies();
 		
-		if(cookies != null && cookies.length > 0) {
+		if(session.getAttribute("darkModeFlag") == null && (cookies != null && cookies.length > 0)) {
 			for(Cookie c : cookies) {
 				if(c.getName().equals("darkModeFlag")) {
 					if(c.getValue().equals("on")) {

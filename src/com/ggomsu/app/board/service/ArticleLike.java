@@ -32,10 +32,12 @@ public class ArticleLike implements Action {
 			if(articleDAO.checkLiked(nickname, articleIndex)) {
 				articleDAO.cancelLike(nickname, articleIndex);
 				json.put("status", "cancel");
+				json.put("articleLikeCount", articleDAO.findArticle(articleIndex).getArticleLikeCount());
 			}
 			else {
 				articleDAO.doLike(nickname, articleIndex);
 				json.put("status", "do");
+				json.put("articleLikeCount", articleDAO.findArticle(articleIndex).getArticleLikeCount());
 			}
 		}
 		else {

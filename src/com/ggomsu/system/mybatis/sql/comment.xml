@@ -3,7 +3,7 @@
 <mapper namespace="Comment">
 	<!-- 작성자: 김지혜, 박성민 -->
 	<select id ="getCommentList" parameterType="map" resultType="comment">
-		SELECT C.*, COUNT(CL.commentIndex), M.profileImageUrl,
+		SELECT C.*, COUNT(CL.commentIndex) as commentLikeCount, M.profileImageUrl,
 			(SELECT COUNT(nickname) 
 		     FROM commentLike 
     		 WHERE (commentIndex, nickname) = (C.commentIndex, #{nickname})) AS isLiked

@@ -23,10 +23,10 @@ public class AdminController extends HttpServlet{
 		
 		// admin은 관리자만 사용할 수 있다.
 		String statusValue = (String) req.getSession().getAttribute("statusValue");
-		if(!statusValue.equals("ADM")) {
+		if(statusValue == null || !statusValue.equals("ADM")) {
 			forward = new ActionForward();
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error");
+			forward.setPath(req.getContextPath() + "/member/sign-in?code=no-member");
 			return forward;
 		}
 		
@@ -89,7 +89,6 @@ public class AdminController extends HttpServlet{
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
-			e.printStackTrace();
 		}
 
 		// forward or redirect

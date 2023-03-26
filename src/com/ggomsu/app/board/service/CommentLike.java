@@ -32,10 +32,12 @@ public class CommentLike implements Action {
 			if(commentDAO.checkLiked(nickname, commentIndex)) {
 				commentDAO.cancelLike(nickname, commentIndex);
 				json.put("status", "cancel");
+				json.put("commentLikeCount", commentDAO.getCommentOne(commentIndex).getCommentLikeCount());
 			}
 			else {
 				commentDAO.doLike(nickname, commentIndex);
 				json.put("status", "do");
+				json.put("commentLikeCount", commentDAO.getCommentOne(commentIndex).getCommentLikeCount());
 			}
 		}
 		else {

@@ -29,7 +29,7 @@ public class SignInConfirm implements Action {
 		boolean isSignInOk = false;
 		boolean isArticleRedirect = false;
 		
-		if(rememberEmail.equals("on")) {
+		if(rememberEmail != null && rememberEmail.equals("on")) {
 			Cookie emailCookie = new Cookie("email", email);
 			Cookie rememberEmailCookie = new Cookie("rememberEmail", "on");
 			emailCookie.setMaxAge(60 * 60 * 24 * 30);
