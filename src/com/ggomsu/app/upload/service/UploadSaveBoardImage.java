@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import com.ggomsu.system.action.Action;
 import com.ggomsu.system.action.ActionForward;
 import com.ggomsu.system.upload.UUIDFileRenamePolicy;
+import com.ggomsu.system.upload.UploadHelper;
 import com.oreilly.servlet.MultipartRequest;
 
 // 작성자 : 박성민
@@ -23,12 +24,13 @@ public class UploadSaveBoardImage implements Action {
 		
 		// cos, json-simple jar 필요
 		JSONObject json = new JSONObject();
+		UploadHelper uploadHelper = new UploadHelper();
 		
 		// multipart config
 		// 필요 시 category만 변경
 		String category = "board";
 		String contextRoot = req.getSession().getServletContext().getRealPath("/");
-		String fileRoot = contextRoot + "\\uploads\\" + category + "\\";
+		String fileRoot = contextRoot + "/uploads/" + category + "/";
 		int fileSize = 1024 * 1024 * 5;
 		String encoding = "UTF-8";
 		
@@ -37,6 +39,8 @@ public class UploadSaveBoardImage implements Action {
 		if(!file.exists()) {
 			file.mkdirs();
 		}
+		
+		uploadHelper.deleteOldFile(file);
 		
 		// 파일 저장. 파일 이름 정책은 com.ggomsu.app.upload.policy 참고
 		MultipartRequest multi = new MultipartRequest(req, fileRoot, fileSize, encoding, new UUIDFileRenamePolicy());

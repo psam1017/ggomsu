@@ -26,7 +26,7 @@ public class MyController extends HttpServlet {
 		if(statusValue == null || !(statusValue.equals("MEM") || statusValue.equals("SNS"))) {
 			forward = new ActionForward();
 			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/error/error?code=no-member");
+			forward.setPath(req.getContextPath() + "/member/sign-in?code=no-member");
 			return forward;
 		}
 		
@@ -90,11 +90,9 @@ public class MyController extends HttpServlet {
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());
-			e.printStackTrace();
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
-			e.printStackTrace();
 		}
 		
 		// forward or redirect

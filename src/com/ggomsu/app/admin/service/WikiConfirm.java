@@ -34,8 +34,24 @@ public class WikiConfirm implements Action {
 			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=keep");
 		} else {
 			WikiInfoDTO info = wikiDAO.findWikiInfo(subject, rvs);
-			System.out.println(info.getNickname());
-			System.out.println(info.getIp());
+			
+			if(info.getRvs() == 1) {
+				WikiInfoDTO newInfo = new WikiInfoDTO();
+				newInfo.setSubject(subject);
+				newInfo.setRvs(2);
+				newInfo.setNickname((String) req.getSession().getAttribute("nickname"));
+				newInfo.setIp("");
+				
+				wikiDAO.insertWikiInfo(newInfo);
+				
+				forward.setForward(false);
+				forward.setPath(req.getContextPath() + "/admin/wiki/report?code=v1");
+			}
+			else {
+				
+				forward.setForward(false);
+				forward.setPath(req.getContextPath() + "/admin/wiki/report?code=delete");
+			}
 			
 			// abuse에 nickname 또는 ip를 저장
 			wikiDAO.confirmWikiAbuse(info.getNickname(), info.getIp());
@@ -43,9 +59,6 @@ public class WikiConfirm implements Action {
 			adminDAO.confirmReportedWiki(subject, rvs, wikiDeleteReason);
 			// 위키를 삭제 처리함
 			wikiDAO.confirmWikiDelete(subject, rvs);
-			
-			forward.setForward(false);
-			forward.setPath(req.getContextPath() + "/admin/wiki/report?code=delete");
 		}
 		
 		return forward;

@@ -32,21 +32,21 @@ public class ConfigConfirm implements Action{
 		String statusURI = null;
 		Cookie cookie = null;
 		
+		// 잘못된 접근일 때
+		if(!req.getMethod().equals("POST")) {
+			forward.setPath(req.getContextPath() + "/admin/config?code=error");
+			forward.setForward(false);
+			return forward;
+		}
+		
 		boolean alarmFlag = alarmFlagText != null && alarmFlagText.equals("on") ? true : false;
-		boolean darkModeFlag = darkModeFlagText != null && req.getParameter("darkModeFlag").equals("on") ? true : false;
+		boolean darkModeFlag = darkModeFlagText != null && darkModeFlagText.equals("on") ? true : false;
 		
 		if(statusValue.equals("MEM") || statusValue.equals("SNS")) {
 			statusURI = "my";
 		}
 		else if (statusValue.equals("ADM")) {
 			statusURI = "admin";
-		}
-		
-		// 잘못된 접근일 때
-		if(!req.getMethod().equals("POST")) {
-			forward.setPath(req.getContextPath() + "/admin/config?code=error");
-			forward.setForward(false);
-			return forward;
 		}
 		
 		if(!alarmFlag) {

@@ -42,7 +42,7 @@ public class CapchaHelper extends NaverHelperImpl {
 		// 캡차 이미지가 저장될 디렉토리의 경로
 		String category = "capcha";
 		String contextRoot = req.getServletContext().getRealPath("/");
-		String fileRoot = contextRoot + "\\uploads\\" + category + "\\";
+		String fileRoot = contextRoot + "/uploads/" + category + "/";
 		
 		// 파일이 10개가 넘으면 비우기
 		File dir = new File(fileRoot);

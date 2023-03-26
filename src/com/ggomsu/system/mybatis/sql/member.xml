@@ -39,7 +39,7 @@
 		)
 	</insert>
 	<insert id="insertAuthFailedEmail" parameterType="string">
-		INSERT INTO members (email, statusValue)
+		INSERT INTO members (email, nickname, statusValue)
 		VALUES (#{email}, 'SUS')
 	</insert>
 

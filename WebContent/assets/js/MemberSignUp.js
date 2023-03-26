@@ -46,6 +46,12 @@ const memberKey = document.getElementById("memberKey");
 
 let isAuthValid = false;
 
+// checkEmail(email.value);
+// checkPassword(password.value);
+// checkNickname(nickname.value);
+// checkName(memberName.value);
+// checkContact(contact.value);
+
 email.addEventListener("keyup", function(){
     checkEmail(this.value);
 });
@@ -69,12 +75,9 @@ memberName.addEventListener("keyup", function(){
 eachContact.forEach(element => {
 	element.addEventListener("keyup", function(){
 		this.value = contactOnlyNumber(this.value);
+		concatContact();
+		checkContact(contact.value);
 	});
-});
-
-eachContact[2].addEventListener("keyup", function(){
-	concatContact();
-	checkContact(contact.value);
 });
 
 email.addEventListener("change", function(){
@@ -258,7 +261,7 @@ function checkName(nameValue){
 
 	isNameValid = false;
 	
-	if(nameValue < 2 || nameValue > 5){
+	if(nameValue.length < 2 || nameValue.length > 5){
 		nameResult.innerText = "이름은 2자 이상 5자 이내로 입력해주세요.";
 		return;
 	}
@@ -294,7 +297,7 @@ function checkContact(contactValue){
 	isContactValid = false;
 
 	if(!(contact.value.length == 10 || contact.value.length == 11)){
-		contactResult.innerText = "전화번호 길이가 유효하지 않습니다.";
+		contactResult.innerText = "전화번호는 필수항목입니다.";
 		return;
 	}
 
@@ -400,9 +403,11 @@ function checkAuth(memberKeyValue){
             }
             else if(json.auth == "not-ok" && json.authFailCount >= 3){
             	alert(json.authFailCount + "번 실패했습니다. 해당 이메일은 사용하실 수 없습니다.");
+            	email.focus();
             }
             else if(json.auth == "fail"){
             	alert("해당 주소는 사용할 수 없습니다.\n다른 주소를 사용해주세요.");
+            	email.focus();
             }
         }
     }

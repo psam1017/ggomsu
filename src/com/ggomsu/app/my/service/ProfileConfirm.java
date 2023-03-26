@@ -64,7 +64,7 @@ public class ProfileConfirm implements Action{
 		// 프로필 이미지 크기는 25KB 이하 -> javascript에서 제어
 		String category = "profile";
 		String contextRoot = req.getServletContext().getRealPath("/");
-		String fileRoot = contextRoot + "\\uploads\\" + category + "\\";
+		String fileRoot = contextRoot + "/uploads/" + category + "/";
 		int fileSize  = 1024 * 25 + 1;
 		String encoding = "UTF-8";
 		FileRenamePolicy policy = new ProfileImageRenamePolicy(fileRoot, oldNickname, newNickname);

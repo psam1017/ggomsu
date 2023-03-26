@@ -167,9 +167,11 @@
 		SET boardValue = #{boardValue}, title = #{title}, content = #{content}, updatedAt = NOW()
 		WHERE articleIndex = #{articleIndex}
 	</update>
-	<delete id="deleteArticle" parameterType="_int">
-		DELETE FROM articles WHERE articleIndex = #{articleIndex}
-	</delete>
+	<update id="deleteArticle" parameterType="_int">
+		UPDATE articles 
+		SET deletedAt = NOW(), articleDeleteReason = '작성자에 의한 삭제'
+		WHERE articleIndex = #{articleIndex}
+	</update>
 	
 	<!-- admin에서 사용 -->
 	<update id="confirmArticleDelete" parameterType="map">

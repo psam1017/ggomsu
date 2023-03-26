@@ -49,11 +49,9 @@ public class HomeController extends HttpServlet {
 		} catch (SQLException e) {
 			forward = new ActionForward();
 			forward.setActionBySQLException(req.getContextPath());
-			e.printStackTrace();
 		} catch (Exception e) {
 			forward = new ActionForward();
 			forward.setActionByException(req.getContextPath());
-			e.printStackTrace();
 		}
 
 		// forward or redirect

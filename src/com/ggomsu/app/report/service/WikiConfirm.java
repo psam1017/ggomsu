@@ -47,7 +47,7 @@ public class WikiConfirm implements Action{
 			vo.setSubject(subject);
 			vo.setRvs(rvs);
 			vo.setNickname(nickname);
-			vo.setIp(nickname.equals("noname") ? req.getRemoteAddr() : null);
+			vo.setIp(nickname.equals("noname") ? req.getRemoteAddr() : "");
 			vo.setWikiReportReason(wikiReportReason);
 			dao.replaceWikiReport(vo);
 			json.put("status", "success");

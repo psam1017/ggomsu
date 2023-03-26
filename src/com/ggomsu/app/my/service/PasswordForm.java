@@ -22,7 +22,7 @@ public class PasswordForm implements Action {
 		}
 		else {
 			forward.setForward(false);
-			forward.setPath(req.getSession() + "/error/error");
+			forward.setPath(req.getSession() + "/member/sign-in?code=no-member");
 		}
 		
 		return forward;

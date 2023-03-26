@@ -87,15 +87,6 @@ public class ArticleView implements Action {
 			forward.setForward(false);
 		}
 		else {
-			// 게시글 정보 반환
-			req.setAttribute("article", articleDTO);
-			req.setAttribute("isArticleLike", articleDAO.checkLiked(nickname, articleIndex));
-			
-			// 검색 조건 유지
-			req.setAttribute("page", page);
-			req.setAttribute("boardValue", boardValue);
-			req.setAttribute("boardText", boardText);
-			
 			// 쿠키에 boardValue가 없거나 다르다면 저장
 			boardHelper.setBoardCookie(req, resp, boardValue);
 			
@@ -104,12 +95,22 @@ public class ArticleView implements Action {
 			// (2) 조회수를 상승시킴
 			if(boardHelper.setArticleCookie(req, resp, articleIndex)) {
 				articleDAO.updateArticleViewCount(articleIndex);
+				articleDTO.setViewCount(articleDTO.getViewCount() + 1);
 			}
 			
 			// 알람 기능을 활성화한 상태이고, 알람에 존재하는 게시글이라면 삭제
 			if(alarmFlag) {
 				alarmHelper.deleteArticleAlarm(nickname, articleIndex);
 			}
+			
+			// 게시글 정보 반환
+			req.setAttribute("article", articleDTO);
+			req.setAttribute("isArticleLike", articleDAO.checkLiked(nickname, articleIndex));
+			
+			// 검색 조건 유지
+			req.setAttribute("page", page);
+			req.setAttribute("boardValue", boardValue);
+			req.setAttribute("boardText", boardText);
 			
 			forward.setForward(true);
 			forward.setPath("/views/board/ArticleView.jsp");
