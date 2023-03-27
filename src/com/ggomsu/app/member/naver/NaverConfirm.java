@@ -96,6 +96,7 @@ public class NaverConfirm implements Action{
 				forward.setPath(req.getContextPath() + "/member/sns/form");
 			}
 			else {
+				session.setAttribute("statusValue", memberVO.getStatusValue());
 				forward.setPath(req.getContextPath() + "/member/integration");
 			}
 		}

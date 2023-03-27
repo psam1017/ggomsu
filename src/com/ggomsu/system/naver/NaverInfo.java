@@ -6,7 +6,7 @@ public class NaverInfo {
 	private static String clientSecret;
 	
 	public final static String SESSION_STATE = "oauth_state";
-    public final static String LOGIN_REDIRECT_URI = "http://localhost:8087/member/naver/confirm";
+    public final static String LOGIN_REDIRECT_URI = "http://ggomsu.com/member/naver/confirm";
     public final static String AUTHORIZATION_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
     public final static String ACCESS_TOKEN_END_POINT = "https://nid.naver.com/oauth2.0/token";
     public final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";

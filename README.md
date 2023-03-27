@@ -18,6 +18,16 @@
 보다 상세한 내용은 꼼수닷컴 포트폴리오 메뉴(https://ggomsu.com/article/list?boardValue=portfolio)를 참고해주세요.   
 또는 Github의 specification 항목을 참고해주세요.
 
+---
+
+### bug fix 23.03.26.
+
+ **서버 기능 수정**
+- naver 로그인 검수 승인 후 테스트
+- naver 로그인 안내 절차에 따라 로그인 기능을 수정함
+
+---
+
 ### bug fix 23.03.26.
 
  **서버 기능 수정**
