@@ -22,9 +22,7 @@ public class IntegrationConfirm implements Action {
 		
 		if(email != null) {
 			String type= "naver";
-			String newStatusValue = "MEM";
 			memberDAO.insertSnsKey(email, snsKey, type);
-			memberDAO.restoreInvalid(email, newStatusValue);
 			session.invalidate();
 			forward.setPath(req.getContextPath() + "/member/sign-in?code=sns");
 		}
@@ -35,5 +33,4 @@ public class IntegrationConfirm implements Action {
 		
 		return forward;
 	}
-
 }

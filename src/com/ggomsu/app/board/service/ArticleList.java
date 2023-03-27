@@ -115,7 +115,7 @@ public class ArticleList implements Action{
 		
 		// 페이징 처리 시작
 		int page = (temp == null) ? 1 : Integer.parseInt(temp);
-		int pageSize = boardValue.equals("portfolio") ? 20 : 10; // 포트폴리오는 가급적 페이징되지 않도록
+		int pageSize = 10;
 		int totalCount = articleDAO.findTotal(boardValue, blindList, search, category, period);
 		int startPage = ((page - 1) / pageSize) * pageSize + 1;
 		int endPage = startPage + 9;
