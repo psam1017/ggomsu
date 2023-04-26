@@ -21,7 +21,7 @@
 
 보다 상세한 내용은 꼼수닷컴에서 포트폴리오 메뉴(회원가입 또는 비회원 인증이 필요할 수 있습니다) 또는 Github의 specification 항목을 참고해주세요.
 
-포트폴리오 명세서   
+### 포트폴리오 명세서   
 (꼼수닷컴) https://ggomsu.com/article/list?boardValue=portfolio   
 (깃허브)   https://github.com/psam1017/ggomsu/tree/main/specification
 
